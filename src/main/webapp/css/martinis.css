@@ -1,0 +1,35 @@
+.nowrap {
+    white-space: nowrap;
+}
+
+#table-actors td,
+#table-projects td,
+#table-scenes td,
+#table-blocks td {
+    border-top: none;
+}
+
+#table-scenes td:first-child,
+#table-blocks td:first-child {
+    width: 99%;
+}
+
+.page-header small a,
+#table-scenes .btn,
+#table-blocks .btn {
+    opacity: 0;
+}
+
+.page-header small a:focus,
+.page-header:hover small a,
+#table-scenes tr .btn:focus,
+#table-scenes tr:hover .btn,
+#table-blocks tr .btn:focus,
+#table-blocks tr:hover .btn {
+    opacity: 1;
+}
+
+#table-scenes tr:last-child .btn.move-up,
+#table-blocks tr:last-child .btn.move-up {
+    margin-left: 22px;
+}
