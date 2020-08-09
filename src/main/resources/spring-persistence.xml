@@ -16,13 +16,17 @@
 
     <!-- Bean definitions go here -->
 
-    <tx:annotation-driven/>
+    <tx:annotation-driven />
+    
+    <bean class="java.net.URI" id="dbUrl">
+        <constructor-arg value="#{systemEnvironment['JAWSDB_URL']}" />
+    </bean>
 
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="jdbc:mysql://localhost:3306/martinis?serverTimezone=EST" />
-        <property name="username" value="root" />
-        <property name="password" value="rootroot" />
+        <property name="url" value="#{ 'jdbc:mysql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }" />
+        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }" />
+        <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }" />
         <property name="initialSize" value="5" />
         <property name="maxTotal" value="10" />
     </bean>
