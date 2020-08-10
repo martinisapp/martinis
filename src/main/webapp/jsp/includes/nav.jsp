@@ -5,7 +5,7 @@
         </div>
         <ul class="nav navbar-nav">
             <li class="${param.page == 'index' ? 'active' : ''}">
-                <a href="${pageContext.request.contextPath}">Home</a>
+                <a href="${pageContext.request.contextPath}/">Home</a>
             </li>
             <li class="${param.page == 'projects' ? 'active' : ''}">
                 <a href="${pageContext.request.contextPath}/project/list">Projects</a>
