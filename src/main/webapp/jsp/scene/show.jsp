@@ -40,7 +40,7 @@
                                 <c:if test="${not loop.first}">
                                     <a href="${pageContext.request.contextPath}/block/moveUp?id=${block.id}" class="btn btn-default btn-xs move-up" role="button">↑</a>
                                 </c:if>
-                                <a href="${pageContext.request.contextPath}/block/createBelow?id=${block.id}" class="btn btn-primary btn-xs" role="button">+ block</a>
+                                <a href="${pageContext.request.contextPath}/block/createBelow?id=${block.id}" class="btn btn-primary btn-xs create-below" role="button">+ block</a>
                             </div>
                         </td>
                     </tr>
