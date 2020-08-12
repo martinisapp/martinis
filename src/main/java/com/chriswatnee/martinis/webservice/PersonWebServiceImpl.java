@@ -61,7 +61,7 @@ public class PersonWebServiceImpl implements PersonWebService {
         // Put stuff
         personProfileViewModel.setId(person.getId());
         personProfileViewModel.setName(person.getName());
-        personProfileViewModel.setUsername(person.getUsername());
+        personProfileViewModel.setCreditName(person.getCreditName());
 
         if (actor != null) {
             personProfileViewModel.setActorId(actor.getId());
@@ -122,7 +122,7 @@ public class PersonWebServiceImpl implements PersonWebService {
         EditPersonCommandModel commandModel = new EditPersonCommandModel();
         commandModel.setId(existingPerson.getId());
         commandModel.setName(existingPerson.getName());
-        commandModel.setUsername(existingPerson.getUsername());
+        commandModel.setCreditName(existingPerson.getCreditName());
 
         if (selectedActor != null) {
             commandModel.setActorId(selectedActor.getId());
@@ -147,7 +147,7 @@ public class PersonWebServiceImpl implements PersonWebService {
         
         // Put stuff
         person.setName(createPersonCommandModel.getName());
-        person.setUsername(createPersonCommandModel.getUsername());
+        person.setCreditName(createPersonCommandModel.getCreditName());
 
         if (actor != null) {
             person.setActor(actor);
@@ -175,7 +175,7 @@ public class PersonWebServiceImpl implements PersonWebService {
 
         // Put stuff
         person.setName(editPersonCommandModel.getName());
-        person.setUsername(editPersonCommandModel.getUsername());
+        person.setCreditName(editPersonCommandModel.getCreditName());
         person.setActor(actor);
         person.setProject(project);
 

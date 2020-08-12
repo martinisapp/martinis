@@ -49,7 +49,7 @@ CREATE TABLE actor (
 CREATE TABLE person (
 	id int NOT NULL AUTO_INCREMENT,
 	`name` varchar(60) NOT NULL,
-	username varchar(60) NOT NULL,
+	credit_name varchar(60) NOT NULL,
 	actor_id int NULL,
 	project_id int NOT NULL,
 	PRIMARY KEY (id),

@@ -26,10 +26,10 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="username" class="col-md-2 control-label">Username:</label>
+                    <label for="creditName" class="col-md-2 control-label">Credit Name:</label>
                     <div class="col-md-10">
-                        <sf:input type="text" class="form-control" path="username" />
-                        <sf:errors path="username" />
+                        <sf:input type="text" class="form-control" path="creditName" />
+                        <sf:errors path="creditName" />
                     </div>
                 </div>
                 <div class="form-group">
