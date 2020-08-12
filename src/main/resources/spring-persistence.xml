@@ -18,6 +18,16 @@
 
     <tx:annotation-driven />
     
+    <!-- <bean id="dataSource"
+          class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/martinis?serverTimezone=EST"/>
+        <property name="username" value="root"/>
+        <property name="password" value="rootroot"/>
+        <property name="initialSize" value="5"/>
+        <property name="maxTotal" value="10"/>
+    </bean> -->
+    
     <bean class="java.net.URI" id="dbUrl">
         <constructor-arg value="#{systemEnvironment['JAWSDB_URL']}" />
     </bean>
