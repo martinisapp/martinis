@@ -14,7 +14,7 @@
         <div class="container">
             <jsp:include page="../includes/logout.jsp" />
             <ol class="breadcrumb">
-                <li><a href="${pageContext.request.contextPath}/actor/list">Actors</a></li>
+                <li><a href="${pageContext.request.contextPath}/actor/list">Casting</a></li>
                 <li class="active">${viewModel.first} ${viewModel.last}</li>
             </ol>
             <div class="page-header">

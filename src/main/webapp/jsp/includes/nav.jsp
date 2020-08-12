@@ -10,8 +10,8 @@
             <li class="${param.page == 'projects' ? 'active' : ''}">
                 <a href="${pageContext.request.contextPath}/project/list">Projects</a>
             </li>
-            <li class="${param.page == 'actors' ? 'active' : ''}">
-                <a href="${pageContext.request.contextPath}/actor/list">Actors</a>
+            <li class="${param.page == 'casting' ? 'active' : ''}">
+                <a href="${pageContext.request.contextPath}/actor/list">Casting</a>
             </li>
         </ul>
     </div>

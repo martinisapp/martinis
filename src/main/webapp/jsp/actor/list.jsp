@@ -4,22 +4,22 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Martinis - Actors</title>
+        <title>Martinis - Casting</title>
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/martinis.css" rel="stylesheet">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
     </head>
     <body>
         <jsp:include page="../includes/nav.jsp">
-            <jsp:param name="page" value="actors" />
+            <jsp:param name="page" value="casting" />
         </jsp:include>
         <div class="container">
             <jsp:include page="../includes/logout.jsp" />
             <ol class="breadcrumb">
-                <li class="active">Actors</li>
+                <li class="active">Casting</li>
             </ol>
             <div class="page-header">
-                <h1>Actors</h1>
+                <h1>Casting</h1>
             </div>
             <table id="table-actors" class="table table-hover">
                 <c:forEach items="${viewModel.actors}" var="actor">
