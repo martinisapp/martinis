@@ -10,7 +10,7 @@
     </head>
     <body>
         <jsp:include page="../includes/nav.jsp">
-            <jsp:param name="page" value="projects"/>
+            <jsp:param name="page" value="projects" />
         </jsp:include>
         <div class="container">
             <jsp:include page="../includes/logout.jsp" />

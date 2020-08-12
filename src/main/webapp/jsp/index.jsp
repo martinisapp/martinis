@@ -9,7 +9,7 @@
     </head>
     <body>
         <jsp:include page="includes/nav.jsp">
-            <jsp:param name="page" value="index"/>
+            <jsp:param name="page" value="index" />
         </jsp:include>
         <div class="container">
             <div class="page-header">

@@ -7,10 +7,10 @@
  http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
     <beans:bean id="webexpressionHandler"
-                class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler"/>
+                class="org.springframework.security.web.access.expression.DefaultWebSecurityExpressionHandler" />
     
     <beans:bean id="encoder"
-                class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder"/>
+                class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
                 
     <http pattern="/login" security="none" />
     <http pattern="/css/**" security="none" />
