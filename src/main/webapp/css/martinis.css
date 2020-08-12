@@ -2,6 +2,7 @@
     white-space: nowrap;
 }
 
+#table-actors a,
 #table-projects a,
 #table-scenes a {
     color: #000;
