@@ -21,7 +21,7 @@
                 <div class="form-group">
                     <label for="name" class="col-md-2 control-label">Name:</label>
                     <div class="col-md-10">
-                        <sf:input type="text" class="form-control" path="name" />
+                        <sf:input type="text" class="form-control" spellcheck="true" path="name" />
                         <sf:errors path="name" />
                     </div>
                 </div>

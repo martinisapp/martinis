@@ -20,7 +20,7 @@
                 <div class="form-group">
                     <label for="title" class="col-md-2 control-label">Title:</label>
                     <div class="col-md-10">
-                        <sf:input type="text" class="form-control" path="title" />
+                        <sf:input type="text" class="form-control" spellcheck="true" path="title" />
                         <sf:errors path="title" />
                     </div>
                 </div>

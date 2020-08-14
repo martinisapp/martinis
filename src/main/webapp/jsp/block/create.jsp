@@ -20,7 +20,7 @@
                 <div class="form-group">
                     <label for="content" class="col-md-2 control-label">Content:</label>
                     <div class="col-md-10">
-                        <sf:textarea class="form-control" path="content" rows="5" cols="30" />
+                        <sf:textarea class="form-control" spellcheck="true" rows="5" cols="30" path="content" />
                         <sf:errors path="content" />
                     </div>
                 </div>
