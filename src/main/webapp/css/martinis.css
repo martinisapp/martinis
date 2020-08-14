@@ -4,7 +4,8 @@
 
 #table-actors a,
 #table-projects a,
-#table-scenes a {
+#table-scenes a,
+#table-blocks a.character-name {
     color: #000;
 }
 
