@@ -25,11 +25,19 @@
                 <c:forEach items="${viewModel.blocks}" var="block" varStatus="loop">
                     <tr>
                         <td>
-                            <c:if test="${not empty block.personName}">
-                                <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name">${block.personName}</a>
-                                <br />
-                            </c:if>
-                            ${block.content}
+                            <c:choose>
+                                <c:when test="${not empty block.personName}">
+                                    <p class="mb-0 text-center">
+                                        <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name">${block.personName}</a>
+                                    </p>
+                                    <div class="text-center">
+                                        ${block.content}
+                                    </div>
+                                </c:when>    
+                                <c:otherwise>
+                                    ${block.content}
+                                </c:otherwise>
+                            </c:choose>
                         </td>
                         <td>
                             <div class="nowrap">
