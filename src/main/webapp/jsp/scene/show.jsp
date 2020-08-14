@@ -26,7 +26,7 @@
                     <tr>
                         <td>
                             <c:if test="${not empty block.personName}">
-                                <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name">${block.personName}</a>:
+                                <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name">${block.personName}</a>
                                 <br />
                             </c:if>
                             ${block.content}
