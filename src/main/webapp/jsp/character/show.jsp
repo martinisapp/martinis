@@ -21,7 +21,7 @@
             <div class="page-header">
                 <h1>${viewModel.name} <small><a href="${pageContext.request.contextPath}/character/edit?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">edit</a> <a href="${pageContext.request.contextPath}/character/delete?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">delete</a></small></h1>
             </div>
-            <p>Credit Name: ${viewModel.creditName}</p>
+            <p>Full Name: ${viewModel.fullName}</p>
             <c:if test="${not empty viewModel.actorName}">
                 <p>Actor: <a href="${pageContext.request.contextPath}/actor/show?id=${viewModel.actorId}">${viewModel.actorName}</a></p>
             </c:if>

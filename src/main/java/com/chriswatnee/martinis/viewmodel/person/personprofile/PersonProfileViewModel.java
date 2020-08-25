@@ -13,7 +13,7 @@ public class PersonProfileViewModel {
     
     private int id;
     private String name;
-    private String creditName;
+    private String fullName;
     private int actorId;
     private String actorName;
     private int projectId;
@@ -35,12 +35,12 @@ public class PersonProfileViewModel {
         this.name = name;
     }
 
-    public String getCreditName() {
-        return creditName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setCreditName(String creditName) {
-        this.creditName = creditName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public int getActorId() {

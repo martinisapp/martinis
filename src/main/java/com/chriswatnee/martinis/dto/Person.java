@@ -13,7 +13,7 @@ public class Person {
     
     private Integer id;
     private String name;
-    private String creditName;
+    private String fullName;
     Actor actor;
     Project project;
 
@@ -33,12 +33,12 @@ public class Person {
         this.name = name;
     }
 
-    public String getCreditName() {
-        return creditName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setCreditName(String creditName) {
-        this.creditName = creditName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Actor getActor() {

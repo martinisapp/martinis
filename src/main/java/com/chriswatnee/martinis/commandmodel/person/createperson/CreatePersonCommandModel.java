@@ -18,8 +18,8 @@ public class CreatePersonCommandModel {
     @Length(max = 60, message = "Name must be no more than 60 characters in length.")
     private String name;
     @NotEmpty(message = "You must supply a value for Username.")
-    @Length(max = 60, message = "Credit Name must be no more than 60 characters in length.")
-    private String creditName;
+    @Length(max = 60, message = "Full Name must be no more than 60 characters in length.")
+    private String fullName;
     
     private Integer actorId;
     private Integer projectId;
@@ -32,12 +32,12 @@ public class CreatePersonCommandModel {
         this.name = name;
     }
 
-    public String getCreditName() {
-        return creditName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setCreditName(String creditName) {
-        this.creditName = creditName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public Integer getActorId() {

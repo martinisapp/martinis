@@ -26,9 +26,9 @@ public class PersonDaoImpl implements PersonDao {
     
     JdbcTemplate jdbcTemplate;
     
-    static String CREATE_QUERY = "INSERT INTO person (`name`, credit_name, actor_id, project_id) VALUES (?,?,?,?)";
+    static String CREATE_QUERY = "INSERT INTO person (`name`, full_name, actor_id, project_id) VALUES (?,?,?,?)";
     static String READ_QUERY = "SELECT * FROM person WHERE id = ?";
-    static String UPDATE_QUERY = "UPDATE person SET `name` = ?, credit_name = ?, actor_id = ?, project_id = ? WHERE id = ?";
+    static String UPDATE_QUERY = "UPDATE person SET `name` = ?, full_name = ?, actor_id = ?, project_id = ? WHERE id = ?";
     static String DELETE_QUERY = "DELETE FROM person WHERE id = ?";
     static String LIST_QUERY = "SELECT * FROM person";
     static String GET_PERSONS_BY_PROJECT_QUERY = "SELECT * FROM person where project_id = ? ORDER BY `name`";
@@ -56,7 +56,7 @@ public class PersonDaoImpl implements PersonDao {
         
         jdbcTemplate.update(CREATE_QUERY,
                             person.getName(),
-                            person.getCreditName(),
+                            person.getFullName(),
                             actorId,
                             projectId
         );
@@ -96,7 +96,7 @@ public class PersonDaoImpl implements PersonDao {
         
         jdbcTemplate.update(UPDATE_QUERY,
                             person.getName(),
-                            person.getCreditName(),
+                            person.getFullName(),
                             actorId,
                             projectId,
                             person.getId()
@@ -130,7 +130,7 @@ public class PersonDaoImpl implements PersonDao {
             
             person.setId(resultSet.getInt("id"));
             person.setName(resultSet.getString("name"));
-            person.setCreditName(resultSet.getString("credit_name"));
+            person.setFullName(resultSet.getString("full_name"));
             
             Integer actorId = resultSet.getInt("actor_id");
             
