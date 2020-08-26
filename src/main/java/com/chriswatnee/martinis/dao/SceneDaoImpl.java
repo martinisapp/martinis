@@ -34,6 +34,8 @@ public class SceneDaoImpl implements SceneDao {
     static String GET_ORDER_QUERY = "SELECT `order` FROM scene WHERE id = ?";
     static String UPATE_ORDER_QUERY = "UPDATE scene SET `order` = ? WHERE id = ?";
     static String UPDATE_ORDERS_QUERY = "UPDATE scene SET `order` = `order` - 1 WHERE `order` > ?";
+    static String ADD_ORDERS_QUERY = "UPDATE scene SET `order` = `order` + 1 WHERE `order` > ? AND project_id = ?";
+    static String SUBTRACT_ORDERS_QUERY = "UPDATE scene SET `order` = `order` - 1 WHERE `order` > ? AND project_id = ?";
     static String GET_SCENES_BY_PROJECT_QUERY = "SELECT * FROM scene WHERE project_id = ? ORDER BY `order`";
     static String GET_SCENE_COUNT_BY_PROJECT_QUERY = "SELECT COUNT(*) FROM scene WHERE project_id = ?";
     
@@ -63,6 +65,40 @@ public class SceneDaoImpl implements SceneDao {
         int createId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
         
         scene.setId(createId);
+        
+        return scene;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Scene createBelow(Scene scene) {
+        
+        Integer projectId = null;
+        
+        if (scene.getProject() != null) {
+            projectId = scene.getProject().getId();
+        }
+        
+        Integer order = null;
+        
+        if (scene.getOrder() != null) {
+            order = scene.getOrder() + 1;
+        }
+        
+        jdbcTemplate.update(ADD_ORDERS_QUERY,
+                            scene.getOrder(),
+                            projectId
+        );
+        
+        jdbcTemplate.update(CREATE_QUERY,
+                            order,
+                            scene.getName(),
+                            projectId
+        );
+        
+        int createdId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
+        
+        scene.setId(createdId);
         
         return scene;
     }

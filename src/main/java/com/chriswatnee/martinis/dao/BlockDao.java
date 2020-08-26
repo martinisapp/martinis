@@ -16,7 +16,7 @@ import java.util.List;
 public interface BlockDao {
     
     public Block create(Block block);
-    public Block createBelow(Block block); 
+    public Block createBelow(Block block);
     public Block read(Integer id);
     public void update(Block block);
     public void delete(Block block);

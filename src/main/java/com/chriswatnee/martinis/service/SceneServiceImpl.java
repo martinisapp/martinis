@@ -30,6 +30,11 @@ public class SceneServiceImpl implements SceneService {
     }
 
     @Override
+    public Scene createBelow(Scene scene) {
+        return sceneDao.createBelow(scene);
+    }
+
+    @Override
     public Scene read(Integer id) {
         return sceneDao.read(id);
     }

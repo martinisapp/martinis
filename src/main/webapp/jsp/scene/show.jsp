@@ -57,7 +57,7 @@
             </table>
             <p>
                 <a href="${pageContext.request.contextPath}/block/create?sceneId=${viewModel.id}" class="btn btn-primary" role="button">Create New Block</a> 
-                <a href="${pageContext.request.contextPath}/scene/create?projectId=${viewModel.projectId}" class="btn btn-default" role="button">Create New Scene</a> 
+                <a href="${pageContext.request.contextPath}/scene/createBelow?id=${viewModel.id}" class="btn btn-default" role="button">Create New Scene</a> 
                 <a href="${pageContext.request.contextPath}/character/create?projectId=${viewModel.projectId}" class="btn btn-default" role="button">Create New Character</a>
             </p>
             <nav aria-label="...">

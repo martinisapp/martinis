@@ -6,6 +6,7 @@
 package com.chriswatnee.martinis.webservice;
 
 import com.chriswatnee.martinis.commandmodel.scene.createscene.CreateSceneCommandModel;
+import com.chriswatnee.martinis.commandmodel.scene.createscenebelow.CreateSceneBelowCommandModel;
 import com.chriswatnee.martinis.commandmodel.scene.editscene.EditSceneCommandModel;
 import com.chriswatnee.martinis.dto.Block;
 import com.chriswatnee.martinis.dto.Person;
@@ -16,6 +17,7 @@ import com.chriswatnee.martinis.service.PersonService;
 import com.chriswatnee.martinis.service.ProjectService;
 import com.chriswatnee.martinis.service.SceneService;
 import com.chriswatnee.martinis.viewmodel.scene.createscene.CreateSceneViewModel;
+import com.chriswatnee.martinis.viewmodel.scene.createscenebelow.CreateSceneBelowViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.editscene.EditSceneViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.BlockViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.SceneProfileViewModel;
@@ -103,6 +105,29 @@ public class SceneWebServiceImpl implements SceneWebService {
     }
 
     @Override
+    public CreateSceneBelowViewModel getCreateSceneBelowViewModel(Integer id) {
+
+        // Instantiate
+        CreateSceneBelowViewModel createSceneBelowViewModel = new CreateSceneBelowViewModel();
+
+        // Look up stuff
+        Scene existingScene = sceneService.read(id);
+        Project project = projectService.getProjectByScene(existingScene);
+
+        // Populate commmand model
+        CreateSceneBelowCommandModel commandModel = new CreateSceneBelowCommandModel();
+        commandModel.setId(existingScene.getId());
+        commandModel.setProjectId(project.getId());
+        
+        createSceneBelowViewModel.setCreateSceneBelowCommandModel(commandModel);
+
+        // Populate
+        createSceneBelowViewModel.setProjectId(project.getId());
+
+        return createSceneBelowViewModel;
+    }
+
+    @Override
     public EditSceneViewModel getEditSceneViewModel(Integer id) {
 
         // Instantiate
@@ -145,6 +170,29 @@ public class SceneWebServiceImpl implements SceneWebService {
 
         // Save stuff
         scene = sceneService.create(scene);
+        
+        return scene;
+    }
+
+    @Override
+    public Scene saveCreateSceneBelowCommandModel(CreateSceneBelowCommandModel createSceneBelowCommandModel) {
+
+        // Instantiate
+        Scene scene = new Scene();
+        
+        // Look up stuff
+        Scene existingScene = sceneService.read(createSceneBelowCommandModel.getId());
+        
+        Project project = projectService.read(existingScene.getProject().getId());
+        
+        // Put stuff
+        scene.setOrder(existingScene.getOrder());
+        scene.setName(createSceneBelowCommandModel.getName());
+
+        scene.setProject(project);
+
+        // Save stuff
+        scene = sceneService.createBelow(scene);
         
         return scene;
     }

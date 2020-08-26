@@ -16,6 +16,7 @@ import java.util.List;
 public interface SceneDao {
     
     public Scene create(Scene scene);
+    public Scene createBelow(Scene scene);
     public Scene read(Integer id);
     public void update(Scene scene);
     public void delete(Scene scene);

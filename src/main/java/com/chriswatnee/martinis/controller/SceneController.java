@@ -6,9 +6,11 @@
 package com.chriswatnee.martinis.controller;
 
 import com.chriswatnee.martinis.commandmodel.scene.createscene.CreateSceneCommandModel;
+import com.chriswatnee.martinis.commandmodel.scene.createscenebelow.CreateSceneBelowCommandModel;
 import com.chriswatnee.martinis.commandmodel.scene.editscene.EditSceneCommandModel;
 import com.chriswatnee.martinis.dto.Scene;
 import com.chriswatnee.martinis.viewmodel.scene.createscene.CreateSceneViewModel;
+import com.chriswatnee.martinis.viewmodel.scene.createscenebelow.CreateSceneBelowViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.editscene.EditSceneViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.SceneProfileViewModel;
 import com.chriswatnee.martinis.webservice.SceneWebService;
@@ -123,6 +125,36 @@ public class SceneController {
         }
 
         Scene scene = sceneWebService.saveCreateSceneCommandModel(commandModel);
+
+        return "redirect:/scene/show?id=" + scene.getId();
+    }
+    
+    // Show Form
+    @RequestMapping(value = "/createBelow")
+    public String createBelow(@RequestParam Integer id, Model model) {
+
+        CreateSceneBelowViewModel viewModel = sceneWebService.getCreateSceneBelowViewModel(id);
+
+        model.addAttribute("viewModel", viewModel);
+        model.addAttribute("commandModel", viewModel.getCreateSceneBelowCommandModel());
+
+        return "scene/createBelow";
+    }
+
+    // Handle Form Submission
+    @RequestMapping(value = "/createBelow", method = RequestMethod.POST)
+    public String saveCreateBelow(@Valid @ModelAttribute("commandModel") CreateSceneBelowCommandModel commandModel, BindingResult bindingResult, Model model) {
+
+        if (bindingResult.hasErrors()) {
+            CreateSceneBelowViewModel viewModel = sceneWebService.getCreateSceneBelowViewModel(commandModel.getProjectId());
+
+            model.addAttribute("viewModel", viewModel);
+            model.addAttribute("commandModel", commandModel);
+
+            return "scene/createBelow";
+        }
+
+        Scene scene = sceneWebService.saveCreateSceneBelowCommandModel(commandModel);
 
         return "redirect:/scene/show?id=" + scene.getId();
     }
