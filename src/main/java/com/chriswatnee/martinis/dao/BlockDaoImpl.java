@@ -33,7 +33,7 @@ public class BlockDaoImpl implements BlockDao {
     static String LIST_QUERY = "SELECT * FROM block";
     static String GET_BLOCK_BY_ORDER_QUERY = "SELECT * FROM block WHERE `order` = ? AND scene_id = ?";
     static String GET_ORDER_QUERY = "SELECT `order` FROM block WHERE id = ?";
-    static String UPATE_ORDER_QUERY = "UPDATE block SET `order` = ? WHERE id = ?";
+    static String UPDATE_ORDER_QUERY = "UPDATE block SET `order` = ? WHERE id = ?";
     static String ADD_ORDERS_QUERY = "UPDATE block SET `order` = `order` + 1 WHERE `order` > ? AND scene_id = ?";
     static String SUBTRACT_ORDERS_QUERY = "UPDATE block SET `order` = `order` - 1 WHERE `order` > ? AND scene_id = ?";
     static String GET_BLOCKS_BY_SCENE_QUERY = "SELECT * FROM block WHERE scene_id = ? ORDER BY `order`";
@@ -172,12 +172,12 @@ public class BlockDaoImpl implements BlockDao {
         Block blockAbove = readByOrder(block.getOrder() - 1, block.getScene().getId());
         
         if (blockAbove != null) {
-            jdbcTemplate.update(UPATE_ORDER_QUERY,
+            jdbcTemplate.update(UPDATE_ORDER_QUERY,
                                 blockAbove.getOrder(),
                                 block.getId()
             );
 
-            jdbcTemplate.update(UPATE_ORDER_QUERY,
+            jdbcTemplate.update(UPDATE_ORDER_QUERY,
                                 block.getOrder(),
                                 blockAbove.getId()
             );
@@ -191,12 +191,12 @@ public class BlockDaoImpl implements BlockDao {
         Block blockBelow = readByOrder(block.getOrder() + 1, block.getScene().getId());
         
         if (blockBelow != null) {
-            jdbcTemplate.update(UPATE_ORDER_QUERY,
+            jdbcTemplate.update(UPDATE_ORDER_QUERY,
                                 blockBelow.getOrder(),
                                 block.getId()
             );
 
-            jdbcTemplate.update(UPATE_ORDER_QUERY,
+            jdbcTemplate.update(UPDATE_ORDER_QUERY,
                                 block.getOrder(),
                                 blockBelow.getId()
             );

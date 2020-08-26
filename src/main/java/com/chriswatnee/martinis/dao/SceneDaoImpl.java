@@ -32,7 +32,7 @@ public class SceneDaoImpl implements SceneDao {
     static String LIST_QUERY = "SELECT * FROM scene";
     static String GET_SCENE_BY_ORDER_QUERY = "SELECT * FROM scene WHERE `order` = ? AND project_id = ?";
     static String GET_ORDER_QUERY = "SELECT `order` FROM scene WHERE id = ?";
-    static String UPATE_ORDER_QUERY = "UPDATE scene SET `order` = ? WHERE id = ?";
+    static String UPDATE_ORDER_QUERY = "UPDATE scene SET `order` = ? WHERE id = ?";
     static String UPDATE_ORDERS_QUERY = "UPDATE scene SET `order` = `order` - 1 WHERE `order` > ?";
     static String ADD_ORDERS_QUERY = "UPDATE scene SET `order` = `order` + 1 WHERE `order` > ? AND project_id = ?";
     static String SUBTRACT_ORDERS_QUERY = "UPDATE scene SET `order` = `order` - 1 WHERE `order` > ? AND project_id = ?";
@@ -147,12 +147,12 @@ public class SceneDaoImpl implements SceneDao {
         Scene previousScene = getSceneByProjectAndOrder(scene.getProject(), scene.getOrder() - 1);
         
         if (previousScene != null) {
-            jdbcTemplate.update(UPATE_ORDER_QUERY,
+            jdbcTemplate.update(UPDATE_ORDER_QUERY,
                                 previousScene.getOrder(),
                                 scene.getId()
             );
 
-            jdbcTemplate.update(UPATE_ORDER_QUERY,
+            jdbcTemplate.update(UPDATE_ORDER_QUERY,
                                 scene.getOrder(),
                                 previousScene.getId()
             );
@@ -166,12 +166,12 @@ public class SceneDaoImpl implements SceneDao {
         Scene nextScene = getSceneByProjectAndOrder(scene.getProject(), scene.getOrder() + 1);
         
         if (nextScene != null) {
-            jdbcTemplate.update(UPATE_ORDER_QUERY,
+            jdbcTemplate.update(UPDATE_ORDER_QUERY,
                                 nextScene.getOrder(),
                                 scene.getId()
             );
 
-            jdbcTemplate.update(UPATE_ORDER_QUERY,
+            jdbcTemplate.update(UPDATE_ORDER_QUERY,
                                 scene.getOrder(),
                                 nextScene.getId()
             );
