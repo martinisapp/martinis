@@ -33,7 +33,6 @@ public class SceneDaoImpl implements SceneDao {
     static String GET_SCENE_BY_ORDER_QUERY = "SELECT * FROM scene WHERE `order` = ? AND project_id = ?";
     static String GET_ORDER_QUERY = "SELECT `order` FROM scene WHERE id = ?";
     static String UPDATE_ORDER_QUERY = "UPDATE scene SET `order` = ? WHERE id = ?";
-    static String UPDATE_ORDERS_QUERY = "UPDATE scene SET `order` = `order` - 1 WHERE `order` > ?";
     static String ADD_ORDERS_QUERY = "UPDATE scene SET `order` = `order` + 1 WHERE `order` > ? AND project_id = ?";
     static String SUBTRACT_ORDERS_QUERY = "UPDATE scene SET `order` = `order` - 1 WHERE `order` > ? AND project_id = ?";
     static String GET_SCENES_BY_PROJECT_QUERY = "SELECT * FROM scene WHERE project_id = ? ORDER BY `order`";
@@ -137,7 +136,10 @@ public class SceneDaoImpl implements SceneDao {
         
         jdbcTemplate.update(DELETE_QUERY, scene.getId());
         
-        jdbcTemplate.update(UPDATE_ORDERS_QUERY, scene.getOrder());
+        jdbcTemplate.update(SUBTRACT_ORDERS_QUERY,
+                            scene.getOrder(),
+                            scene.getProject().getId()
+        );
     }
 
     @Override
