@@ -26,7 +26,7 @@
                     <table id="table-scenes" class="table table-hover">
                         <c:forEach items="${viewModel.scenes}" var="scene" varStatus="loop">
                             <tr>
-                                <td><a href="${pageContext.request.contextPath}/scene/show?id=${scene.id}">${scene.name}</a></td>
+                                <td><a href="${pageContext.request.contextPath}/scene/show?id=${scene.id}" class="text-uppercase">${scene.name}</a></td>
                                 <td>
                                     <div class="nowrap">
                                         <c:if test="${not loop.last}">

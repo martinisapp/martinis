@@ -16,10 +16,10 @@
             <ol class="breadcrumb">
                 <li><a href="${pageContext.request.contextPath}/project/list">Projects</a></li>
                 <li><a href="#"><a href="${pageContext.request.contextPath}/project/show?id=${viewModel.projectId}">${viewModel.projectTitle}</a></a></li>
-                <li class="active">${viewModel.name}</li>
+                <li class="active text-uppercase">${viewModel.name}</li>
             </ol>
             <div class="page-header">
-                <h1>${viewModel.name} <small><a href="${pageContext.request.contextPath}/scene/edit?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">edit</a> <a href="${pageContext.request.contextPath}/scene/delete?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">delete</a></small></h1>
+                <h1 class="text-uppercase">${viewModel.name} <small><a href="${pageContext.request.contextPath}/scene/edit?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">edit</a> <a href="${pageContext.request.contextPath}/scene/delete?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">delete</a></small></h1>
             </div>
             <table id="table-blocks" class="table table-hover">
                 <c:forEach items="${viewModel.blocks}" var="block" varStatus="loop">
@@ -28,7 +28,7 @@
                             <c:choose>
                                 <c:when test="${not empty block.personName}">
                                     <p class="mb-0 text-center">
-                                        <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name">${block.personName}</a>
+                                        <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name text-uppercase">${block.personName}</a>
                                     </p>
                                     <div class="text-center">
                                         ${block.content}
