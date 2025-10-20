@@ -2,6 +2,7 @@ package com.chriswatnee.martinis.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,6 +16,9 @@ public class DatabaseCheckController {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
+    @Autowired
+    private BCryptPasswordEncoder encoder;
 
     @RequestMapping(value = "/dbcheck", method = RequestMethod.GET)
     @ResponseBody
@@ -89,11 +93,39 @@ public class DatabaseCheckController {
             result.append("</table>");
 
             result.append("<p style='color:green;font-weight:bold;'>✓ Database connection successful!</p>");
-            result.append("<p><strong>Login credentials:</strong> Username: <code>admin</code> / Password: <code>password</code></p>");
+
+            // Test bcrypt password matching
+            result.append("<h2>BCrypt Password Verification:</h2>");
+            List<Map<String, Object>> adminUser = jdbcTemplate.queryForList(
+                "SELECT username, `password` FROM `user` WHERE username = ?", "admin"
+            );
+
+            if (!adminUser.isEmpty()) {
+                String storedHash = (String) adminUser.get(0).get("password");
+                String testPassword = "password";
+
+                boolean matches = encoder.matches(testPassword, storedHash);
+
+                result.append("<table><tr><th>Test</th><th>Result</th></tr>");
+                result.append("<tr><td>Stored hash</td><td><code>").append(storedHash).append("</code></td></tr>");
+                result.append("<tr><td>Test password</td><td><code>").append(testPassword).append("</code></td></tr>");
+                result.append("<tr><td>BCrypt matches?</td><td style='font-weight:bold;color:");
+                result.append(matches ? "green'>✓ YES" : "red'>✗ NO");
+                result.append("</td></tr></table>");
+
+                if (matches) {
+                    result.append("<p style='color:green;font-weight:bold;'>✓ Password 'password' matches the stored hash!</p>");
+                    result.append("<p><strong>Login should work with:</strong> Username: <code>admin</code> / Password: <code>password</code></p>");
+                } else {
+                    result.append("<p style='color:red;font-weight:bold;'>✗ Password 'password' does NOT match the stored hash!</p>");
+                    result.append("<p>This is the problem - the hash in the database is incorrect.</p>");
+                }
+            }
 
         } catch (Exception e) {
             result.append("<p style='color:red;'>Error: ").append(e.getMessage()).append("</p>");
             result.append("<pre>").append(e.getClass().getName()).append("</pre>");
+            e.printStackTrace();
         }
 
         return result.toString();
