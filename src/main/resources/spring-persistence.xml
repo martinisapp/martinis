@@ -28,17 +28,20 @@
         <property name="maxTotal" value="10"/>
     </bean> -->
     
+    <!-- Support both Railway (DATABASE_URL/MYSQL_URL) and Heroku (JAWSDB_URL) -->
     <bean class="java.net.URI" id="dbUrl">
-        <constructor-arg value="#{systemEnvironment['JAWSDB_URL']}" />
+        <constructor-arg value="#{systemEnvironment['DATABASE_URL'] ?: systemEnvironment['MYSQL_URL'] ?: systemEnvironment['JAWSDB_URL']}" />
     </bean>
 
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
         <property name="driverClassName" value="com.mysql.jdbc.Driver" />
-        <property name="url" value="#{ 'jdbc:mysql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() }" />
+        <property name="url" value="#{ 'jdbc:mysql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() + '?reconnect=true&amp;useSSL=false&amp;serverTimezone=UTC' }" />
         <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }" />
         <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }" />
         <property name="initialSize" value="5" />
         <property name="maxTotal" value="10" />
+        <property name="testOnBorrow" value="true" />
+        <property name="validationQuery" value="SELECT 1" />
     </bean>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
