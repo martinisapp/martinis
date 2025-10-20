@@ -18,8 +18,7 @@ CREATE TABLE `user` (
 	enabled tinyint(1) NOT NULL,
 	first_name varchar(30) NOT NULL,
 	last_name varchar(30) NOT NULL,
-	PRIMARY KEY (id),
-	KEY username(username)
+	PRIMARY KEY (id)
 );
 
 CREATE TABLE authority (
