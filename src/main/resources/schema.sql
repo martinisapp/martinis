@@ -24,7 +24,6 @@ CREATE TABLE `user` (
 CREATE TABLE authority (
 	username varchar(20) NOT NULL,
 	authority varchar(20) NOT NULL,
-	KEY username(username),
 	FOREIGN KEY (username) REFERENCES `user`(username)
 );
 
