@@ -94,8 +94,24 @@ public class DatabaseCheckController {
 
             result.append("<p style='color:green;font-weight:bold;'>✓ Database connection successful!</p>");
 
+            // Generate correct bcrypt hash
+            result.append("<h2>Generate Correct BCrypt Hash:</h2>");
+            String correctPassword = "password";
+            String newHash = encoder.encode(correctPassword);
+
+            result.append("<table><tr><th>Item</th><th>Value</th></tr>");
+            result.append("<tr><td>Password to encode</td><td><code>").append(correctPassword).append("</code></td></tr>");
+            result.append("<tr><td>Correct BCrypt hash</td><td><code>").append(newHash).append("</code></td></tr>");
+            result.append("<tr><td>Verification</td><td style='color:green;font-weight:bold;'>✓ ").append(encoder.matches(correctPassword, newHash) ? "VALID" : "INVALID").append("</td></tr>");
+            result.append("</table>");
+
+            result.append("<p><strong>Copy this hash and use it in data.sql:</strong></p>");
+            result.append("<pre style='background:#f5f5f5;padding:10px;border:1px solid #ddd;overflow-x:auto;'>");
+            result.append(newHash);
+            result.append("</pre>");
+
             // Test bcrypt password matching
-            result.append("<h2>BCrypt Password Verification:</h2>");
+            result.append("<h2>BCrypt Password Verification (Current Database):</h2>");
             List<Map<String, Object>> adminUser = jdbcTemplate.queryForList(
                 "SELECT username, `password` FROM `user` WHERE username = ?", "admin"
             );
@@ -118,7 +134,11 @@ public class DatabaseCheckController {
                     result.append("<p><strong>Login should work with:</strong> Username: <code>admin</code> / Password: <code>password</code></p>");
                 } else {
                     result.append("<p style='color:red;font-weight:bold;'>✗ Password 'password' does NOT match the stored hash!</p>");
-                    result.append("<p>This is the problem - the hash in the database is incorrect.</p>");
+                    result.append("<p style='background:#fff3cd;padding:10px;border:1px solid #ffc107;'>");
+                    result.append("<strong>SOLUTION:</strong> Copy the correct hash from the 'Generate Correct BCrypt Hash' section above ");
+                    result.append("and paste it into your <code>src/main/resources/data.sql</code> file, replacing the old hash. ");
+                    result.append("Then commit and push the change to trigger a new deployment.");
+                    result.append("</p>");
                 }
             }
 
