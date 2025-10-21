@@ -272,6 +272,18 @@ public class BlockWebServiceImpl implements BlockWebService {
         blockService.reorderBlocks(blockIds);
     }
 
+    @Override
+    public List<Person> getPersonsForScene(Integer sceneId) {
+        Scene scene = sceneService.read(sceneId);
+        Project project = projectService.getProjectByScene(scene);
+        return personService.getPersonsByProject(project);
+    }
+
+    @Override
+    public Block getBlock(Integer id) {
+        return blockService.read(id);
+    }
+
     // Translate create person/scene
     private List<CreatePersonViewModel> translateCreatePersonViewModel(List<Person> persons) {
 

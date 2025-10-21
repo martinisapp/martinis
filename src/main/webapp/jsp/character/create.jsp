@@ -9,6 +9,7 @@
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/martinis.css" rel="stylesheet">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     </head>
     <body>
         <jsp:include page="../includes/nav.jsp" />
@@ -51,7 +52,5 @@
                 </div>
             </sf:form>
         </div>
-        <script src="${pageContext.request.contextPath}/js/jquery-3.1.1.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
     </body>
 </html>

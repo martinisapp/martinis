@@ -9,6 +9,7 @@ import com.chriswatnee.martinis.commandmodel.block.createblock.CreateBlockComman
 import com.chriswatnee.martinis.commandmodel.block.createblockbelow.CreateBlockBelowCommandModel;
 import com.chriswatnee.martinis.commandmodel.block.editblock.EditBlockCommandModel;
 import com.chriswatnee.martinis.dto.Block;
+import com.chriswatnee.martinis.dto.Person;
 import com.chriswatnee.martinis.viewmodel.block.createblock.CreateBlockViewModel;
 import com.chriswatnee.martinis.viewmodel.block.createblockbelow.CreateBlockBelowViewModel;
 import com.chriswatnee.martinis.viewmodel.block.editblock.EditBlockViewModel;
@@ -19,7 +20,7 @@ import java.util.List;
  * @author chris
  */
 public interface BlockWebService {
-    
+
     public CreateBlockViewModel getCreateBlockViewModel(Integer sceneId);
     public CreateBlockBelowViewModel getCreateBlockBelowViewModel(Integer id);
     public EditBlockViewModel getEditBlockViewModel(Integer id);
@@ -33,5 +34,8 @@ public interface BlockWebService {
     public Block moveBlockUp(Integer id);
     public Block moveBlockDown(Integer id);
     public void reorderBlocks(List<Integer> blockIds);
+
+    public List<Person> getPersonsForScene(Integer sceneId);
+    public Block getBlock(Integer id);
 
 }
