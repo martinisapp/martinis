@@ -10,7 +10,7 @@ $(document).ready(function() {
             return;
         }
 
-        e.preventDefault();
+        e.stopPropagation(); // Prevent event from bubbling to document click handler
         var $row = $(this).closest('tr');
         var $display = $row.find('.block-display');
         var $edit = $row.find('.block-edit');
@@ -42,6 +42,11 @@ $(document).ready(function() {
         $edit.find('.edit-content-textarea').focus();
     });
 
+    // Prevent clicks inside edit form from bubbling to document handler
+    $(document).on('click', '.block-edit', function(e) {
+        e.stopPropagation();
+    });
+
     // Function to close edit mode
     function closeEditMode($row) {
         var $display = $row.find('.block-display');
@@ -64,18 +69,12 @@ $(document).ready(function() {
 
     // Handle clicking outside the edit form
     $(document).on('click', function(e) {
-        // Find all rows that are currently being edited
+        // Find all rows that are currently being edited and close them
+        // (clicks inside .block-edit and .block-display are stopped from propagating)
         $('tr[data-block-id]').each(function() {
             var $row = $(this);
             if ($row.data('is-editing')) {
-                var $edit = $row.find('.block-edit');
-                var $display = $row.find('.block-display');
-
-                // Check if click is outside the edit form and not on the block display
-                if (!$edit.is(e.target) && $edit.has(e.target).length === 0 &&
-                    !$display.is(e.target) && $display.has(e.target).length === 0) {
-                    closeEditMode($row);
-                }
+                closeEditMode($row);
             }
         });
     });
