@@ -112,8 +112,10 @@
                                     <textarea class="form-control edit-content-textarea" rows="3">${block.content}</textarea>
                                 </div>
                                 <div class="form-group">
-                                    <div class="save-status" style="display: inline-block; margin-right: 10px;"></div>
-                                    <button class="btn btn-default btn-sm cancel-edit-btn">Done</button>
+                                    <div class="save-status"></div>
+                                    <div class="text-muted small" style="margin-top: 5px;">
+                                        <i>Click outside or press Escape to finish editing</i>
+                                    </div>
                                 </div>
                             </div>
                         </td>
