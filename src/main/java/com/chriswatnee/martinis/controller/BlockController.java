@@ -118,9 +118,38 @@ public class BlockController {
         }
     }
 
+    // htmx endpoint - get edit form
+    @RequestMapping(value = "/editForm", method = RequestMethod.GET)
+    public String getEditForm(@RequestParam Integer id, Model model) {
+        Block block = blockWebService.getBlock(id);
+        model.addAttribute("block", block);
+        model.addAttribute("persons", blockWebService.getPersonsForScene(block.getScene().getId()));
+        return "fragments/block-edit-form";
+    }
+
+    // htmx endpoint - get display view (for canceling edits)
+    @RequestMapping(value = "/displayView", method = RequestMethod.GET)
+    public String getDisplayView(@RequestParam Integer id, Model model) {
+        Block block = blockWebService.getBlock(id);
+        model.addAttribute("block", block);
+        return "fragments/block-display";
+    }
+
+    // htmx endpoint - update block and return display view
     @RequestMapping(value = "/updateInline", method = RequestMethod.POST)
+    public String updateInline(@ModelAttribute EditBlockCommandModel commandModel, Model model) {
+        if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
+            return "error";
+        }
+        Block block = blockWebService.saveEditBlockCommandModel(commandModel);
+        model.addAttribute("block", block);
+        return "fragments/block-display";
+    }
+
+    // Legacy JSON endpoint for backwards compatibility
+    @RequestMapping(value = "/updateInlineJson", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> updateInline(@RequestBody EditBlockCommandModel commandModel) {
+    public ResponseEntity<String> updateInlineJson(@RequestBody EditBlockCommandModel commandModel) {
         try {
             if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
                 return new ResponseEntity<>("Content cannot be empty", HttpStatus.BAD_REQUEST);

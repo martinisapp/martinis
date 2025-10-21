@@ -11,6 +11,7 @@
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/martinis.css" rel="stylesheet">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
+        <script src="https://unpkg.com/htmx.org@1.9.10"></script>
         <style>
             .drag-handle {
                 cursor: move;
@@ -99,16 +100,19 @@
             <table id="table-blocks" class="table table-hover">
                 <tbody>
                 <c:forEach items="${viewModel.blocks}" var="block" varStatus="loop">
-                    <tr data-block-id="${block.id}" data-person-id="${block.personId}" data-scene-id="${viewModel.id}">
+                    <tr data-block-id="${block.id}">
                         <td>
                             <span class="drag-handle" title="Drag to reorder">&#8942;&#8942;</span>
                         </td>
                         <td>
-                            <div class="block-display">
+                            <div class="block-display"
+                                 hx-get="${pageContext.request.contextPath}/block/editForm?id=${block.id}"
+                                 hx-target="closest td"
+                                 hx-swap="innerHTML">
                                 <c:choose>
                                     <c:when test="${not empty block.personName}">
                                         <p class="mb-0 text-center">
-                                            <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name text-uppercase">${block.personName}</a>
+                                            <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name text-uppercase" onclick="event.stopPropagation()">${block.personName}</a>
                                         </p>
                                         <div class="text-center block-content">
                                             ${block.content}
@@ -118,28 +122,6 @@
                                         <div class="block-content">${block.content}</div>
                                     </c:otherwise>
                                 </c:choose>
-                            </div>
-                            <div class="block-edit" style="display: none;">
-                                <div class="form-group">
-                                    <label>Character:</label>
-                                    <select class="form-control edit-person-select">
-                                        <option value="">-- No Character --</option>
-                                        <c:forEach items="${viewModel.persons}" var="person">
-                                            <option value="${person.id}" ${person.id == block.personId ? 'selected' : ''}>${person.name}</option>
-                                        </c:forEach>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Content:</label>
-                                    <!-- Deployed from commit: rows expanded to 8 -->
-                                    <textarea class="form-control edit-content-textarea" rows="8">${block.content}</textarea>
-                                </div>
-                                <div class="form-group">
-                                    <div class="save-status"></div>
-                                    <div class="text-muted small" style="margin-top: 5px;">
-                                        <i>Click outside or press Escape to finish editing</i>
-                                    </div>
-                                </div>
                             </div>
                         </td>
                         <td>
@@ -174,20 +156,10 @@
                 </ul>
             </nav>
         </div>
-        <script src="${pageContext.request.contextPath}/js/jquery-3.1.1.min.js"></script>
-        <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
         <script>
             var contextPath = '${pageContext.request.contextPath}';
-            var editBlockId = '${param.editBlock}';
-            var sceneId = ${viewModel.id};
-            var scenePersons = [
-                <c:forEach items="${viewModel.persons}" var="person" varStatus="loop">
-                {id: ${person.id}, name: '${person.name}'}<c:if test="${!loop.last}">,</c:if>
-                </c:forEach>
-            ];
         </script>
-        <script src="${pageContext.request.contextPath}/js/block-reorder.js"></script>
-        <script src="${pageContext.request.contextPath}/js/block-inline-edit.js"></script>
+        <script src="${pageContext.request.contextPath}/js/block-htmx.js"></script>
     </body>
 </html>
