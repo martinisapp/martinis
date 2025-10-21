@@ -226,6 +226,13 @@ public class BlockWebServiceImpl implements BlockWebService {
 
         return block;
     }
+
+    @Override
+    public void restoreBlock(Block block) {
+
+        // Restore the deleted block
+        blockService.restore(block);
+    }
     
     @Override
     public Block moveBlockUp(Integer id) {

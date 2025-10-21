@@ -15,6 +15,7 @@ import com.chriswatnee.martinis.viewmodel.block.editblock.EditBlockViewModel;
 import com.chriswatnee.martinis.webservice.BlockWebService;
 import java.util.List;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
  *
@@ -40,11 +42,30 @@ public class BlockController {
     BlockWebService blockWebService;
     
     @RequestMapping(value = "/delete")
-    public String delete(@RequestParam Integer id) {
-        
+    public String delete(@RequestParam Integer id, HttpSession session, RedirectAttributes redirectAttributes) {
+
         Block block = blockWebService.deleteBlock(id);
-        
+
+        // Store deleted block in session for undo
+        session.setAttribute("deletedBlock", block);
+
+        // Add flash attribute to show undo notification
+        redirectAttributes.addFlashAttribute("blockDeleted", true);
+
         return "redirect:/scene/show?id=" + block.getScene().getId();
+    }
+
+    @RequestMapping(value = "/undo")
+    public String undo(HttpSession session) {
+
+        Block deletedBlock = (Block) session.getAttribute("deletedBlock");
+
+        if (deletedBlock != null) {
+            blockWebService.restoreBlock(deletedBlock);
+            session.removeAttribute("deletedBlock");
+        }
+
+        return "redirect:/scene/show?id=" + deletedBlock.getScene().getId();
     }
     
     @RequestMapping(value = "/moveUp")

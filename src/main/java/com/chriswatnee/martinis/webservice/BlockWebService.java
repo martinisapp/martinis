@@ -29,6 +29,7 @@ public interface BlockWebService {
     public Block saveEditBlockCommandModel(EditBlockCommandModel editBlockCommandModel);
 
     public Block deleteBlock(Integer id);
+    public void restoreBlock(Block block);
     public Block moveBlockUp(Integer id);
     public Block moveBlockDown(Integer id);
     public void reorderBlocks(List<Integer> blockIds);

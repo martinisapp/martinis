@@ -20,6 +20,7 @@ public interface BlockDao {
     public Block read(Integer id);
     public void update(Block block);
     public void delete(Block block);
+    public void restore(Block block);
     public void moveUp(Block block);
     public void moveDown(Block block);
     public void updateOrder(Integer blockId, Integer newOrder);
