@@ -1,11 +1,12 @@
 {
-  "name": "SG Records WebMVC",
-  "description": "Example of SpringMVC on heroku",
-  "repository": "https://bitbucket.thesoftwareguild.com/scm/sg/sg-heroku-archetype.git",
+  "name": "Martinis",
+  "description": "Spring MVC web application for screenwriting",
+  "repository": "https://github.com/martinisapp/martinis",
   "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Tomcat-logo.svg",
   "keywords": [
     "java",
     "tomcat",
-    "spring"
+    "spring",
+    "screenwriting"
   ]
 }
