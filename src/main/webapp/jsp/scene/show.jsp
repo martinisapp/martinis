@@ -8,6 +8,31 @@
         <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
         <link href="${pageContext.request.contextPath}/css/martinis.css" rel="stylesheet">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
+        <style>
+            .drag-handle {
+                cursor: move;
+                padding: 5px 10px;
+                color: #999;
+                font-size: 18px;
+                display: inline-block;
+            }
+            .drag-handle:hover {
+                color: #333;
+            }
+            .sortable-ghost {
+                opacity: 0.4;
+                background: #f5f5f5;
+            }
+            .sortable-drag {
+                opacity: 0.8;
+            }
+            #table-blocks tbody tr {
+                transition: background-color 0.2s;
+            }
+            #table-blocks tbody tr:hover {
+                background-color: #f9f9f9;
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="../includes/nav.jsp" />
@@ -22,8 +47,12 @@
                 <h1 class="text-uppercase">${viewModel.name} <small><a href="${pageContext.request.contextPath}/scene/edit?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">edit</a> <a href="${pageContext.request.contextPath}/scene/delete?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">delete</a></small></h1>
             </div>
             <table id="table-blocks" class="table table-hover">
+                <tbody>
                 <c:forEach items="${viewModel.blocks}" var="block" varStatus="loop">
-                    <tr>
+                    <tr data-block-id="${block.id}">
+                        <td>
+                            <span class="drag-handle" title="Drag to reorder">&#8942;&#8942;</span>
+                        </td>
                         <td>
                             <c:choose>
                                 <c:when test="${not empty block.personName}">
@@ -54,6 +83,7 @@
                         </td>
                     </tr>
                 </c:forEach>
+                </tbody>
             </table>
             <p>
                 <a href="${pageContext.request.contextPath}/block/create?sceneId=${viewModel.id}" class="btn btn-primary" role="button">Create New Block</a> 
@@ -73,5 +103,10 @@
         </div>
         <script src="${pageContext.request.contextPath}/js/jquery-3.1.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
+        <script>
+            var contextPath = '${pageContext.request.contextPath}';
+        </script>
+        <script src="${pageContext.request.contextPath}/js/block-reorder.js"></script>
     </body>
 </html>
