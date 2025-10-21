@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    console.log('Block inline edit JavaScript loaded');
     var csrfToken = $('meta[name="_csrf"]').attr('content');
     var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
     var autoSaveTimers = {}; // Store timers per block
@@ -98,18 +99,22 @@ $(document).ready(function() {
             e.preventDefault();
             var $row = $(this).closest('tr[data-block-id]');
             var blockId = $row.data('block-id');
+
+            // Clear any pending auto-save timer
             if (autoSaveTimers[blockId]) {
                 clearTimeout(autoSaveTimers[blockId]);
                 delete autoSaveTimers[blockId];
             }
-            autoSaveBlock($row);
-            // Trigger create new block after a short delay to allow save to complete
-            setTimeout(function() {
-                var $createBtn = $row.find('.create-below');
-                if ($createBtn.length > 0) {
-                    window.location.href = $createBtn.attr('href');
-                }
-            }, 500);
+
+            // Only save and create new block if this is NOT a new block being created
+            if (!$row.data('is-new')) {
+                autoSaveBlock($row);
+                // Trigger create new block inline after a short delay to allow save to complete
+                setTimeout(function() {
+                    closeEditMode($row);
+                    createNewBlockRow(blockId);
+                }, 500);
+            }
         }
     });
 
@@ -333,8 +338,12 @@ $(document).ready(function() {
     // Handle "+ block" (create below) button click
     $(document).on('click', '.create-below', function(e) {
         e.preventDefault();
-        var blockId = $(this).closest('tr').data('block-id');
+        console.log('Create below button clicked - creating inline');
+        var $tr = $(this).closest('tr');
+        var blockId = $tr.data('block-id');
+        console.log('Block ID:', blockId);
         createNewBlockRow(blockId);
+        return false; // Extra prevention of default behavior
     });
 
     // Handle save new block button
@@ -400,4 +409,8 @@ $(document).ready(function() {
         var $row = $(this).closest('tr');
         $row.remove();
     });
+
+    // Log that event handlers are registered
+    console.log('All block inline edit event handlers registered');
+    console.log('+ block buttons found:', $('.create-below').length);
 });
