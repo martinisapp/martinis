@@ -52,6 +52,14 @@
             .block-display {
                 min-height: 30px;
             }
+            .save-status {
+                font-size: 13px;
+                min-width: 100px;
+                vertical-align: middle;
+            }
+            .save-status i {
+                font-style: italic;
+            }
         </style>
     </head>
     <body>
@@ -104,8 +112,8 @@
                                     <textarea class="form-control edit-content-textarea" rows="3">${block.content}</textarea>
                                 </div>
                                 <div class="form-group">
-                                    <button class="btn btn-success btn-sm save-block-btn">Save</button>
-                                    <button class="btn btn-default btn-sm cancel-edit-btn">Cancel</button>
+                                    <div class="save-status" style="display: inline-block; margin-right: 10px;"></div>
+                                    <button class="btn btn-default btn-sm cancel-edit-btn">Done</button>
                                 </div>
                             </div>
                         </td>
