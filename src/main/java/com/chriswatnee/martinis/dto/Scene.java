@@ -5,11 +5,15 @@
  */
 package com.chriswatnee.martinis.dto;
 
+import java.io.Serializable;
+
 /**
  *
  * @author chris
  */
-public class Scene {
+public class Scene implements Serializable {
+
+    private static final long serialVersionUID = 1L;
     
     private Integer id;
     private Integer order;
