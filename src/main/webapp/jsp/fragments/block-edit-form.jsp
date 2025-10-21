@@ -2,7 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="block-edit">
     <form hx-post="${pageContext.request.contextPath}/block/updateInline"
-          hx-target="closest td"
+          hx-target="closest .block-column-content"
           hx-swap="innerHTML"
           hx-trigger="submit">
         <input type="hidden" name="id" value="${block.id}">
@@ -21,7 +21,7 @@
             <textarea class="form-control" name="content" rows="8"
                       hx-post="${pageContext.request.contextPath}/block/updateInline"
                       hx-include="closest form"
-                      hx-target="closest td"
+                      hx-target="closest .block-column-content"
                       hx-swap="innerHTML"
                       hx-trigger="keyup changed delay:1500ms, blur">${block.content}</textarea>
         </div>
