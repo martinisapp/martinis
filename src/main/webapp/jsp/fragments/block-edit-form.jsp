@@ -9,7 +9,7 @@
         <input type="hidden" name="sceneId" value="${block.scene.id}">
         <div class="form-group">
             <label>Character:</label>
-            <select class="form-control" name="personId"
+            <select class="form-control edit-person-select" name="personId"
                     hx-post="${pageContext.request.contextPath}/block/updateInline"
                     hx-include="closest form"
                     hx-target="closest td"
