@@ -60,6 +60,16 @@ public class BlockServiceImpl implements BlockService {
     }
 
     @Override
+    public void reorderBlocks(List<Integer> blockIds) {
+        // Update the order of each block based on its position in the list
+        for (int i = 0; i < blockIds.size(); i++) {
+            Integer blockId = blockIds.get(i);
+            Integer newOrder = i + 1; // Order starts at 1
+            blockDao.updateOrder(blockId, newOrder);
+        }
+    }
+
+    @Override
     public List<Block> list() {
         return blockDao.list();
     }

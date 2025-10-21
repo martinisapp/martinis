@@ -22,7 +22,8 @@ public interface BlockService {
     public void delete(Block block);
     public void moveUp(Block block);
     public void moveDown(Block block);
+    public void reorderBlocks(List<Integer> blockIds);
     public List<Block> list();
     public List<Block> getBlocksByScene(Scene scene);
-    
+
 }

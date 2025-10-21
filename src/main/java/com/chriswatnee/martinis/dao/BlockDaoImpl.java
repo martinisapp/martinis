@@ -204,6 +204,11 @@ public class BlockDaoImpl implements BlockDao {
     }
 
     @Override
+    public void updateOrder(Integer blockId, Integer newOrder) {
+        jdbcTemplate.update(UPDATE_ORDER_QUERY, newOrder, blockId);
+    }
+
+    @Override
     public List<Block> list() {
         return jdbcTemplate.query(LIST_QUERY, new BlockMapper());
     }

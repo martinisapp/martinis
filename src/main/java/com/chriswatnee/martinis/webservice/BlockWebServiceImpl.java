@@ -250,7 +250,12 @@ public class BlockWebServiceImpl implements BlockWebService {
 
         return block;
     }
-    
+
+    @Override
+    public void reorderBlocks(List<Integer> blockIds) {
+        blockService.reorderBlocks(blockIds);
+    }
+
     // Translate create person/scene
     private List<CreatePersonViewModel> translateCreatePersonViewModel(List<Person> persons) {
 

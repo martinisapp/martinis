@@ -13,15 +13,20 @@ import com.chriswatnee.martinis.viewmodel.block.createblock.CreateBlockViewModel
 import com.chriswatnee.martinis.viewmodel.block.createblockbelow.CreateBlockBelowViewModel;
 import com.chriswatnee.martinis.viewmodel.block.editblock.EditBlockViewModel;
 import com.chriswatnee.martinis.webservice.BlockWebService;
+import java.util.List;
 import javax.inject.Inject;
 import javax.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -52,12 +57,23 @@ public class BlockController {
     
     @RequestMapping(value = "/moveDown")
     public String moveDown(@RequestParam Integer id) {
-        
+
         Block block = blockWebService.moveBlockDown(id);
-        
+
         return "redirect:/scene/show?id=" + block.getScene().getId();
     }
-    
+
+    @RequestMapping(value = "/reorder", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> reorder(@RequestBody List<Integer> blockIds) {
+        try {
+            blockWebService.reorderBlocks(blockIds);
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     // Show Form
     @RequestMapping(value = "/edit")
     public String edit(@RequestParam Integer id, Model model) {
