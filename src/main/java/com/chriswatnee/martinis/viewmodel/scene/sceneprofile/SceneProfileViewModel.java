@@ -12,7 +12,7 @@ import java.util.List;
  * @author chris
  */
 public class SceneProfileViewModel {
-    
+
     private int id;
     private String name;
     private int projectId;
@@ -22,6 +22,7 @@ public class SceneProfileViewModel {
     private int nextSceneId;
     private String nextSceneName;
     private List<BlockViewModel> blocks;
+    private List<PersonViewModel> persons;
 
     public int getId() {
         return id;
@@ -94,5 +95,13 @@ public class SceneProfileViewModel {
     public void setBlocks(List<BlockViewModel> blocks) {
         this.blocks = blocks;
     }
-    
+
+    public List<PersonViewModel> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(List<PersonViewModel> persons) {
+        this.persons = persons;
+    }
+
 }

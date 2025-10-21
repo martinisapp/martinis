@@ -20,6 +20,7 @@ import com.chriswatnee.martinis.viewmodel.scene.createscene.CreateSceneViewModel
 import com.chriswatnee.martinis.viewmodel.scene.createscenebelow.CreateSceneBelowViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.editscene.EditSceneViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.BlockViewModel;
+import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.PersonViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.SceneProfileViewModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,7 +47,7 @@ public class SceneWebServiceImpl implements SceneWebService {
     
     @Override
     public SceneProfileViewModel getSceneProfileViewModel(Integer id) {
-        
+
         // Instantiate
         SceneProfileViewModel sceneProfileViewModel = new SceneProfileViewModel();
 
@@ -58,30 +59,37 @@ public class SceneWebServiceImpl implements SceneWebService {
         if (scene.getProject() != null) {
             project = projectService.read(scene.getProject().getId());
         }
-        
+
         Scene previousScene = sceneService.getPreviousScene(scene);
         Scene nextScene = sceneService.getNextScene(scene);
+
+        // Get persons for the project
+        List<Person> persons = new ArrayList<>();
+        if (project != null) {
+            persons = personService.getPersonsByProject(project);
+        }
 
         // Put stuff
         sceneProfileViewModel.setId(scene.getId());
         sceneProfileViewModel.setName(scene.getName());
-        
+
         if (project != null) {
             sceneProfileViewModel.setProjectId(project.getId());
             sceneProfileViewModel.setProjectTitle(project.getTitle());
         }
-        
+
         if (previousScene != null) {
             sceneProfileViewModel.setPreviousSceneId(previousScene.getId());
             sceneProfileViewModel.setPreviousSceneName(previousScene.getName());
         }
-        
+
         if (nextScene != null) {
             sceneProfileViewModel.setNextSceneId(nextScene.getId());
             sceneProfileViewModel.setNextSceneName(nextScene.getName());
         }
-        
+
         sceneProfileViewModel.setBlocks(translateBlock(blocks));
+        sceneProfileViewModel.setPersons(translatePerson(persons));
 
         return sceneProfileViewModel;
     }
@@ -269,7 +277,7 @@ public class SceneWebServiceImpl implements SceneWebService {
         blockViewModel.setOrder(block.getOrder());
         blockViewModel.setContent(block.getContent());
         blockViewModel.setId(block.getId());
-        
+
         if (block.getPerson() != null) {
             Person person = personService.read(block.getPerson().getId());
 
@@ -282,5 +290,24 @@ public class SceneWebServiceImpl implements SceneWebService {
 
         return blockViewModel;
     }
-    
+
+    private List<PersonViewModel> translatePerson(List<Person> persons) {
+        List<PersonViewModel> personViewModels = new ArrayList<>();
+
+        for (Person person : persons) {
+            personViewModels.add(translatePerson(person));
+        }
+
+        return personViewModels;
+    }
+
+    private PersonViewModel translatePerson(Person person) {
+        PersonViewModel personViewModel = new PersonViewModel();
+
+        personViewModel.setId(person.getId());
+        personViewModel.setName(person.getName());
+
+        return personViewModel;
+    }
+
 }

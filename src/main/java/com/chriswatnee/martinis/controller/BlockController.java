@@ -74,6 +74,20 @@ public class BlockController {
         }
     }
 
+    @RequestMapping(value = "/updateInline", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> updateInline(@RequestBody EditBlockCommandModel commandModel) {
+        try {
+            if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
+                return new ResponseEntity<>("Content cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+            blockWebService.saveEditBlockCommandModel(commandModel);
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     // Show Form
     @RequestMapping(value = "/edit")
     public String edit(@RequestParam Integer id, Model model) {

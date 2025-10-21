@@ -34,6 +34,24 @@
             #table-blocks tbody tr:hover {
                 background-color: #f9f9f9;
             }
+            .block-edit {
+                padding: 10px;
+                background-color: #f8f9fa;
+                border-radius: 4px;
+            }
+            .block-edit .form-group {
+                margin-bottom: 10px;
+            }
+            .block-edit label {
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            .block-edit textarea.form-control {
+                resize: vertical;
+            }
+            .block-display {
+                min-height: 30px;
+            }
         </style>
     </head>
     <body>
@@ -51,28 +69,49 @@
             <table id="table-blocks" class="table table-hover">
                 <tbody>
                 <c:forEach items="${viewModel.blocks}" var="block" varStatus="loop">
-                    <tr data-block-id="${block.id}">
+                    <tr data-block-id="${block.id}" data-person-id="${block.personId}" data-scene-id="${viewModel.id}">
                         <td>
                             <span class="drag-handle" title="Drag to reorder">&#8942;&#8942;</span>
                         </td>
                         <td>
-                            <c:choose>
-                                <c:when test="${not empty block.personName}">
-                                    <p class="mb-0 text-center">
-                                        <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name text-uppercase">${block.personName}</a>
-                                    </p>
-                                    <div class="text-center">
-                                        ${block.content}
-                                    </div>
-                                </c:when>    
-                                <c:otherwise>
-                                    ${block.content}
-                                </c:otherwise>
-                            </c:choose>
+                            <div class="block-display">
+                                <c:choose>
+                                    <c:when test="${not empty block.personName}">
+                                        <p class="mb-0 text-center">
+                                            <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name text-uppercase">${block.personName}</a>
+                                        </p>
+                                        <div class="text-center block-content">
+                                            ${block.content}
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="block-content">${block.content}</div>
+                                    </c:otherwise>
+                                </c:choose>
+                            </div>
+                            <div class="block-edit" style="display: none;">
+                                <div class="form-group">
+                                    <label>Character:</label>
+                                    <select class="form-control edit-person-select">
+                                        <option value="">-- No Character --</option>
+                                        <c:forEach items="${viewModel.persons}" var="person">
+                                            <option value="${person.id}" ${person.id == block.personId ? 'selected' : ''}>${person.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Content:</label>
+                                    <textarea class="form-control edit-content-textarea" rows="3">${block.content}</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-success btn-sm save-block-btn">Save</button>
+                                    <button class="btn btn-default btn-sm cancel-edit-btn">Cancel</button>
+                                </div>
+                            </div>
                         </td>
                         <td>
                             <div class="nowrap">
-                                <a href="${pageContext.request.contextPath}/block/edit?id=${block.id}" class="btn btn-default btn-xs" role="button">edit</a>
+                                <button class="btn btn-default btn-xs edit-inline-btn" role="button">edit</button>
                                 <a href="${pageContext.request.contextPath}/block/delete?id=${block.id}" class="btn btn-default btn-xs" role="button">delete</a>
                                 <c:if test="${not loop.last}">
                                     <a href="${pageContext.request.contextPath}/block/moveDown?id=${block.id}" class="btn btn-default btn-xs move-down" role="button">↓</a>
@@ -110,5 +149,6 @@
             var contextPath = '${pageContext.request.contextPath}';
         </script>
         <script src="${pageContext.request.contextPath}/js/block-reorder.js"></script>
+        <script src="${pageContext.request.contextPath}/js/block-inline-edit.js"></script>
     </body>
 </html>
