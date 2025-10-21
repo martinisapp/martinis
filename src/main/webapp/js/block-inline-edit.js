@@ -1,6 +1,7 @@
 $(document).ready(function() {
     var csrfToken = $('meta[name="_csrf"]').attr('content');
     var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+    var autoSaveTimers = {}; // Store timers per block
 
     // Handle edit button click
     $(document).on('click', '.edit-inline-btn', function(e) {
@@ -8,6 +9,14 @@ $(document).ready(function() {
         var $row = $(this).closest('tr');
         var $display = $row.find('.block-display');
         var $edit = $row.find('.block-edit');
+        var blockId = $row.data('block-id');
+
+        // Store original values for change detection
+        var originalContent = $row.find('.block-content').text().trim();
+        var originalPersonId = $row.data('person-id');
+
+        $row.data('original-content', originalContent);
+        $row.data('original-person-id', originalPersonId);
 
         // Hide display, show edit form
         $display.hide();
@@ -15,6 +24,9 @@ $(document).ready(function() {
 
         // Hide the edit button while editing
         $(this).hide();
+
+        // Initialize save status
+        updateSaveStatus($row, 'ready');
     });
 
     // Handle cancel button click
@@ -23,10 +35,17 @@ $(document).ready(function() {
         var $row = $(this).closest('tr');
         var $display = $row.find('.block-display');
         var $edit = $row.find('.block-edit');
+        var blockId = $row.data('block-id');
+
+        // Clear any pending auto-save timer
+        if (autoSaveTimers[blockId]) {
+            clearTimeout(autoSaveTimers[blockId]);
+            delete autoSaveTimers[blockId];
+        }
 
         // Reset form values to original
-        var originalContent = $row.find('.block-content').text().trim();
-        var originalPersonId = $row.data('person-id');
+        var originalContent = $row.data('original-content');
+        var originalPersonId = $row.data('original-person-id');
 
         $edit.find('.edit-content-textarea').val(originalContent);
         $edit.find('.edit-person-select').val(originalPersonId || '');
@@ -39,11 +58,41 @@ $(document).ready(function() {
         $row.find('.edit-inline-btn').show();
     });
 
-    // Handle save button click
-    $(document).on('click', '.save-block-btn', function(e) {
-        e.preventDefault();
-        var $button = $(this);
-        var $row = $button.closest('tr');
+    // Auto-save on content change (debounced)
+    $(document).on('input', '.edit-content-textarea', function() {
+        var $row = $(this).closest('tr');
+        var blockId = $row.data('block-id');
+
+        // Clear existing timer
+        if (autoSaveTimers[blockId]) {
+            clearTimeout(autoSaveTimers[blockId]);
+        }
+
+        // Show "typing..." status
+        updateSaveStatus($row, 'typing');
+
+        // Set new timer to auto-save after 1.5 seconds of inactivity
+        autoSaveTimers[blockId] = setTimeout(function() {
+            autoSaveBlock($row);
+        }, 1500);
+    });
+
+    // Auto-save on character selection change (immediate)
+    $(document).on('change', '.edit-person-select', function() {
+        var $row = $(this).closest('tr');
+        var blockId = $row.data('block-id');
+
+        // Clear any pending timer since we're saving now
+        if (autoSaveTimers[blockId]) {
+            clearTimeout(autoSaveTimers[blockId]);
+            delete autoSaveTimers[blockId];
+        }
+
+        autoSaveBlock($row);
+    });
+
+    // Function to auto-save a block
+    function autoSaveBlock($row) {
         var blockId = $row.data('block-id');
         var sceneId = $row.data('scene-id');
         var content = $row.find('.edit-content-textarea').val();
@@ -51,12 +100,21 @@ $(document).ready(function() {
 
         // Validate content
         if (!content || content.trim() === '') {
-            alert('Content cannot be empty');
+            updateSaveStatus($row, 'error', 'Content cannot be empty');
             return;
         }
 
-        // Disable button while saving
-        $button.prop('disabled', true).text('Saving...');
+        // Check if anything actually changed
+        var originalContent = $row.data('original-content');
+        var originalPersonId = $row.data('original-person-id') || '';
+
+        if (content === originalContent && (personId || '') == originalPersonId) {
+            updateSaveStatus($row, 'ready');
+            return; // No changes to save
+        }
+
+        // Show saving status
+        updateSaveStatus($row, 'saving');
 
         // Prepare data
         var data = {
@@ -88,29 +146,52 @@ $(document).ready(function() {
                     $display.html('<div class="block-content">' + escapeHtml(content) + '</div>');
                 }
 
-                // Update data attributes
+                // Update data attributes with new values
                 $row.data('person-id', personId || '');
+                $row.data('original-content', content);
+                $row.data('original-person-id', personId || '');
 
-                // Hide edit form, show display
-                $row.find('.block-edit').hide();
-                $display.show();
+                // Show saved status
+                updateSaveStatus($row, 'saved');
 
-                // Re-enable button and show edit button
-                $button.prop('disabled', false).text('Save');
-                $row.find('.edit-inline-btn').show();
-
-                console.log('Block updated successfully');
+                console.log('Block auto-saved successfully');
             },
             error: function(xhr, status, error) {
-                console.error('Error updating block:', error);
-                var errorMessage = xhr.responseText || 'Failed to update block. Please try again.';
-                alert(errorMessage);
-
-                // Re-enable button
-                $button.prop('disabled', false).text('Save');
+                console.error('Error auto-saving block:', error);
+                var errorMessage = xhr.responseText || 'Failed to save';
+                updateSaveStatus($row, 'error', errorMessage);
             }
         });
-    });
+    }
+
+    // Function to update save status indicator
+    function updateSaveStatus($row, status, message) {
+        var $statusIndicator = $row.find('.save-status');
+
+        switch(status) {
+            case 'ready':
+                $statusIndicator.html('<span class="text-muted"><i>Ready to edit</i></span>');
+                break;
+            case 'typing':
+                $statusIndicator.html('<span class="text-muted"><i>Typing...</i></span>');
+                break;
+            case 'saving':
+                $statusIndicator.html('<span class="text-info"><i>Saving...</i></span>');
+                break;
+            case 'saved':
+                $statusIndicator.html('<span class="text-success"><i>Saved</i></span>');
+                // Clear "saved" message after 2 seconds
+                setTimeout(function() {
+                    if ($statusIndicator.find('.text-success').length > 0) {
+                        $statusIndicator.html('<span class="text-muted"><i>Ready to edit</i></span>');
+                    }
+                }, 2000);
+                break;
+            case 'error':
+                $statusIndicator.html('<span class="text-danger"><i>' + (message || 'Error saving') + '</i></span>');
+                break;
+        }
+    }
 
     // Helper function to escape HTML
     function escapeHtml(text) {
