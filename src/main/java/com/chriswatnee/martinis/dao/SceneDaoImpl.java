@@ -37,6 +37,7 @@ public class SceneDaoImpl implements SceneDao {
     static String SUBTRACT_ORDERS_QUERY = "UPDATE scene SET `order` = `order` - 1 WHERE `order` > ? AND project_id = ?";
     static String GET_SCENES_BY_PROJECT_QUERY = "SELECT * FROM scene WHERE project_id = ? ORDER BY `order`";
     static String GET_SCENE_COUNT_BY_PROJECT_QUERY = "SELECT COUNT(*) FROM scene WHERE project_id = ?";
+    static String CREATE_BLOCK_QUERY = "INSERT INTO block (`order`, content, person_id, scene_id) VALUES (?,?,?,?)";
     
     @Inject
     public SceneDaoImpl(JdbcTemplate jdbcTemplate) {
@@ -46,59 +47,75 @@ public class SceneDaoImpl implements SceneDao {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Scene create(Scene scene) {
-        
+
         Integer projectId = null;
-        
+
         if (scene.getProject() != null) {
             projectId = scene.getProject().getId();
         }
-        
+
         int order = jdbcTemplate.queryForObject(GET_SCENE_COUNT_BY_PROJECT_QUERY, Integer.class, projectId) + 1;
-        
+
         jdbcTemplate.update(CREATE_QUERY,
                             order,
                             scene.getName(),
                             projectId
         );
-        
+
         int createId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-        
+
         scene.setId(createId);
-        
+
+        // Create a default block for the new scene
+        jdbcTemplate.update(CREATE_BLOCK_QUERY,
+                            1,          // order (first block)
+                            "",         // content (empty)
+                            null,       // person_id (no character)
+                            createId    // scene_id
+        );
+
         return scene;
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Scene createBelow(Scene scene) {
-        
+
         Integer projectId = null;
-        
+
         if (scene.getProject() != null) {
             projectId = scene.getProject().getId();
         }
-        
+
         Integer order = null;
-        
+
         if (scene.getOrder() != null) {
             order = scene.getOrder() + 1;
         }
-        
+
         jdbcTemplate.update(ADD_ORDERS_QUERY,
                             scene.getOrder(),
                             projectId
         );
-        
+
         jdbcTemplate.update(CREATE_QUERY,
                             order,
                             scene.getName(),
                             projectId
         );
-        
+
         int createdId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-        
+
         scene.setId(createdId);
-        
+
+        // Create a default block for the new scene
+        jdbcTemplate.update(CREATE_BLOCK_QUERY,
+                            1,          // order (first block)
+                            "",         // content (empty)
+                            null,       // person_id (no character)
+                            createdId   // scene_id
+        );
+
         return scene;
     }
 
