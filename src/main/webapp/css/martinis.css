@@ -58,8 +58,8 @@
     border-top: none;
 }
 
-#table-scenes td:first-child,
-#table-blocks td:first-child {
+#table-scenes td:nth-child(2),
+#table-blocks td:nth-child(2) {
     width: 99%;
 }
 
