@@ -34,14 +34,14 @@
                                       hx-include="closest form"
                                       hx-target="closest tr"
                                       hx-swap="outerHTML"
-                                      hx-trigger="keyup changed delay:1500ms, blur"></textarea>
+                                      hx-trigger="keyup changed delay:1500ms[event.target.value.trim().length > 0], blur[event.target.value.trim().length > 0]"></textarea>
                         </div>
                         <div class="form-group">
                             <div class="save-status">
                                 <span class="text-muted htmx-indicator">Saving...</span>
                             </div>
                             <div class="text-muted small">
-                                <i>Auto-saves as you type. Press Escape or click outside to cancel.</i>
+                                <i>Auto-saves as you type.</i>
                             </div>
                         </div>
                     </form>
@@ -72,14 +72,14 @@
                                       hx-include="closest form"
                                       hx-target="closest tr"
                                       hx-swap="outerHTML"
-                                      hx-trigger="keyup changed delay:1500ms, blur"></textarea>
+                                      hx-trigger="keyup changed delay:1500ms[event.target.value.trim().length > 0], blur[event.target.value.trim().length > 0]"></textarea>
                         </div>
                         <div class="form-group">
                             <div class="save-status">
                                 <span class="text-muted htmx-indicator">Saving...</span>
                             </div>
                             <div class="text-muted small">
-                                <i>Auto-saves as you type. Press Escape or click outside to cancel.</i>
+                                <i>Auto-saves as you type.</i>
                             </div>
                         </div>
                     </form>
