@@ -259,19 +259,4 @@ $(document).ready(function() {
         };
         return text.replace(/[&<>"']/g, function(m) { return map[m]; });
     }
-
-    // Auto-enter edit mode for newly created block
-    if (typeof editBlockId !== 'undefined' && editBlockId && editBlockId !== '') {
-        var $newBlock = $('tr[data-block-id="' + editBlockId + '"]');
-        if ($newBlock.length > 0) {
-            // Small delay to ensure page is fully loaded
-            setTimeout(function() {
-                enterEditMode($newBlock);
-                // Scroll to the new block
-                $('html, body').animate({
-                    scrollTop: $newBlock.offset().top - 100
-                }, 500);
-            }, 100);
-        }
-    }
 });
