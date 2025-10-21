@@ -230,6 +230,15 @@ public class BlockWebServiceImpl implements BlockWebService {
     @Override
     public void restoreBlock(Block block) {
 
+        // Validate that the person still exists, if not set to null
+        if (block.getPerson() != null && block.getPerson().getId() != null) {
+            Person person = personService.read(block.getPerson().getId());
+            if (person == null) {
+                // Person was deleted, so remove the reference
+                block.setPerson(null);
+            }
+        }
+
         // Restore the deleted block
         blockService.restore(block);
     }
