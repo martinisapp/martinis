@@ -109,6 +109,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Content:</label>
+                                    <!-- Deployed from commit: rows expanded to 8 -->
                                     <textarea class="form-control edit-content-textarea" rows="8">${block.content}</textarea>
                                 </div>
                                 <div class="form-group">
