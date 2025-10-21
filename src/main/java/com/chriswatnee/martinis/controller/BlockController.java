@@ -227,12 +227,21 @@ public class BlockController {
     @ResponseBody
     public ResponseEntity<String> createInline(@RequestBody CreateBlockCommandModel commandModel) {
         try {
+            System.out.println("DEBUG /createInline - Received commandModel:");
+            System.out.println("  content: " + commandModel.getContent());
+            System.out.println("  personId: " + commandModel.getPersonId());
+            System.out.println("  sceneId: " + commandModel.getSceneId());
+
             if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
                 return new ResponseEntity<>("Content cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+            if (commandModel.getSceneId() == null) {
+                return new ResponseEntity<>("Scene ID is required", HttpStatus.BAD_REQUEST);
             }
             Block block = blockWebService.saveCreateBlockCommandModel(commandModel);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -242,12 +251,22 @@ public class BlockController {
     @ResponseBody
     public ResponseEntity<String> createBelowInline(@RequestBody CreateBlockBelowCommandModel commandModel) {
         try {
+            System.out.println("DEBUG /createBelowInline - Received commandModel:");
+            System.out.println("  id: " + commandModel.getId());
+            System.out.println("  content: " + commandModel.getContent());
+            System.out.println("  personId: " + commandModel.getPersonId());
+            System.out.println("  sceneId: " + commandModel.getSceneId());
+
             if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
                 return new ResponseEntity<>("Content cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+            if (commandModel.getId() == null) {
+                return new ResponseEntity<>("Block ID is required for createBelow", HttpStatus.BAD_REQUEST);
             }
             Block block = blockWebService.saveCreateBlockBelowCommandModel(commandModel);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

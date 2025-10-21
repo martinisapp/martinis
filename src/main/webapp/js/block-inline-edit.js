@@ -282,6 +282,11 @@ $(document).ready(function() {
         var tempId = 'new-' + Date.now();
         var $newRow = $('<tr data-block-id="' + tempId + '" data-person-id="" data-scene-id="' + sceneId + '" data-is-new="true">');
 
+        // Store whether this is create-below or create-at-end
+        if (insertAfterBlockId) {
+            $newRow.data('insert-after-block-id', insertAfterBlockId);
+        }
+
         // Drag handle cell
         $newRow.append('<td><span class="drag-handle" title="Drag to reorder">&#8942;&#8942;</span></td>');
 
@@ -353,6 +358,8 @@ $(document).ready(function() {
         var content = $row.find('.edit-content-textarea').val();
         var personId = $row.find('.edit-person-select').val();
 
+        console.log('Saving new block - content:', content, 'personId:', personId);
+
         // Validate content
         if (!content || content.trim() === '') {
             updateSaveStatus($row, 'error', 'Content cannot be empty');
@@ -362,25 +369,30 @@ $(document).ready(function() {
         // Show saving status
         updateSaveStatus($row, 'saving');
 
-        // Determine if this is create or createBelow
-        var insertAfterBlockId = null;
-        var $prevRow = $row.prev('tr[data-block-id]');
-        if ($prevRow.length > 0 && !$prevRow.data('is-new')) {
-            insertAfterBlockId = $prevRow.data('block-id');
-        }
+        // Determine if this is create or createBelow based on stored data
+        var insertAfterBlockId = $row.data('insert-after-block-id');
+
+        console.log('insertAfterBlockId:', insertAfterBlockId);
 
         // Prepare data
         var data = {
-            sceneId: sceneId,
             content: content,
             personId: personId ? parseInt(personId) : null
         };
 
         // Choose endpoint based on whether we're inserting after a specific block
-        var endpoint = insertAfterBlockId ? '/block/createBelowInline' : '/block/createInline';
+        var endpoint;
         if (insertAfterBlockId) {
+            endpoint = '/block/createBelowInline';
             data.id = insertAfterBlockId;
+            console.log('Using createBelowInline with id:', insertAfterBlockId);
+        } else {
+            endpoint = '/block/createInline';
+            data.sceneId = sceneId;
+            console.log('Using createInline with sceneId:', sceneId);
         }
+
+        console.log('Sending AJAX request to', endpoint, 'with data:', data);
 
         // Send AJAX request
         $.ajax({
@@ -392,11 +404,14 @@ $(document).ready(function() {
                 xhr.setRequestHeader(csrfHeader, csrfToken);
             },
             success: function(response) {
+                console.log('Block created successfully');
                 // Reload the page to show the new block in the correct position
                 window.location.reload();
             },
             error: function(xhr, status, error) {
                 console.error('Error creating block:', error);
+                console.error('Response status:', xhr.status);
+                console.error('Response text:', xhr.responseText);
                 var errorMessage = xhr.responseText || 'Failed to create block';
                 updateSaveStatus($row, 'error', errorMessage);
             }
