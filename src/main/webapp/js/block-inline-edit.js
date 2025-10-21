@@ -49,7 +49,7 @@ $(document).ready(function() {
     });
 
     // Function to close edit mode
-    function closeEditMode($row) {
+    function closeEditMode($row, skipSave) {
         var $display = $row.find('.block-display');
         var $edit = $row.find('.block-edit');
         var blockId = $row.data('block-id');
@@ -59,6 +59,33 @@ $(document).ready(function() {
             clearTimeout(autoSaveTimers[blockId]);
             delete autoSaveTimers[blockId];
         }
+
+        // Check if we should auto-save before closing (unless it's a new block)
+        if (!skipSave && !$row.data('is-new')) {
+            var content = $row.find('.edit-content-textarea').val();
+            var personId = $row.find('.edit-person-select').val();
+            var originalContent = $row.data('original-content');
+            var originalPersonId = $row.data('original-person-id') || '';
+
+            // If there are unsaved changes, save them before closing
+            if (content && content !== originalContent || (personId || '') != originalPersonId) {
+                // Trigger auto-save and close after it completes
+                autoSaveBlock($row, function() {
+                    // Close after save completes
+                    actuallyCloseEditMode($row);
+                });
+                return; // Don't close yet, wait for save to complete
+            }
+        }
+
+        // No unsaved changes or skip requested, close immediately
+        actuallyCloseEditMode($row);
+    }
+
+    // Helper function that actually closes the edit mode
+    function actuallyCloseEditMode($row) {
+        var $display = $row.find('.block-display');
+        var $edit = $row.find('.block-edit');
 
         // Show display, hide edit form
         $edit.hide();
@@ -108,12 +135,11 @@ $(document).ready(function() {
 
             // Only save and create new block if this is NOT a new block being created
             if (!$row.data('is-new')) {
-                autoSaveBlock($row);
-                // Trigger create new block inline after a short delay to allow save to complete
-                setTimeout(function() {
-                    closeEditMode($row);
+                autoSaveBlock($row, function() {
+                    // After save completes, close and create new block
+                    closeEditMode($row, true); // Skip save since we just saved
                     createNewBlockRow(blockId);
-                }, 500);
+                });
             }
         }
     });
@@ -162,7 +188,7 @@ $(document).ready(function() {
     });
 
     // Function to auto-save a block
-    function autoSaveBlock($row) {
+    function autoSaveBlock($row, callback) {
         var blockId = $row.data('block-id');
         var sceneId = $row.data('scene-id');
         var content = $row.find('.edit-content-textarea').val();
@@ -171,6 +197,7 @@ $(document).ready(function() {
         // Validate content
         if (!content || content.trim() === '') {
             updateSaveStatus($row, 'error', 'Content cannot be empty');
+            if (callback) callback();
             return;
         }
 
@@ -180,6 +207,7 @@ $(document).ready(function() {
 
         if (content === originalContent && (personId || '') == originalPersonId) {
             updateSaveStatus($row, 'ready');
+            if (callback) callback();
             return; // No changes to save
         }
 
@@ -225,11 +253,17 @@ $(document).ready(function() {
                 updateSaveStatus($row, 'saved');
 
                 console.log('Block auto-saved successfully');
+
+                // Call callback if provided
+                if (callback) callback();
             },
             error: function(xhr, status, error) {
                 console.error('Error auto-saving block:', error);
                 var errorMessage = xhr.responseText || 'Failed to save';
                 updateSaveStatus($row, 'error', errorMessage);
+
+                // Call callback even on error
+                if (callback) callback();
             }
         });
     }
