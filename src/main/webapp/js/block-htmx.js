@@ -64,12 +64,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!isInsideEdit && !isInsideDisplay) {
             var editForms = document.querySelectorAll('.block-edit');
             editForms.forEach(function(form) {
-                // Trigger a GET request to reload the display view
-                var blockId = form.querySelector('input[name="id"]').value;
-                htmx.ajax('GET', contextPath + '/block/displayView?id=' + blockId, {
-                    target: form.closest('td'),
-                    swap: 'innerHTML'
-                });
+                var formElement = form.querySelector('form');
+                if (!formElement) return;
+
+                // Check if this is a new block form (has action ending with createInline or createBelowInline)
+                var action = formElement.getAttribute('hx-post') || '';
+                if (action.includes('createInline') || action.includes('createBelowInline')) {
+                    // For new block forms, remove the entire row
+                    form.closest('tr').remove();
+                } else {
+                    // For existing block forms, reload the display view
+                    var blockId = form.querySelector('input[name="id"]').value;
+                    htmx.ajax('GET', contextPath + '/block/displayView?id=' + blockId, {
+                        target: form.closest('td'),
+                        swap: 'innerHTML'
+                    });
+                }
             });
         }
     });
@@ -79,12 +89,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.key === 'Escape' || e.keyCode === 27) {
             var editForms = document.querySelectorAll('.block-edit');
             editForms.forEach(function(form) {
-                // Trigger a GET request to reload the display view
-                var blockId = form.querySelector('input[name="id"]').value;
-                htmx.ajax('GET', contextPath + '/block/displayView?id=' + blockId, {
-                    target: form.closest('td'),
-                    swap: 'innerHTML'
-                });
+                var formElement = form.querySelector('form');
+                if (!formElement) return;
+
+                // Check if this is a new block form (has action ending with createInline or createBelowInline)
+                var action = formElement.getAttribute('hx-post') || '';
+                if (action.includes('createInline') || action.includes('createBelowInline')) {
+                    // For new block forms, remove the entire row
+                    form.closest('tr').remove();
+                } else {
+                    // For existing block forms, reload the display view
+                    var blockId = form.querySelector('input[name="id"]').value;
+                    htmx.ajax('GET', contextPath + '/block/displayView?id=' + blockId, {
+                        target: form.closest('td'),
+                        swap: 'innerHTML'
+                    });
+                }
             });
         }
     });
