@@ -38,9 +38,9 @@
                         </div>
                         <div class="form-group">
                             <div class="save-status">
-                                <span class="text-muted htmx-indicator" style="font-style: italic;">Saving...</span>
+                                <span class="text-muted htmx-indicator">Saving...</span>
                             </div>
-                            <div class="text-muted small" style="margin-top: 5px;">
+                            <div class="text-muted small">
                                 <i>Auto-saves as you type. Press Escape or click outside to cancel.</i>
                             </div>
                         </div>
@@ -76,9 +76,9 @@
                         </div>
                         <div class="form-group">
                             <div class="save-status">
-                                <span class="text-muted htmx-indicator" style="font-style: italic;">Saving...</span>
+                                <span class="text-muted htmx-indicator">Saving...</span>
                             </div>
-                            <div class="text-muted small" style="margin-top: 5px;">
+                            <div class="text-muted small">
                                 <i>Auto-saves as you type. Press Escape or click outside to cancel.</i>
                             </div>
                         </div>
