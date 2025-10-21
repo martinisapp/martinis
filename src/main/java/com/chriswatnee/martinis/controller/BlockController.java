@@ -61,11 +61,14 @@ public class BlockController {
         Block deletedBlock = (Block) session.getAttribute("deletedBlock");
 
         if (deletedBlock != null) {
+            Integer sceneId = deletedBlock.getScene().getId();
             blockWebService.restoreBlock(deletedBlock);
             session.removeAttribute("deletedBlock");
+            return "redirect:/scene/show?id=" + sceneId;
         }
 
-        return "redirect:/scene/show?id=" + deletedBlock.getScene().getId();
+        // If no deleted block in session, redirect to project list
+        return "redirect:/project/list";
     }
     
     @RequestMapping(value = "/moveUp")
