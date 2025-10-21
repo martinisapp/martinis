@@ -9,12 +9,7 @@
         <input type="hidden" name="sceneId" value="${block.scene.id}">
         <div class="form-group">
             <label>Character:</label>
-            <select class="form-control edit-person-select" name="personId"
-                    hx-post="${pageContext.request.contextPath}/block/updateInline"
-                    hx-include="closest form"
-                    hx-target="closest .block-column-content"
-                    hx-swap="innerHTML"
-                    hx-trigger="change">
+            <select class="form-control edit-person-select" name="personId">
                 <option value="">-- No Character --</option>
                 <c:forEach items="${persons}" var="person">
                     <option value="${person.id}" ${block.person != null && person.id == block.person.id ? 'selected' : ''}>${person.name}</option>
