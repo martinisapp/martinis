@@ -136,9 +136,6 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="save-status"></div>
-                                    <div class="keyboard-shortcuts-hint">
-                                        <strong>Shortcuts:</strong> Ctrl+S to save | Return to save & new block | ↑↓ to navigate | Esc to close
-                                    </div>
                                 </div>
                             </div>
                         </td>
