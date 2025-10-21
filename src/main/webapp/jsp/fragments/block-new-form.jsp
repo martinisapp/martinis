@@ -41,7 +41,7 @@
                                 <span class="text-muted htmx-indicator">Saving...</span>
                             </div>
                             <div class="text-muted small">
-                                <i>Auto-saves as you type. Press Escape or click outside to cancel.</i>
+                                <i>Auto-saves as you type. Press Escape to cancel.</i>
                             </div>
                         </div>
                     </form>
@@ -79,7 +79,7 @@
                                 <span class="text-muted htmx-indicator">Saving...</span>
                             </div>
                             <div class="text-muted small">
-                                <i>Auto-saves as you type. Press Escape or click outside to cancel.</i>
+                                <i>Auto-saves as you type. Press Escape to cancel.</i>
                             </div>
                         </div>
                     </form>

@@ -70,8 +70,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Check if this is a new block form (has action ending with createInline or createBelowInline)
                 var action = formElement.getAttribute('hx-post') || '';
                 if (action.includes('createInline') || action.includes('createBelowInline')) {
-                    // For new block forms, remove the entire row
-                    form.closest('tr').remove();
+                    // For new block forms, do nothing - let auto-save handle it via blur event
+                    return;
                 } else {
                     // For existing block forms, reload the display view
                     var blockId = form.querySelector('input[name="id"]').value;
