@@ -1,7 +1,42 @@
 # Login Troubleshooting for Railway Deployment
 
-## Current Issue
-Getting redirected to `/login?login_error=1` when trying to log in.
+## No Default Users
+
+For security reasons, this application no longer creates default users. You must create your own admin user before you can log in.
+
+## Creating Your First Admin User
+
+### Option 1: Using Environment Variables (Recommended)
+
+Set the following environment variables in Railway before deployment:
+
+1. Go to Railway → Your App Service → Variables
+2. Add these variables:
+   - `ADMIN_USERNAME` - Your desired admin username (e.g., "admin")
+   - `ADMIN_PASSWORD` - Your desired admin password (use a strong password!)
+   - `ADMIN_FIRSTNAME` - (Optional) Admin's first name
+   - `ADMIN_LASTNAME` - (Optional) Admin's last name
+
+3. Redeploy the application
+
+The application will automatically create the admin user on startup if these environment variables are set and the user doesn't already exist.
+
+### Option 2: Manual Database Insert
+
+If you prefer to create users manually, connect to your Railway MySQL database and run:
+
+```sql
+-- Create a user (replace values with your own)
+INSERT INTO `user` (username, `password`, enabled, first_name, last_name)
+VALUES ('yourusername', 'BCRYPT_HASH_HERE', 1, 'First', 'Last');
+
+-- Grant user authorities
+INSERT INTO authority (username, authority) VALUES
+('yourusername', 'ROLE_ADMIN'),
+('yourusername', 'ROLE_USER');
+```
+
+**Important**: You need to generate a BCrypt hash for your password. You can use the BcryptTest.java utility or online BCrypt generators.
 
 ## Step 1: Verify Database Contents
 
@@ -18,51 +53,33 @@ SELECT * FROM authority;
 
 ### Expected Results:
 
-**User table should show:**
-| id | username | password_start | enabled | first_name | last_name |
-|----|----------|---------------|---------|------------|-----------|
-| 1  | admin    | $2a$10$BGmcUaHCftiG | 1       | Chris      | Watnee    |
-| 2  | clint    | $2a$10$BGmcUaHCftiG | 1       | Clint      | Watnee    |
+You should see at least one user with ROLE_USER or ROLE_ADMIN authority.
 
-**Authority table should show:**
-| username | authority   |
-|----------|-------------|
-| admin    | ROLE_ADMIN  |
-| admin    | ROLE_USER   |
-| clint    | ROLE_USER   |
+If you see **no users**, you need to create an admin user (see above).
 
-## Step 2: Check Railway Deployment Logs
+## Step 2: Check Database Connection
 
-In Railway → Your App Service → Deployments → Click latest deployment → Logs
+Visit `/dbcheck` on your deployed application (e.g., `https://your-app.railway.app/dbcheck`)
 
-Look for these lines near the end:
-```
-INFO: Executing SQL script from class path resource [schema.sql]
-INFO: Executed SQL script from class path resource [schema.sql] in XXX ms
-INFO: Executing SQL script from class path resource [data.sql]
-INFO: Executed SQL script from class path resource [data.sql] in XX ms
-```
+This page will show:
+- All users in the database
+- All authorities
+- Database statistics
+- Instructions for creating users if none exist
 
-Also look for this line confirming the new MySQL driver:
-```
-com.mysql.cj.jdbc.Driver
-```
-
-If you see `com.mysql.jdbc.Driver` instead, the new fix hasn't deployed yet.
-
-## Step 3: Correct Login Credentials
-
-**IMPORTANT**: Do NOT type the bcrypt hash! The hash in the database is supposed to be there.
+## Step 3: Login Credentials
 
 When logging in, enter:
-- **Username**: `admin` (plain text, lowercase)
-- **Password**: `password` (plain text, lowercase - just the word "password")
+- **Username**: The username you created (plain text)
+- **Password**: The password you set (plain text)
 
-The application will automatically hash your typed password and compare it to the database hash.
+The application will automatically hash your typed password and compare it to the BCrypt hash stored in the database.
+
+**IMPORTANT**: Do NOT type the bcrypt hash! Enter your actual password in plain text.
 
 ## Step 4: Check for Errors
 
-If still failing, check Railway logs for any errors containing:
+If login fails, check Railway logs for any errors containing:
 - `SQLException`
 - `Authentication failed`
 - `Bad credentials`
@@ -71,11 +88,12 @@ Copy and paste any errors you find.
 
 ## Common Issues
 
-1. **Old deployment still running**: Railway might not have deployed the latest fix yet
-2. **Wrong database**: Data might be in a different database/schema
-3. **Case sensitivity**: MySQL table/column names might be case-sensitive depending on OS
-4. **Connection string**: The MYSQL_URL might be pointing to wrong database
+1. **No users created**: The most common issue - make sure to create an admin user first
+2. **Wrong environment variables**: Check that ADMIN_USERNAME and ADMIN_PASSWORD are set correctly
+3. **Old deployment**: Railway might not have deployed the latest version yet
+4. **Wrong database**: The MYSQL_URL might be pointing to the wrong database
+5. **Incorrect password**: BCrypt is case-sensitive - make sure you're typing the exact password you set
 
 ## Next Steps
 
-If Step 1 shows the users and authorities exist correctly, and Step 2 shows the new driver is being used, then we need to enable debug logging to see why Spring Security is rejecting the credentials.
+If you've created a user but still can't log in, enable debug logging to see why Spring Security is rejecting the credentials. Check the Railway deployment logs for detailed authentication error messages.

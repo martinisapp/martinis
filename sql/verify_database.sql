@@ -1,5 +1,5 @@
 -- Database Verification Script for Railway MySQL
--- Run this in Railway's MySQL console to verify users were created correctly
+-- Run this in Railway's MySQL console to verify database setup
 
 -- Check if tables exist
 SHOW TABLES;
@@ -10,17 +10,11 @@ DESCRIBE `user`;
 -- Check authority table structure
 DESCRIBE authority;
 
--- Check if admin user exists
-SELECT * FROM `user` WHERE username = 'admin';
+-- List all users
+SELECT id, username, enabled, first_name, last_name FROM `user`;
 
--- Check if clint user exists
-SELECT * FROM `user` WHERE username = 'clint';
-
--- Check authorities for admin
-SELECT * FROM authority WHERE username = 'admin';
-
--- Check authorities for clint
-SELECT * FROM authority WHERE username = 'clint';
+-- List all authorities
+SELECT username, authority FROM authority;
 
 -- Count total users
 SELECT COUNT(*) as total_users FROM `user`;
