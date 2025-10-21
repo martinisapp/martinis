@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -18,7 +19,7 @@
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
                     <form class="form-horizontal" role="form" method="POST" action="${pageContext.request.contextPath}/j_spring_security_check">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                        <sec:csrfInput />
                         <div class="form-group">
                             <label for="j_username" class="col-md-2 control-label">Username:</label>
                             <div class="col-md-10">
