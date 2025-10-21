@@ -33,9 +33,23 @@ This application is configured for deployment on Railway.com.
    - The application also supports `DATABASE_URL` and `JAWSDB_URL` for compatibility
    - No manual configuration needed for the database connection
 
-5. **Database Setup**
-   - After deployment, you'll need to initialize your MySQL database with the required schema
-   - You can find the SQL scripts in the `sql/` directory
+5. **Create Initial Admin User**
+
+   **IMPORTANT**: For security reasons, no default users are created. You must create an admin user before you can log in.
+
+   Set the following environment variables in Railway:
+   - `ADMIN_USERNAME` - Your desired admin username (e.g., "admin")
+   - `ADMIN_PASSWORD` - Your desired admin password (use a strong password!)
+   - `ADMIN_FIRSTNAME` - (Optional) Admin's first name
+   - `ADMIN_LASTNAME` - (Optional) Admin's last name
+
+   The application will automatically create the admin user on startup.
+
+   **Security Best Practice**: After the first successful deployment and user creation, remove the `ADMIN_PASSWORD` environment variable to prevent unauthorized access.
+
+6. **Database Setup**
+   - The database schema is automatically initialized on first deployment
+   - SQL scripts are available in the `sql/` directory for reference
 
 #### Alternative: One-Click Deploy
 
