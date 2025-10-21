@@ -364,7 +364,7 @@ $(document).ready(function() {
 
         switch(status) {
             case 'ready':
-                $statusIndicator.html('<span class="text-muted"><i>Ready to edit</i></span>');
+                $statusIndicator.html('');
                 break;
             case 'typing':
                 $statusIndicator.html('<span class="text-muted"><i>Typing...</i></span>');
@@ -377,7 +377,7 @@ $(document).ready(function() {
                 // Clear "saved" message after 2 seconds
                 setTimeout(function() {
                     if ($statusIndicator.find('.text-success').length > 0) {
-                        $statusIndicator.html('<span class="text-muted"><i>Ready to edit</i></span>');
+                        $statusIndicator.html('');
                     }
                 }, 2000);
                 break;
