@@ -22,63 +22,6 @@
                 });
             });
         </script>
-        <style>
-            .drag-handle {
-                cursor: move;
-                padding: 5px 10px;
-                color: #999;
-                font-size: 18px;
-                display: inline-block;
-            }
-            .drag-handle:hover {
-                color: #333;
-            }
-            .sortable-ghost {
-                opacity: 0.4;
-                background: #f5f5f5;
-            }
-            .sortable-drag {
-                opacity: 0.8;
-            }
-            #table-blocks tbody tr {
-                transition: background-color 0.2s;
-            }
-            #table-blocks tbody tr:hover {
-                background-color: #f9f9f9;
-            }
-            .block-edit {
-                padding: 10px;
-                background-color: #f8f9fa;
-                border-radius: 4px;
-            }
-            .block-edit .form-group {
-                margin-bottom: 10px;
-            }
-            .block-edit label {
-                font-weight: bold;
-                margin-bottom: 5px;
-            }
-            .block-edit textarea.form-control {
-                resize: vertical;
-                text-align: left;
-            }
-            .block-display {
-                min-height: 30px;
-                cursor: pointer;
-            }
-            .block-display:hover {
-                background-color: #f0f0f0;
-                border-radius: 4px;
-            }
-            .save-status {
-                font-size: 13px;
-                min-width: 100px;
-                vertical-align: middle;
-            }
-            .save-status i {
-                font-style: italic;
-            }
-        </style>
     </head>
     <body>
         <jsp:include page="../includes/nav.jsp" />
@@ -87,14 +30,14 @@
 
             <!-- Undo notification -->
             <c:if test="${blockDeleted}">
-                <div id="undo-notification" class="alert alert-success" role="alert" style="margin-top: 20px; margin-bottom: 20px;">
+                <div id="undo-notification" class="alert alert-success" role="alert">
                     <strong>Block deleted.</strong>
                     <c:choose>
                         <c:when test="${undoCount > 1}">
-                            <a href="${pageContext.request.contextPath}/block/undo" class="btn btn-sm btn-warning" style="margin-left: 10px;">Undo (${undoCount} available)</a>
+                            <a href="${pageContext.request.contextPath}/block/undo" class="btn btn-sm btn-warning">Undo (${undoCount} available)</a>
                         </c:when>
                         <c:otherwise>
-                            <a href="${pageContext.request.contextPath}/block/undo" class="btn btn-sm btn-warning" style="margin-left: 10px;">Undo</a>
+                            <a href="${pageContext.request.contextPath}/block/undo" class="btn btn-sm btn-warning">Undo</a>
                         </c:otherwise>
                     </c:choose>
                 </div>
