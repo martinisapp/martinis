@@ -123,6 +123,11 @@ $(document).ready(function() {
         var $row = $(this).closest('tr');
         var blockId = $row.data('block-id');
 
+        // Don't auto-save for new blocks being created
+        if ($row.data('is-new')) {
+            return;
+        }
+
         // Clear existing timer
         if (autoSaveTimers[blockId]) {
             clearTimeout(autoSaveTimers[blockId]);
@@ -141,6 +146,11 @@ $(document).ready(function() {
     $(document).on('change', '.edit-person-select', function() {
         var $row = $(this).closest('tr');
         var blockId = $row.data('block-id');
+
+        // Don't auto-save for new blocks being created
+        if ($row.data('is-new')) {
+            return;
+        }
 
         // Clear any pending timer since we're saving now
         if (autoSaveTimers[blockId]) {
