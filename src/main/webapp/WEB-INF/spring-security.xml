@@ -21,6 +21,8 @@
     <http auto-config="true">
         <form-login login-processing-url="/j_spring_security_check"
                     login-page="/login"
+                    username-parameter="j_username"
+                    password-parameter="j_password"
                     authentication-failure-url="/login?login_error=1" />
         <intercept-url pattern="/login"
                        access="permitAll" />
