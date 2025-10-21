@@ -199,6 +199,24 @@ $(document).ready(function() {
             }, 500);
         }
 
+        // Return/Enter: Save and create new block below (without modifier keys)
+        if (e.key === 'Enter' && !e.ctrlKey && !e.metaKey && !e.shiftKey && !e.altKey) {
+            e.preventDefault();
+            var blockId = $row.data('block-id');
+            if (autoSaveTimers[blockId]) {
+                clearTimeout(autoSaveTimers[blockId]);
+                delete autoSaveTimers[blockId];
+            }
+            autoSaveBlock($row);
+            // Trigger create new block after a short delay to allow save to complete
+            setTimeout(function() {
+                var $createBtn = $row.find('.create-below');
+                if ($createBtn.length > 0) {
+                    window.location.href = $createBtn.attr('href');
+                }
+            }, 500);
+        }
+
         // Arrow Down: Navigate to next block (when at end of textarea)
         if (e.key === 'ArrowDown' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
             var cursorPos = $textarea[0].selectionStart;
