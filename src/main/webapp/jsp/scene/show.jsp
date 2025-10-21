@@ -159,8 +159,8 @@
                 </tbody>
             </table>
             <p>
-                <a href="${pageContext.request.contextPath}/block/create?sceneId=${viewModel.id}" class="btn btn-primary" role="button">Create New Block</a> 
-                <a href="${pageContext.request.contextPath}/scene/createBelow?id=${viewModel.id}" class="btn btn-default" role="button">Create New Scene</a> 
+                <button id="create-new-block-btn" class="btn btn-primary" type="button">Create New Block</button>
+                <a href="${pageContext.request.contextPath}/scene/createBelow?id=${viewModel.id}" class="btn btn-default" role="button">Create New Scene</a>
                 <a href="${pageContext.request.contextPath}/character/create?projectId=${viewModel.projectId}" class="btn btn-default" role="button">Create New Character</a>
             </p>
             <nav aria-label="...">
@@ -180,7 +180,12 @@
         <script>
             var contextPath = '${pageContext.request.contextPath}';
             var editBlockId = '${param.editBlock}';
-
+            var sceneId = ${viewModel.id};
+            var scenePersons = [
+                <c:forEach items="${viewModel.persons}" var="person" varStatus="loop">
+                {id: ${person.id}, name: '${person.name}'}<c:if test="${!loop.last}">,</c:if>
+                </c:forEach>
+            ];
         </script>
         <script src="${pageContext.request.contextPath}/js/block-reorder.js"></script>
         <script src="${pageContext.request.contextPath}/js/block-inline-edit.js"></script>
