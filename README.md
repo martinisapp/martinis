@@ -1,56 +1,94 @@
 # Martinis
 
-A Java Spring MVC application for managing film production scenes, actors, and blocking.
+A Spring MVC web application for managing screenplay projects, scenes, actors, and shooting schedules.
 
-## Deployment on Railway
+## Deployment
 
-This application is configured to run on [Railway](https://railway.com/).
+### Railway.com
 
-### Prerequisites
+This application is configured for deployment on Railway.com.
 
-- A Railway account
-- A MySQL database service on Railway
+#### Prerequisites
+- A Railway account (https://railway.app)
+- A MySQL database (Railway provides MySQL as an add-on)
 
-### Deployment Steps
+#### Deployment Steps
 
 1. **Create a new project on Railway**
-   - Go to [railway.com](https://railway.com/) and create a new project
-   - Add a MySQL database service to your project
+   - Visit https://railway.app and create a new project
+   - Connect your GitHub repository
 
-2. **Connect your repository**
-   - Connect this GitHub repository to Railway
-   - Railway will automatically detect the Java/Maven configuration
+2. **Add a MySQL database**
+   - In your Railway project, click "New Service"
+   - Select "Database" → "MySQL"
+   - Railway will automatically create a `MYSQL_URL` environment variable
 
-3. **Configure environment variables**
-   - Railway will automatically set `PORT` and `DATABASE_URL`
-   - The application supports the following database URL formats:
-     - `DATABASE_URL` (Railway default)
-     - `MYSQL_URL` (Railway MySQL)
-     - `JAWSDB_URL` (Heroku compatibility)
+3. **Deploy the application**
+   - Railway will automatically detect the Java/Maven project
+   - The build process is configured in `nixpacks.toml`
+   - The app will start using the command specified in `railway.json`
 
-4. **Deploy**
-   - Railway will automatically build and deploy using the configuration in:
-     - `nixpacks.toml` - Build configuration
-     - `railway.json` - Deployment settings
-     - `Procfile` - Start command
+4. **Environment Variables**
+   - The application automatically reads the `MYSQL_URL` environment variable provided by Railway
+   - The application also supports `DATABASE_URL` and `JAWSDB_URL` for compatibility
+   - No manual configuration needed for the database connection
 
-### Database Setup
+5. **Database Setup**
+   - After deployment, you'll need to initialize your MySQL database with the required schema
+   - You can find the SQL scripts in the `sql/` directory
 
-After deployment, you'll need to initialize your MySQL database with the required schema. You can find the SQL scripts in the `sql/` directory.
+#### Alternative: One-Click Deploy
 
-### Heroku Deployment
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new)
 
-This application is also compatible with Heroku:
+### Heroku (Legacy)
 
-1. Create a new Heroku app
-2. Add JawsDB MySQL addon
-3. Deploy using Git or GitHub integration
-4. The `Procfile` will be used to start the application
+The application also supports Heroku deployment using the `JAWSDB_URL` environment variable.
 
-### Local Development
+## Local Development
 
-For local development with MySQL:
+### Prerequisites
+- Java 8 or higher
+- Maven 3.x
+- MySQL database
 
-1. Uncomment the local datasource configuration in `src/main/resources/spring-persistence.xml`
-2. Update the connection details to match your local MySQL instance
-3. Run with Maven: `mvn clean package && java -jar target/dependency/webapp-runner.jar target/*.war`
+### Database Configuration
+
+For local development, uncomment and configure the local database bean in `src/main/resources/spring-persistence.xml`:
+
+```xml
+<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
+    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+    <property name="url" value="jdbc:mysql://localhost:3306/martinis?serverTimezone=EST"/>
+    <property name="username" value="root"/>
+    <property name="password" value="rootroot"/>
+    <property name="initialSize" value="5"/>
+    <property name="maxTotal" value="10"/>
+</bean>
+```
+
+### Build and Run
+
+```bash
+# Build the project
+mvn clean package
+
+# Run locally (requires webapp-runner)
+java -jar target/dependency/webapp-runner.jar target/*.war
+```
+
+## Technology Stack
+
+- **Framework**: Spring MVC 4.3.18
+- **Database**: MySQL with JDBC
+- **Build Tool**: Maven
+- **Server**: Tomcat (via webapp-runner)
+- **Java Version**: 8
+
+## Features
+
+- Project management for screenplays
+- Scene organization and scheduling
+- Actor/character management
+- Shooting schedule blocks
+- RESTful web services API
