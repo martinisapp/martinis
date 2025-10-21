@@ -48,6 +48,7 @@
             }
             .block-edit textarea.form-control {
                 resize: vertical;
+                text-align: left;
             }
             .block-display {
                 min-height: 30px;
