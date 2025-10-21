@@ -385,89 +385,92 @@ $(document).ready(function() {
     });
 
     // Handle "+ block" (create below) button click
-    $(document).on('click', '.create-below', function(e) {
-        e.preventDefault();
-        console.log('Create below button clicked - creating inline');
-        var $tr = $(this).closest('tr');
-        var blockId = $tr.data('block-id');
-        console.log('Block ID:', blockId);
-        createNewBlockRow(blockId);
-        return false; // Extra prevention of default behavior
-    });
+    // DISABLED - now handled by HTMX in block-row.jsp
+    // $(document).on('click', '.create-below', function(e) {
+    //     e.preventDefault();
+    //     console.log('Create below button clicked - creating inline');
+    //     var $tr = $(this).closest('tr');
+    //     var blockId = $tr.data('block-id');
+    //     console.log('Block ID:', blockId);
+    //     createNewBlockRow(blockId);
+    //     return false; // Extra prevention of default behavior
+    // });
 
     // Handle save new block button
-    $(document).on('click', '.save-new-block-btn', function(e) {
-        e.preventDefault();
-        var $row = $(this).closest('tr');
-        var content = $row.find('.edit-content-textarea').val();
-        var personId = $row.find('.edit-person-select').val();
-
-        console.log('Saving new block - content:', content, 'personId:', personId);
-
-        // Validate content
-        if (!content || content.trim() === '') {
-            updateSaveStatus($row, 'error', 'Content cannot be empty');
-            return;
-        }
-
-        // Show saving status
-        updateSaveStatus($row, 'saving');
-
-        // Determine if this is create or createBelow based on stored data
-        var insertAfterBlockId = $row.data('insert-after-block-id');
-
-        console.log('insertAfterBlockId:', insertAfterBlockId);
-
-        // Prepare data
-        var data = {
-            content: content,
-            personId: personId ? parseInt(personId) : null
-        };
-
-        // Choose endpoint based on whether we're inserting after a specific block
-        var endpoint;
-        if (insertAfterBlockId) {
-            endpoint = '/block/createBelowInline';
-            data.id = insertAfterBlockId;
-            console.log('Using createBelowInline with id:', insertAfterBlockId);
-        } else {
-            endpoint = '/block/createInline';
-            data.sceneId = sceneId;
-            console.log('Using createInline with sceneId:', sceneId);
-        }
-
-        console.log('Sending AJAX request to', endpoint, 'with data:', data);
-
-        // Send AJAX request
-        $.ajax({
-            url: contextPath + endpoint,
-            method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(data),
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader(csrfHeader, csrfToken);
-            },
-            success: function(response) {
-                console.log('Block created successfully');
-                // Reload the page to show the new block in the correct position
-                window.location.reload();
-            },
-            error: function(xhr, status, error) {
-                console.error('Error creating block:', error);
-                console.error('Response status:', xhr.status);
-                console.error('Response text:', xhr.responseText);
-                var errorMessage = xhr.responseText || 'Failed to create block';
-                updateSaveStatus($row, 'error', errorMessage);
-            }
-        });
-    });
+    // DISABLED - now handled by HTMX form submission in block-new-form.jsp
+    // $(document).on('click', '.save-new-block-btn', function(e) {
+    //     e.preventDefault();
+    //     var $row = $(this).closest('tr');
+    //     var content = $row.find('.edit-content-textarea').val();
+    //     var personId = $row.find('.edit-person-select').val();
+    //
+    //     console.log('Saving new block - content:', content, 'personId:', personId);
+    //
+    //     // Validate content
+    //     if (!content || content.trim() === '') {
+    //         updateSaveStatus($row, 'error', 'Content cannot be empty');
+    //         return;
+    //     }
+    //
+    //     // Show saving status
+    //     updateSaveStatus($row, 'saving');
+    //
+    //     // Determine if this is create or createBelow based on stored data
+    //     var insertAfterBlockId = $row.data('insert-after-block-id');
+    //
+    //     console.log('insertAfterBlockId:', insertAfterBlockId);
+    //
+    //     // Prepare data
+    //     var data = {
+    //         content: content,
+    //         personId: personId ? parseInt(personId) : null
+    //     };
+    //
+    //     // Choose endpoint based on whether we're inserting after a specific block
+    //     var endpoint;
+    //     if (insertAfterBlockId) {
+    //         endpoint = '/block/createBelowInline';
+    //         data.id = insertAfterBlockId;
+    //         console.log('Using createBelowInline with id:', insertAfterBlockId);
+    //     } else {
+    //         endpoint = '/block/createInline';
+    //         data.sceneId = sceneId;
+    //         console.log('Using createInline with sceneId:', sceneId);
+    //     }
+    //
+    //     console.log('Sending AJAX request to', endpoint, 'with data:', data);
+    //
+    //     // Send AJAX request
+    //     $.ajax({
+    //         url: contextPath + endpoint,
+    //         method: 'POST',
+    //         contentType: 'application/json',
+    //         data: JSON.stringify(data),
+    //         beforeSend: function(xhr) {
+    //             xhr.setRequestHeader(csrfHeader, csrfToken);
+    //         },
+    //         success: function(response) {
+    //             console.log('Block created successfully');
+    //             // Reload the page to show the new block in the correct position
+    //             window.location.reload();
+    //         },
+    //         error: function(xhr, status, error) {
+    //             console.error('Error creating block:', error);
+    //             console.error('Response status:', xhr.status);
+    //             console.error('Response text:', xhr.responseText);
+    //             var errorMessage = xhr.responseText || 'Failed to create block';
+    //             updateSaveStatus($row, 'error', errorMessage);
+    //         }
+    //     });
+    // });
 
     // Handle cancel new block button
-    $(document).on('click', '.cancel-new-block-btn', function(e) {
-        e.preventDefault();
-        var $row = $(this).closest('tr');
-        $row.remove();
-    });
+    // DISABLED - now handled by HTMX in block-new-form.jsp
+    // $(document).on('click', '.cancel-new-block-btn', function(e) {
+    //     e.preventDefault();
+    //     var $row = $(this).closest('tr');
+    //     $row.remove();
+    // });
 
     // Log that event handlers are registered
     console.log('All block inline edit event handlers registered');

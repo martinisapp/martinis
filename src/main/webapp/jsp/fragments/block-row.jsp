@@ -32,7 +32,9 @@
         <c:if test="${not isFirst}">
             <a href="${pageContext.request.contextPath}/block/moveUp?id=${block.id}" class="btn btn-default btn-xs move-up" role="button">↑</a>
         </c:if>
-        <a href="#"
+        <a hx-get="${pageContext.request.contextPath}/block/createBelowForm?id=${block.id}"
+           hx-target="closest tr"
+           hx-swap="afterend"
            class="btn btn-primary btn-xs create-below"
            role="button">+ block</a>
     </div>

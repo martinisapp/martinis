@@ -135,6 +135,22 @@ public class BlockController {
         return "fragments/block-display";
     }
 
+    // htmx endpoint - get new block form to insert below existing block
+    @RequestMapping(value = "/createBelowForm", method = RequestMethod.GET)
+    public String getCreateBelowForm(@RequestParam Integer id, Model model) {
+        Block block = blockWebService.getBlock(id);
+        model.addAttribute("insertAfterBlockId", id);
+        model.addAttribute("sceneId", block.getScene().getId());
+        model.addAttribute("persons", blockWebService.getPersonsForScene(block.getScene().getId()));
+        return "fragments/block-new-form";
+    }
+
+    // htmx endpoint - cancel new block creation (returns empty string to remove the row)
+    @RequestMapping(value = "/cancelNew", method = RequestMethod.GET)
+    public String cancelNew() {
+        return "fragments/empty";
+    }
+
     // htmx endpoint - update block and return display view
     @RequestMapping(value = "/updateInline", method = RequestMethod.POST)
     public String updateInline(@ModelAttribute EditBlockCommandModel commandModel, Model model) {
@@ -260,12 +276,47 @@ public class BlockController {
         return new ResponseEntity<>("Received: " + rawBody, HttpStatus.OK);
     }
 
-    // AJAX endpoint for inline block creation
+    // htmx endpoint - create new block at end of scene and return block row
     @RequestMapping(value = "/createInline", method = RequestMethod.POST)
+    public String createInline(@ModelAttribute CreateBlockCommandModel commandModel, Model model) {
+        if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
+            return "fragments/empty";
+        }
+        if (commandModel.getSceneId() == null) {
+            return "fragments/empty";
+        }
+        Block block = blockWebService.saveCreateBlockCommandModel(commandModel);
+        model.addAttribute("block", block);
+        model.addAttribute("isFirst", false);
+        model.addAttribute("isLast", true);
+        return "fragments/block-row-complete";
+    }
+
+    // htmx endpoint - create new block below existing block and return block row
+    @RequestMapping(value = "/createBelowInline", method = RequestMethod.POST)
+    public String createBelowInline(@ModelAttribute CreateBlockBelowCommandModel commandModel, Model model) {
+        if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
+            return "fragments/empty";
+        }
+        if (commandModel.getId() == null) {
+            return "fragments/empty";
+        }
+        Block block = blockWebService.saveCreateBlockBelowCommandModel(commandModel);
+
+        // For newly created blocks, assume they're not first/last
+        // User can refresh page to get correct state if needed
+        model.addAttribute("block", block);
+        model.addAttribute("isFirst", false);
+        model.addAttribute("isLast", false);
+        return "fragments/block-row-complete";
+    }
+
+    // Legacy AJAX endpoint for inline block creation (JSON)
+    @RequestMapping(value = "/createInlineJson", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> createInline(@RequestBody CreateBlockCommandModel commandModel) {
+    public ResponseEntity<String> createInlineJson(@RequestBody CreateBlockCommandModel commandModel) {
         try {
-            System.out.println("=== DEBUG /createInline ===");
+            System.out.println("=== DEBUG /createInlineJson ===");
             System.out.println("  content: " + commandModel.getContent());
             System.out.println("  personId: " + commandModel.getPersonId());
             System.out.println("  sceneId: " + commandModel.getSceneId());
@@ -279,18 +330,18 @@ public class BlockController {
             Block block = blockWebService.saveCreateBlockCommandModel(commandModel);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
-            System.err.println("=== ERROR in /createInline ===");
+            System.err.println("=== ERROR in /createInlineJson ===");
             e.printStackTrace();
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    // AJAX endpoint for inline block creation below existing block
-    @RequestMapping(value = "/createBelowInline", method = RequestMethod.POST)
+    // Legacy AJAX endpoint for inline block creation below existing block (JSON)
+    @RequestMapping(value = "/createBelowInlineJson", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> createBelowInline(@RequestBody CreateBlockBelowCommandModel commandModel) {
+    public ResponseEntity<String> createBelowInlineJson(@RequestBody CreateBlockBelowCommandModel commandModel) {
         try {
-            System.out.println("=== DEBUG /createBelowInline ===");
+            System.out.println("=== DEBUG /createBelowInlineJson ===");
             System.out.println("  id: " + commandModel.getId());
             System.out.println("  content: " + commandModel.getContent());
             System.out.println("  personId: " + commandModel.getPersonId());
@@ -305,7 +356,7 @@ public class BlockController {
             Block block = blockWebService.saveCreateBlockBelowCommandModel(commandModel);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
-            System.err.println("=== ERROR in /createBelowInline ===");
+            System.err.println("=== ERROR in /createBelowInlineJson ===");
             e.printStackTrace();
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
