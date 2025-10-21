@@ -17,7 +17,7 @@
             </c:if>
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
-                    <form class="form-horizontal" role="form" method="POST" action="j_spring_security_check">
+                    <form class="form-horizontal" role="form" method="POST" action="${pageContext.request.contextPath}/j_spring_security_check">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                         <div class="form-group">
                             <label for="j_username" class="col-md-2 control-label">Username:</label>
