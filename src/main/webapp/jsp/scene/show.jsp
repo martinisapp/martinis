@@ -53,6 +53,11 @@
             }
             .block-display {
                 min-height: 30px;
+                cursor: pointer;
+            }
+            .block-display:hover {
+                background-color: #f0f0f0;
+                border-radius: 4px;
             }
             .save-status {
                 font-size: 13px;
@@ -124,7 +129,6 @@
                         </td>
                         <td>
                             <div class="nowrap">
-                                <button class="btn btn-default btn-xs edit-inline-btn" role="button">edit</button>
                                 <a href="${pageContext.request.contextPath}/block/delete?id=${block.id}" class="btn btn-default btn-xs" role="button">delete</a>
                                 <c:if test="${not loop.last}">
                                     <a href="${pageContext.request.contextPath}/block/moveDown?id=${block.id}" class="btn btn-default btn-xs move-down" role="button">↓</a>

@@ -3,13 +3,23 @@ $(document).ready(function() {
     var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
     var autoSaveTimers = {}; // Store timers per block
 
-    // Handle edit button click
-    $(document).on('click', '.edit-inline-btn', function(e) {
+    // Handle block-display click to enter edit mode
+    $(document).on('click', '.block-display', function(e) {
+        // Don't trigger edit mode if clicking on a link (character name)
+        if ($(e.target).is('a') || $(e.target).closest('a').length > 0) {
+            return;
+        }
+
         e.preventDefault();
         var $row = $(this).closest('tr');
         var $display = $row.find('.block-display');
         var $edit = $row.find('.block-edit');
         var blockId = $row.data('block-id');
+
+        // Don't enter edit mode if already editing
+        if ($row.data('is-editing')) {
+            return;
+        }
 
         // Store original values for change detection
         var originalContent = $row.find('.block-content').text().trim();
@@ -24,9 +34,6 @@ $(document).ready(function() {
         // Hide display, show edit form
         $display.hide();
         $edit.show();
-
-        // Hide the edit button while editing
-        $(this).hide();
 
         // Initialize save status
         updateSaveStatus($row, 'ready');
@@ -51,9 +58,6 @@ $(document).ready(function() {
         $edit.hide();
         $display.show();
 
-        // Show the edit button again
-        $row.find('.edit-inline-btn').show();
-
         // Remove the editing flag
         $row.removeData('is-editing');
     }
@@ -65,13 +69,12 @@ $(document).ready(function() {
             var $row = $(this);
             if ($row.data('is-editing')) {
                 var $edit = $row.find('.block-edit');
+                var $display = $row.find('.block-display');
 
-                // Check if click is outside the edit form
-                if (!$edit.is(e.target) && $edit.has(e.target).length === 0) {
-                    // Also check if not clicking the edit button itself
-                    if (!$(e.target).hasClass('edit-inline-btn') && !$(e.target).closest('.edit-inline-btn').length) {
-                        closeEditMode($row);
-                    }
+                // Check if click is outside the edit form and not on the block display
+                if (!$edit.is(e.target) && $edit.has(e.target).length === 0 &&
+                    !$display.is(e.target) && $display.has(e.target).length === 0) {
+                    closeEditMode($row);
                 }
             }
         });
