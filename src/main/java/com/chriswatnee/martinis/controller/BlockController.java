@@ -13,6 +13,7 @@ import com.chriswatnee.martinis.viewmodel.block.createblock.CreateBlockViewModel
 import com.chriswatnee.martinis.viewmodel.block.createblockbelow.CreateBlockBelowViewModel;
 import com.chriswatnee.martinis.viewmodel.block.editblock.EditBlockViewModel;
 import com.chriswatnee.martinis.webservice.BlockWebService;
+import java.util.LinkedList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -46,28 +47,47 @@ public class BlockController {
 
         Block block = blockWebService.deleteBlock(id);
 
-        // Store deleted block in session for undo
-        session.setAttribute("deletedBlock", block);
+        // Get or create the undo stack in session
+        @SuppressWarnings("unchecked")
+        LinkedList<Block> deletedBlocksStack = (LinkedList<Block>) session.getAttribute("deletedBlocksStack");
+        if (deletedBlocksStack == null) {
+            deletedBlocksStack = new LinkedList<>();
+            session.setAttribute("deletedBlocksStack", deletedBlocksStack);
+        }
 
-        // Add flash attribute to show undo notification
+        // Add deleted block to the stack
+        deletedBlocksStack.push(block);
+
+        // Add flash attribute to show undo notification with count
         redirectAttributes.addFlashAttribute("blockDeleted", true);
+        redirectAttributes.addFlashAttribute("undoCount", deletedBlocksStack.size());
 
         return "redirect:/scene/show?id=" + block.getScene().getId();
     }
 
     @RequestMapping(value = "/undo")
-    public String undo(HttpSession session) {
+    public String undo(HttpSession session, RedirectAttributes redirectAttributes) {
 
-        Block deletedBlock = (Block) session.getAttribute("deletedBlock");
+        // Get the undo stack from session
+        @SuppressWarnings("unchecked")
+        LinkedList<Block> deletedBlocksStack = (LinkedList<Block>) session.getAttribute("deletedBlocksStack");
 
-        if (deletedBlock != null) {
+        if (deletedBlocksStack != null && !deletedBlocksStack.isEmpty()) {
+            // Pop the most recently deleted block
+            Block deletedBlock = deletedBlocksStack.pop();
             Integer sceneId = deletedBlock.getScene().getId();
             blockWebService.restoreBlock(deletedBlock);
-            session.removeAttribute("deletedBlock");
+
+            // If there are more blocks to undo, keep showing the undo notification
+            if (!deletedBlocksStack.isEmpty()) {
+                redirectAttributes.addFlashAttribute("blockDeleted", true);
+                redirectAttributes.addFlashAttribute("undoCount", deletedBlocksStack.size());
+            }
+
             return "redirect:/scene/show?id=" + sceneId;
         }
 
-        // If no deleted block in session, redirect to project list
+        // If no deleted blocks in session, redirect to project list
         return "redirect:/project/list";
     }
     
