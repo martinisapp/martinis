@@ -12,6 +12,12 @@ $(document).ready(function() {
 
         e.stopPropagation(); // Prevent event from bubbling to document click handler
         var $row = $(this).closest('tr');
+
+        enterEditMode($row);
+    });
+
+    // Function to enter edit mode for a block
+    function enterEditMode($row) {
         var $display = $row.find('.block-display');
         var $edit = $row.find('.block-edit');
         var blockId = $row.data('block-id');
@@ -35,12 +41,17 @@ $(document).ready(function() {
         $display.hide();
         $edit.show();
 
+        // Add visual indicator for active block
+        $row.addClass('editing-active');
+
         // Initialize save status
         updateSaveStatus($row, 'ready');
 
-        // Focus on the textarea
-        $edit.find('.edit-content-textarea').focus();
-    });
+        // Focus on the textarea and auto-expand
+        var $textarea = $edit.find('.edit-content-textarea');
+        $textarea.focus();
+        autoExpandTextarea($textarea[0]);
+    }
 
     // Prevent clicks inside edit form from bubbling to document handler
     $(document).on('click', '.block-edit', function(e) {
@@ -63,8 +74,46 @@ $(document).ready(function() {
         $edit.hide();
         $display.show();
 
+        // Remove visual indicator
+        $row.removeClass('editing-active');
+
         // Remove the editing flag
         $row.removeData('is-editing');
+    }
+
+    // Function to get next/previous block row
+    function getNextBlockRow($currentRow) {
+        var $next = $currentRow.next('tr[data-block-id]');
+        return $next.length > 0 ? $next : null;
+    }
+
+    function getPreviousBlockRow($currentRow) {
+        var $prev = $currentRow.prev('tr[data-block-id]');
+        return $prev.length > 0 ? $prev : null;
+    }
+
+    // Function to navigate to next block
+    function navigateToNextBlock($currentRow) {
+        var $nextRow = getNextBlockRow($currentRow);
+        if ($nextRow) {
+            closeEditMode($currentRow);
+            enterEditMode($nextRow);
+        }
+    }
+
+    // Function to navigate to previous block
+    function navigateToPreviousBlock($currentRow) {
+        var $prevRow = getPreviousBlockRow($currentRow);
+        if ($prevRow) {
+            closeEditMode($currentRow);
+            enterEditMode($prevRow);
+        }
+    }
+
+    // Auto-expand textarea based on content
+    function autoExpandTextarea(textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = (textarea.scrollHeight) + 'px';
     }
 
     // Handle clicking outside the edit form
@@ -79,23 +128,116 @@ $(document).ready(function() {
         });
     });
 
-    // Handle Escape key to close edit mode
+    // Global keyboard shortcuts (not in textarea)
     $(document).on('keydown', function(e) {
+        var $editingRow = $('tr[data-block-id].editing-active');
+
+        // Handle Escape key to close edit mode
         if (e.key === 'Escape' || e.keyCode === 27) {
-            // Find all rows that are currently being edited
-            $('tr[data-block-id]').each(function() {
-                var $row = $(this);
-                if ($row.data('is-editing')) {
-                    closeEditMode($row);
+            if ($editingRow.length > 0) {
+                closeEditMode($editingRow);
+                e.preventDefault();
+            }
+        }
+
+        // Ctrl+N: Create new block below current
+        if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+            e.preventDefault();
+            if ($editingRow.length > 0) {
+                var $createBtn = $editingRow.find('.create-below');
+                if ($createBtn.length > 0) {
+                    window.location.href = $createBtn.attr('href');
                 }
-            });
+            }
+        }
+
+        // Ctrl+D: Delete current block
+        if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+            e.preventDefault();
+            if ($editingRow.length > 0) {
+                if (confirm('Delete this block?')) {
+                    var $deleteBtn = $editingRow.find('a[href*="block/delete"]');
+                    if ($deleteBtn.length > 0) {
+                        window.location.href = $deleteBtn.attr('href');
+                    }
+                }
+            }
+        }
+    });
+
+    // Keyboard shortcuts within textarea
+    $(document).on('keydown', '.edit-content-textarea', function(e) {
+        var $textarea = $(this);
+        var $row = $textarea.closest('tr[data-block-id]');
+
+        // Ctrl+S: Save immediately
+        if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+            e.preventDefault();
+            var blockId = $row.data('block-id');
+            if (autoSaveTimers[blockId]) {
+                clearTimeout(autoSaveTimers[blockId]);
+                delete autoSaveTimers[blockId];
+            }
+            autoSaveBlock($row);
+        }
+
+        // Ctrl+Enter: Save and create new block below
+        if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+            e.preventDefault();
+            var blockId = $row.data('block-id');
+            if (autoSaveTimers[blockId]) {
+                clearTimeout(autoSaveTimers[blockId]);
+                delete autoSaveTimers[blockId];
+            }
+            autoSaveBlock($row);
+            // Trigger create new block after a short delay to allow save to complete
+            setTimeout(function() {
+                var $createBtn = $row.find('.create-below');
+                if ($createBtn.length > 0) {
+                    window.location.href = $createBtn.attr('href');
+                }
+            }, 500);
+        }
+
+        // Arrow Down: Navigate to next block (when at end of textarea)
+        if (e.key === 'ArrowDown' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+            var cursorPos = $textarea[0].selectionStart;
+            var textLength = $textarea.val().length;
+            var textBeforeCursor = $textarea.val().substring(0, cursorPos);
+            var lines = textBeforeCursor.split('\n');
+            var currentLine = lines.length - 1;
+            var totalLines = $textarea.val().split('\n').length - 1;
+
+            // If we're on the last line, navigate to next block
+            if (currentLine === totalLines) {
+                e.preventDefault();
+                navigateToNextBlock($row);
+            }
+        }
+
+        // Arrow Up: Navigate to previous block (when at start of textarea)
+        if (e.key === 'ArrowUp' && !e.ctrlKey && !e.shiftKey && !e.altKey) {
+            var cursorPos = $textarea[0].selectionStart;
+            var textBeforeCursor = $textarea.val().substring(0, cursorPos);
+            var lines = textBeforeCursor.split('\n');
+            var currentLine = lines.length - 1;
+
+            // If we're on the first line, navigate to previous block
+            if (currentLine === 0) {
+                e.preventDefault();
+                navigateToPreviousBlock($row);
+            }
         }
     });
 
     // Auto-save on content change (debounced)
     $(document).on('input', '.edit-content-textarea', function() {
-        var $row = $(this).closest('tr');
+        var $textarea = $(this);
+        var $row = $textarea.closest('tr');
         var blockId = $row.data('block-id');
+
+        // Auto-expand textarea
+        autoExpandTextarea($textarea[0]);
 
         // Clear existing timer
         if (autoSaveTimers[blockId]) {

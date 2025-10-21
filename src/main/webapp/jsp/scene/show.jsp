@@ -136,8 +136,8 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="save-status"></div>
-                                    <div class="text-muted small" style="margin-top: 5px;">
-                                        <i>Click outside or press Escape to finish editing</i>
+                                    <div class="keyboard-shortcuts-hint">
+                                        <strong>Shortcuts:</strong> Ctrl+S to save | Ctrl+Enter to save & new block | ↑↓ to navigate | Esc to close
                                     </div>
                                 </div>
                             </div>
@@ -158,9 +158,44 @@
                 </c:forEach>
                 </tbody>
             </table>
+
+            <!-- Keyboard Shortcuts Help -->
+            <div class="panel panel-default" style="margin-bottom: 20px;">
+                <div class="panel-heading" style="cursor: pointer;" onclick="$('#keyboard-shortcuts').toggle();">
+                    <h4 class="panel-title">
+                        <span class="glyphicon glyphicon-keyboard"></span> Keyboard Shortcuts <small class="text-muted">(click to toggle)</small>
+                    </h4>
+                </div>
+                <div id="keyboard-shortcuts" class="panel-body" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5><strong>While Editing:</strong></h5>
+                            <ul>
+                                <li><kbd>Ctrl</kbd> + <kbd>S</kbd> - Save immediately</li>
+                                <li><kbd>Ctrl</kbd> + <kbd>Enter</kbd> - Save and create new block below</li>
+                                <li><kbd>↑</kbd> / <kbd>↓</kbd> - Navigate to previous/next block</li>
+                                <li><kbd>Esc</kbd> - Close edit mode</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><strong>Global Shortcuts:</strong></h5>
+                            <ul>
+                                <li><kbd>Ctrl</kbd> + <kbd>N</kbd> - Create new block below current</li>
+                                <li><kbd>Ctrl</kbd> + <kbd>D</kbd> - Delete current block</li>
+                                <li>Click any block to start editing</li>
+                                <li>Auto-save after 1.5 seconds of inactivity</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="text-muted small" style="margin-top: 10px; margin-bottom: 0;">
+                        <strong>Tip:</strong> Use arrow keys when on the first/last line of a block to quickly move between blocks. The textarea will auto-expand as you type.
+                    </p>
+                </div>
+            </div>
+
             <p>
-                <a href="${pageContext.request.contextPath}/block/create?sceneId=${viewModel.id}" class="btn btn-primary" role="button">Create New Block</a> 
-                <a href="${pageContext.request.contextPath}/scene/createBelow?id=${viewModel.id}" class="btn btn-default" role="button">Create New Scene</a> 
+                <a href="${pageContext.request.contextPath}/block/create?sceneId=${viewModel.id}" class="btn btn-primary" role="button">Create New Block</a>
+                <a href="${pageContext.request.contextPath}/scene/createBelow?id=${viewModel.id}" class="btn btn-default" role="button">Create New Scene</a>
                 <a href="${pageContext.request.contextPath}/character/create?projectId=${viewModel.projectId}" class="btn btn-default" role="button">Create New Character</a>
             </p>
             <nav aria-label="...">

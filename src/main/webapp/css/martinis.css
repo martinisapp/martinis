@@ -169,3 +169,52 @@
         padding: 8px 12px;
     }
 }
+
+/* Text Editor Enhancement Styles */
+/* Visual indicator for active editing block */
+tr.editing-active {
+    background-color: #f0f8ff !important;
+    border-left: 4px solid #337ab7;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease-in-out;
+}
+
+/* Enhanced textarea styling for better editor experience */
+.edit-content-textarea {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 12px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    resize: vertical;
+    min-height: 100px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    overflow: hidden; /* For auto-expand */
+}
+
+.edit-content-textarea:focus {
+    border-color: #337ab7;
+    box-shadow: 0 0 8px rgba(51, 122, 183, 0.3);
+    outline: none;
+}
+
+/* Smooth transitions for edit mode */
+.block-display,
+.block-edit {
+    transition: opacity 0.2s ease-in-out;
+}
+
+/* Keyboard shortcut hints */
+.keyboard-shortcuts-hint {
+    font-size: 11px;
+    color: #999;
+    margin-top: 5px;
+    font-style: italic;
+}
+
+/* Save status styling improvements */
+.save-status {
+    min-height: 20px;
+    transition: color 0.2s;
+}
