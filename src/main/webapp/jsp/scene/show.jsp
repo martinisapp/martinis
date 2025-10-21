@@ -109,7 +109,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Content:</label>
-                                    <textarea class="form-control edit-content-textarea" rows="3">${block.content}</textarea>
+                                    <textarea class="form-control edit-content-textarea" rows="8">${block.content}</textarea>
                                 </div>
                                 <div class="form-group">
                                     <div class="save-status"></div>
