@@ -8,7 +8,7 @@ cmds = [
 ]
 
 [phases.start]
-cmd = "java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --expand-war --path / --port $PORT target/spring-mvc-webapp.war"
+cmd = "java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --expand-war --port $PORT target/spring-mvc-webapp.war"
 
 [variables]
 MAVEN_OPTS = "-Xmx1024m -Xms512m"
