@@ -222,12 +222,21 @@ public class BlockController {
         return "redirect:/scene/show?id=" + block.getScene().getId();
     }
 
+    // Test endpoint to verify JSON is working
+    @RequestMapping(value = "/testJson", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> testJson(@RequestBody String rawBody) {
+        System.out.println("=== TEST JSON ENDPOINT ===");
+        System.out.println("Raw body received: " + rawBody);
+        return new ResponseEntity<>("Received: " + rawBody, HttpStatus.OK);
+    }
+
     // AJAX endpoint for inline block creation
     @RequestMapping(value = "/createInline", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> createInline(@RequestBody CreateBlockCommandModel commandModel) {
         try {
-            System.out.println("DEBUG /createInline - Received commandModel:");
+            System.out.println("=== DEBUG /createInline ===");
             System.out.println("  content: " + commandModel.getContent());
             System.out.println("  personId: " + commandModel.getPersonId());
             System.out.println("  sceneId: " + commandModel.getSceneId());
@@ -241,6 +250,7 @@ public class BlockController {
             Block block = blockWebService.saveCreateBlockCommandModel(commandModel);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
+            System.err.println("=== ERROR in /createInline ===");
             e.printStackTrace();
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -251,7 +261,7 @@ public class BlockController {
     @ResponseBody
     public ResponseEntity<String> createBelowInline(@RequestBody CreateBlockBelowCommandModel commandModel) {
         try {
-            System.out.println("DEBUG /createBelowInline - Received commandModel:");
+            System.out.println("=== DEBUG /createBelowInline ===");
             System.out.println("  id: " + commandModel.getId());
             System.out.println("  content: " + commandModel.getContent());
             System.out.println("  personId: " + commandModel.getPersonId());
@@ -266,6 +276,7 @@ public class BlockController {
             Block block = blockWebService.saveCreateBlockBelowCommandModel(commandModel);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
+            System.err.println("=== ERROR in /createBelowInline ===");
             e.printStackTrace();
             return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
