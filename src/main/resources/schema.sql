@@ -1,17 +1,9 @@
 -- Schema for Railway MySQL (uses 'railway' database)
 -- This will auto-run when the application starts
+-- Tables are created only if they don't exist, preserving data across deployments
 
--- Drop existing tables if they exist (in correct order due to foreign keys)
-DROP TABLE IF EXISTS `block`;
-DROP TABLE IF EXISTS person;
-DROP TABLE IF EXISTS authority;
-DROP TABLE IF EXISTS `user`;
-DROP TABLE IF EXISTS scene;
-DROP TABLE IF EXISTS actor;
-DROP TABLE IF EXISTS project;
-
--- Create tables
-CREATE TABLE `user` (
+-- Create tables only if they don't exist
+CREATE TABLE IF NOT EXISTS `user` (
 	id int NOT NULL AUTO_INCREMENT,
 	username varchar(20) NOT NULL UNIQUE,
 	`password` varchar(100) NOT NULL,
@@ -21,19 +13,19 @@ CREATE TABLE `user` (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE authority (
+CREATE TABLE IF NOT EXISTS authority (
 	username varchar(20) NOT NULL,
 	authority varchar(20) NOT NULL,
 	FOREIGN KEY (username) REFERENCES `user`(username)
 );
 
-CREATE TABLE project (
+CREATE TABLE IF NOT EXISTS project (
 	id int NOT NULL AUTO_INCREMENT,
 	title varchar(100) NOT NULL,
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE scene (
+CREATE TABLE IF NOT EXISTS scene (
 	id int NOT NULL AUTO_INCREMENT,
 	`order` int NOT NULL,
 	`name` varchar(255) NOT NULL,
@@ -42,7 +34,7 @@ CREATE TABLE scene (
 	FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
 );
 
-CREATE TABLE actor (
+CREATE TABLE IF NOT EXISTS actor (
 	id int NOT NULL AUTO_INCREMENT,
 	first_name varchar(30) NOT NULL,
 	last_name varchar(30) NULL,
@@ -51,7 +43,7 @@ CREATE TABLE actor (
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE person (
+CREATE TABLE IF NOT EXISTS person (
 	id int NOT NULL AUTO_INCREMENT,
 	`name` varchar(60) NOT NULL,
 	full_name varchar(60) NOT NULL,
@@ -62,7 +54,7 @@ CREATE TABLE person (
 	FOREIGN KEY (project_id) REFERENCES project(id) ON DELETE CASCADE
 );
 
-CREATE TABLE `block` (
+CREATE TABLE IF NOT EXISTS `block` (
 	id int NOT NULL AUTO_INCREMENT,
 	`order` int NOT NULL,
 	content TEXT NOT NULL,
