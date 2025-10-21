@@ -18,6 +18,9 @@ $(document).ready(function() {
         $row.data('original-content', originalContent);
         $row.data('original-person-id', originalPersonId);
 
+        // Set editing flag
+        $row.data('is-editing', true);
+
         // Hide display, show edit form
         $display.hide();
         $edit.show();
@@ -27,12 +30,13 @@ $(document).ready(function() {
 
         // Initialize save status
         updateSaveStatus($row, 'ready');
+
+        // Focus on the textarea
+        $edit.find('.edit-content-textarea').focus();
     });
 
-    // Handle cancel button click
-    $(document).on('click', '.cancel-edit-btn', function(e) {
-        e.preventDefault();
-        var $row = $(this).closest('tr');
+    // Function to close edit mode
+    function closeEditMode($row) {
         var $display = $row.find('.block-display');
         var $edit = $row.find('.block-edit');
         var blockId = $row.data('block-id');
@@ -43,19 +47,47 @@ $(document).ready(function() {
             delete autoSaveTimers[blockId];
         }
 
-        // Reset form values to original
-        var originalContent = $row.data('original-content');
-        var originalPersonId = $row.data('original-person-id');
-
-        $edit.find('.edit-content-textarea').val(originalContent);
-        $edit.find('.edit-person-select').val(originalPersonId || '');
-
         // Show display, hide edit form
         $edit.hide();
         $display.show();
 
         // Show the edit button again
         $row.find('.edit-inline-btn').show();
+
+        // Remove the editing flag
+        $row.removeData('is-editing');
+    }
+
+    // Handle clicking outside the edit form
+    $(document).on('click', function(e) {
+        // Find all rows that are currently being edited
+        $('tr[data-block-id]').each(function() {
+            var $row = $(this);
+            if ($row.data('is-editing')) {
+                var $edit = $row.find('.block-edit');
+
+                // Check if click is outside the edit form
+                if (!$edit.is(e.target) && $edit.has(e.target).length === 0) {
+                    // Also check if not clicking the edit button itself
+                    if (!$(e.target).hasClass('edit-inline-btn') && !$(e.target).closest('.edit-inline-btn').length) {
+                        closeEditMode($row);
+                    }
+                }
+            }
+        });
+    });
+
+    // Handle Escape key to close edit mode
+    $(document).on('keydown', function(e) {
+        if (e.key === 'Escape' || e.keyCode === 27) {
+            // Find all rows that are currently being edited
+            $('tr[data-block-id]').each(function() {
+                var $row = $(this);
+                if ($row.data('is-editing')) {
+                    closeEditMode($row);
+                }
+            });
+        }
     });
 
     // Auto-save on content change (debounced)
