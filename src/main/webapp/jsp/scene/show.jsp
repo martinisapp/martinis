@@ -76,10 +76,7 @@
 
             <!-- Undo notification -->
             <c:if test="${blockDeleted}">
-                <div id="undo-notification" class="alert alert-success alert-dismissible" role="alert" style="position: fixed; top: 70px; right: 20px; z-index: 9999; min-width: 300px;">
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <div id="undo-notification" class="alert alert-success" role="alert" style="margin-top: 20px; margin-bottom: 20px;">
                     <strong>Block deleted.</strong>
                     <a href="${pageContext.request.contextPath}/block/undo" class="btn btn-sm btn-warning" style="margin-left: 10px;">Undo</a>
                 </div>
@@ -176,15 +173,6 @@
         <script>
             var contextPath = '${pageContext.request.contextPath}';
 
-            // Auto-hide undo notification after 10 seconds
-            $(document).ready(function() {
-                var undoNotification = $('#undo-notification');
-                if (undoNotification.length) {
-                    setTimeout(function() {
-                        undoNotification.fadeOut();
-                    }, 10000);
-                }
-            });
         </script>
         <script src="${pageContext.request.contextPath}/js/block-reorder.js"></script>
         <script src="${pageContext.request.contextPath}/js/block-inline-edit.js"></script>
