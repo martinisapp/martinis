@@ -170,13 +170,21 @@
     }
 }
 
-/* Text Editor Enhancement Styles */
-/* Visual indicator for active editing block */
-tr.editing-active {
-    background-color: #f0f8ff !important;
-    border-left: 4px solid #337ab7;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: all 0.2s ease-in-out;
+/* Enhanced character selector styling */
+.edit-person-select {
+    font-size: 16px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background-color: #fafafa;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.edit-person-select:focus {
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+    outline: none;
+    background-color: #ffffff;
 }
 
 /* Enhanced textarea styling for better editor experience */
@@ -205,16 +213,16 @@ tr.editing-active {
     transition: opacity 0.2s ease-in-out;
 }
 
-/* Keyboard shortcut hints */
-.keyboard-shortcuts-hint {
-    font-size: 11px;
-    color: #999;
-    margin-top: 5px;
-    font-style: italic;
+/* Enhanced form labels */
+.block-edit label {
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    margin-bottom: 6px;
+    display: block;
 }
 
-/* Save status styling improvements */
-.save-status {
-    min-height: 20px;
-    transition: color 0.2s;
+/* Cleaner form groups */
+.block-edit .form-group {
+    margin-bottom: 16px;
 }
