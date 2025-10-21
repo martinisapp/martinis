@@ -45,3 +45,89 @@
 #table-blocks tr:last-child .btn.move-up {
     margin-left: 22px;
 }
+
+/* Mobile-responsive styles */
+@media (max-width: 767px) {
+    /* Make buttons always visible on mobile (no hover needed) */
+    .page-header small a,
+    #table-scenes .btn,
+    #table-blocks .btn {
+        opacity: 1;
+    }
+
+    /* Improve touch targets for mobile */
+    .btn {
+        min-height: 44px;
+        padding: 10px 12px;
+        margin: 2px 0;
+    }
+
+    /* Stack form controls vertically on mobile */
+    .form-horizontal .control-label {
+        text-align: left;
+        margin-bottom: 5px;
+    }
+
+    /* Add spacing for page headers */
+    .page-header {
+        margin-top: 20px;
+        padding-bottom: 9px;
+    }
+
+    .page-header h1 {
+        font-size: 28px;
+    }
+
+    /* Improve breadcrumb spacing */
+    .breadcrumb {
+        margin-bottom: 15px;
+        padding: 8px 10px;
+    }
+
+    /* Make tables more readable on mobile */
+    .table {
+        font-size: 14px;
+    }
+
+    .table td,
+    .table th {
+        padding: 8px 5px;
+    }
+
+    /* Improve container padding on mobile */
+    .container {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* Stack action buttons */
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .btn-group .btn {
+        width: 100%;
+        margin: 2px 0;
+    }
+
+    /* Remove fixed button margin on mobile */
+    #table-blocks tr:first-child .btn.create-below,
+    #table-scenes tr:last-child .btn.move-up,
+    #table-blocks tr:last-child .btn.move-up {
+        margin-left: 0;
+    }
+}
+
+/* Tablet-specific styles */
+@media (min-width: 768px) and (max-width: 991px) {
+    /* Improve spacing for medium devices */
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+    .btn {
+        padding: 8px 12px;
+    }
+}
