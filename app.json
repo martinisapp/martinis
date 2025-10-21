@@ -1,12 +1,16 @@
 {
   "name": "Martinis",
-  "description": "Spring MVC web application for screenwriting",
+  "description": "Spring MVC application for screenplay management - compatible with Railway and Heroku",
   "repository": "https://github.com/martinisapp/martinis",
   "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Tomcat-logo.svg",
   "keywords": [
     "java",
     "tomcat",
     "spring",
+    "spring-mvc",
+    "maven",
+    "railway",
+    "screenplay",
     "screenwriting"
   ]
 }

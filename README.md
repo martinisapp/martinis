@@ -38,6 +38,15 @@ This application is configured to run on [Railway](https://railway.com/).
 
 After deployment, you'll need to initialize your MySQL database with the required schema. You can find the SQL scripts in the `sql/` directory.
 
+### Heroku Deployment
+
+This application is also compatible with Heroku:
+
+1. Create a new Heroku app
+2. Add JawsDB MySQL addon
+3. Deploy using Git or GitHub integration
+4. The `Procfile` will be used to start the application
+
 ### Local Development
 
 For local development with MySQL:
