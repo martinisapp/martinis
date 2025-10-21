@@ -105,6 +105,17 @@
     padding-left: 10px;
 }
 
+.block-display {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.block-display:hover {
+    background-color: #f0f0f0;
+}
+
 .page-header small a,
 #table-scenes .btn,
 .block-row .btn {

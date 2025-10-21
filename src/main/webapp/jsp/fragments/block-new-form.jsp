@@ -34,7 +34,7 @@
                                       hx-include="closest form"
                                       hx-target="closest .block-row"
                                       hx-swap="outerHTML"
-                                      hx-trigger="keyup changed delay:1500ms[event.target.value.trim().length > 0], blur[event.target.value.trim().length > 0]"></textarea>
+                                      hx-trigger="keyup changed delay:1500ms, blur"></textarea>
                         </div>
                         <div class="form-group">
                             <div class="save-status">
@@ -72,7 +72,7 @@
                                       hx-include="closest form"
                                       hx-target="closest .block-row"
                                       hx-swap="outerHTML"
-                                      hx-trigger="keyup changed delay:1500ms[event.target.value.trim().length > 0], blur[event.target.value.trim().length > 0]"></textarea>
+                                      hx-trigger="keyup changed delay:1500ms, blur"></textarea>
                         </div>
                         <div class="form-group">
                             <div class="save-status">
