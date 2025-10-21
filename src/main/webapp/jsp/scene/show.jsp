@@ -98,7 +98,6 @@
                 </tbody>
             </table>
             <p>
-                <button id="create-new-block-btn" class="btn btn-primary" type="button">Create New Block</button>
                 <a href="${pageContext.request.contextPath}/scene/createBelow?id=${viewModel.id}" class="btn btn-default" role="button">Create New Scene</a>
                 <a href="${pageContext.request.contextPath}/character/create?projectId=${viewModel.projectId}" class="btn btn-default" role="button">Create New Character</a>
             </p>

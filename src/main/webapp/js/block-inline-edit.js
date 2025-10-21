@@ -378,11 +378,6 @@ $(document).ready(function() {
         }, 300);
     }
 
-    // Handle "Create New Block" button click
-    $(document).on('click', '#create-new-block-btn', function(e) {
-        e.preventDefault();
-        createNewBlockRow(null);
-    });
 
     // Handle "+ block" (create below) button click
     // DISABLED - now handled by HTMX in block-row.jsp
