@@ -13,7 +13,6 @@
             <jsp:param name="page" value="index" />
         </jsp:include>
         <div class="container">
-            <p>Welcome!</p>
             <c:if test="${pageContext.request.userPrincipal.name == null}">
                 <p><a href="${pageContext.request.contextPath}/login" class="btn btn-primary" role="button">Login</a></p>
             </c:if>
