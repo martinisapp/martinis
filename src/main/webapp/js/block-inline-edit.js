@@ -259,4 +259,145 @@ $(document).ready(function() {
         };
         return text.replace(/[&<>"']/g, function(m) { return map[m]; });
     }
+
+    // Function to create person select options HTML
+    function createPersonSelectOptions(selectedPersonId) {
+        var options = '<option value="">-- No Character --</option>';
+        if (typeof scenePersons !== 'undefined') {
+            scenePersons.forEach(function(person) {
+                var selected = person.id == selectedPersonId ? 'selected' : '';
+                options += '<option value="' + person.id + '" ' + selected + '>' + escapeHtml(person.name) + '</option>';
+            });
+        }
+        return options;
+    }
+
+    // Function to create a new block row in edit mode
+    function createNewBlockRow(insertAfterBlockId) {
+        var tempId = 'new-' + Date.now();
+        var $newRow = $('<tr data-block-id="' + tempId + '" data-person-id="" data-scene-id="' + sceneId + '" data-is-new="true">');
+
+        // Drag handle cell
+        $newRow.append('<td><span class="drag-handle" title="Drag to reorder">&#8942;&#8942;</span></td>');
+
+        // Content cell with edit form (no display div needed for new blocks)
+        var contentCell = '<td>' +
+            '<div class="block-display" style="display: none;"></div>' +
+            '<div class="block-edit" style="display: block;">' +
+                '<div class="form-group">' +
+                    '<label>Character:</label>' +
+                    '<select class="form-control edit-person-select">' + createPersonSelectOptions('') + '</select>' +
+                '</div>' +
+                '<div class="form-group">' +
+                    '<label>Content:</label>' +
+                    '<textarea class="form-control edit-content-textarea" rows="8"></textarea>' +
+                '</div>' +
+                '<div class="form-group">' +
+                    '<div class="save-status"></div>' +
+                    '<button class="btn btn-primary btn-sm save-new-block-btn">Save</button>' +
+                    '<button class="btn btn-default btn-sm cancel-new-block-btn">Cancel</button>' +
+                '</div>' +
+            '</div>' +
+            '</td>';
+        $newRow.append(contentCell);
+
+        // Actions cell (empty for new blocks)
+        $newRow.append('<td></td>');
+
+        // Insert the row
+        if (insertAfterBlockId) {
+            var $afterRow = $('tr[data-block-id="' + insertAfterBlockId + '"]');
+            $afterRow.after($newRow);
+        } else {
+            $('#table-blocks tbody').append($newRow);
+        }
+
+        // Set editing flag
+        $newRow.data('is-editing', true);
+
+        // Focus on textarea
+        $newRow.find('.edit-content-textarea').focus();
+
+        // Scroll to the new block
+        $('html, body').animate({
+            scrollTop: $newRow.offset().top - 100
+        }, 300);
+    }
+
+    // Handle "Create New Block" button click
+    $(document).on('click', '#create-new-block-btn', function(e) {
+        e.preventDefault();
+        createNewBlockRow(null);
+    });
+
+    // Handle "+ block" (create below) button click
+    $(document).on('click', '.create-below', function(e) {
+        e.preventDefault();
+        var blockId = $(this).closest('tr').data('block-id');
+        createNewBlockRow(blockId);
+    });
+
+    // Handle save new block button
+    $(document).on('click', '.save-new-block-btn', function(e) {
+        e.preventDefault();
+        var $row = $(this).closest('tr');
+        var content = $row.find('.edit-content-textarea').val();
+        var personId = $row.find('.edit-person-select').val();
+
+        // Validate content
+        if (!content || content.trim() === '') {
+            updateSaveStatus($row, 'error', 'Content cannot be empty');
+            return;
+        }
+
+        // Show saving status
+        updateSaveStatus($row, 'saving');
+
+        // Determine if this is create or createBelow
+        var insertAfterBlockId = null;
+        var $prevRow = $row.prev('tr[data-block-id]');
+        if ($prevRow.length > 0 && !$prevRow.data('is-new')) {
+            insertAfterBlockId = $prevRow.data('block-id');
+        }
+
+        // Prepare data
+        var data = {
+            sceneId: sceneId,
+            content: content,
+            personId: personId ? parseInt(personId) : null
+        };
+
+        // Choose endpoint based on whether we're inserting after a specific block
+        var endpoint = insertAfterBlockId ? '/block/createBelowInline' : '/block/createInline';
+        if (insertAfterBlockId) {
+            data.id = insertAfterBlockId;
+        }
+
+        // Send AJAX request
+        $.ajax({
+            url: contextPath + endpoint,
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(data),
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+            },
+            success: function(response) {
+                // Reload the page to show the new block in the correct position
+                window.location.reload();
+            },
+            error: function(xhr, status, error) {
+                console.error('Error creating block:', error);
+                var errorMessage = xhr.responseText || 'Failed to create block';
+                updateSaveStatus($row, 'error', errorMessage);
+            }
+        });
+    });
+
+    // Handle cancel new block button
+    $(document).on('click', '.cancel-new-block-btn', function(e) {
+        e.preventDefault();
+        var $row = $(this).closest('tr');
+        $row.remove();
+    });
 });

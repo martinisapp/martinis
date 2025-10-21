@@ -221,4 +221,34 @@ public class BlockController {
 
         return "redirect:/scene/show?id=" + block.getScene().getId();
     }
+
+    // AJAX endpoint for inline block creation
+    @RequestMapping(value = "/createInline", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> createInline(@RequestBody CreateBlockCommandModel commandModel) {
+        try {
+            if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
+                return new ResponseEntity<>("Content cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+            Block block = blockWebService.saveCreateBlockCommandModel(commandModel);
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    // AJAX endpoint for inline block creation below existing block
+    @RequestMapping(value = "/createBelowInline", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> createBelowInline(@RequestBody CreateBlockBelowCommandModel commandModel) {
+        try {
+            if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
+                return new ResponseEntity<>("Content cannot be empty", HttpStatus.BAD_REQUEST);
+            }
+            Block block = blockWebService.saveCreateBlockBelowCommandModel(commandModel);
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 }
