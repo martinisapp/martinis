@@ -24,9 +24,9 @@
                     login-page="/login"
                     authentication-failure-url="/login?login_error=1" />
         <intercept-url pattern="/"
-                       access="IS_AUTHENTICATED_ANONYMOUSLY" />
+                       access="permitAll" />
         <intercept-url pattern="/**"
-                       access="ROLE_USER" />
+                       access="hasRole('USER')" />
     </http>
     <authentication-manager>
         <authentication-provider>
