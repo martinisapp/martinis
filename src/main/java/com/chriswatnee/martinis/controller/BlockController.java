@@ -154,9 +154,6 @@ public class BlockController {
     // htmx endpoint - update block and return display view
     @RequestMapping(value = "/updateInline", method = RequestMethod.POST)
     public String updateInline(@ModelAttribute EditBlockCommandModel commandModel, Model model) {
-        if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
-            return "error";
-        }
         Block block = blockWebService.saveEditBlockCommandModel(commandModel);
         model.addAttribute("block", block);
         return "fragments/block-display";
@@ -279,9 +276,6 @@ public class BlockController {
     // htmx endpoint - create new block at end of scene and return block row
     @RequestMapping(value = "/createInline", method = RequestMethod.POST)
     public String createInline(@ModelAttribute CreateBlockCommandModel commandModel, Model model) {
-        if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
-            return "fragments/empty";
-        }
         if (commandModel.getSceneId() == null) {
             return "fragments/empty";
         }
@@ -295,9 +289,6 @@ public class BlockController {
     // htmx endpoint - create new block below existing block and return block row
     @RequestMapping(value = "/createBelowInline", method = RequestMethod.POST)
     public String createBelowInline(@ModelAttribute CreateBlockBelowCommandModel commandModel, Model model) {
-        if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
-            return "fragments/empty";
-        }
         if (commandModel.getId() == null) {
             return "fragments/empty";
         }
