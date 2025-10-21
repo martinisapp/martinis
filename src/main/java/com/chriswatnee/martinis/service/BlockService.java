@@ -20,6 +20,7 @@ public interface BlockService {
     public Block read(Integer id);
     public void update(Block block);
     public void delete(Block block);
+    public void restore(Block block);
     public void moveUp(Block block);
     public void moveDown(Block block);
     public void reorderBlocks(List<Integer> blockIds);

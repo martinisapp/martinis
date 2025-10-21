@@ -156,12 +156,43 @@ public class BlockDaoImpl implements BlockDao {
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public void delete(Block block) {
-        
+
         jdbcTemplate.update(DELETE_QUERY, block.getId());
-        
+
         jdbcTemplate.update(SUBTRACT_ORDERS_QUERY,
                             block.getOrder(),
                             block.getScene().getId()
+        );
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void restore(Block block) {
+
+        Integer personId = null;
+
+        if (block.getPerson() != null) {
+            personId = block.getPerson().getId();
+        }
+
+        Integer sceneId = null;
+
+        if (block.getScene() != null) {
+            sceneId = block.getScene().getId();
+        }
+
+        // Make space for the restored block by adding 1 to all blocks with order >= restored block's order
+        jdbcTemplate.update(ADD_ORDERS_QUERY,
+                            block.getOrder() - 1,
+                            sceneId
+        );
+
+        // Insert the block at its original order position
+        jdbcTemplate.update(CREATE_QUERY,
+                            block.getOrder(),
+                            block.getContent(),
+                            personId,
+                            sceneId
         );
     }
 

@@ -50,6 +50,11 @@ public class BlockServiceImpl implements BlockService {
     }
 
     @Override
+    public void restore(Block block) {
+        blockDao.restore(block);
+    }
+
+    @Override
     public void moveUp(Block block) {
         blockDao.moveUp(block);
     }
