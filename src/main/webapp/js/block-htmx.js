@@ -5,14 +5,14 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Block htmx JavaScript loaded');
 
-    var tableBody = document.getElementById('table-blocks');
-    if (tableBody) {
+    var blocksList = document.getElementById('blocks-list');
+    if (blocksList) {
         // Get CSRF token from meta tags
         var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
         var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
 
-        // Initialize SortableJS on the table body
-        var sortable = new Sortable(tableBody.querySelector('tbody'), {
+        // Initialize SortableJS on the blocks list
+        var sortable = new Sortable(blocksList, {
             animation: 150,
             handle: '.drag-handle',
             ghostClass: 'sortable-ghost',
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
             onEnd: function(evt) {
                 // Get the new order of block IDs
                 var blockIds = [];
-                var rows = tableBody.querySelectorAll('tbody tr');
+                var rows = blocksList.querySelectorAll('.block-row');
 
                 rows.forEach(function(row) {
                     var blockId = row.getAttribute('data-block-id');
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // For existing block forms, reload the display view
                     var blockId = form.querySelector('input[name="id"]').value;
                     htmx.ajax('GET', contextPath + '/block/displayView?id=' + blockId, {
-                        target: form.closest('td'),
+                        target: form.closest('.block-column-content'),
                         swap: 'innerHTML'
                     });
                 }
@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     // For existing block forms, reload the display view
                     var blockId = form.querySelector('input[name="id"]').value;
                     htmx.ajax('GET', contextPath + '/block/displayView?id=' + blockId, {
-                        target: form.closest('td'),
+                        target: form.closest('.block-column-content'),
                         swap: 'innerHTML'
                     });
                 }

@@ -2,7 +2,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <div class="block-display"
      hx-get="${pageContext.request.contextPath}/block/editForm?id=${block.id}"
-     hx-target="closest td"
+     hx-target="closest .block-column-content"
      hx-swap="innerHTML">
     <c:choose>
         <c:when test="${not empty block.person}">

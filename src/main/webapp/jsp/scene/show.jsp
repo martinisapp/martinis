@@ -50,17 +50,17 @@
             <div class="page-header">
                 <h1 class="text-uppercase">${viewModel.name} <small><a href="${pageContext.request.contextPath}/scene/edit?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">edit</a> <a href="${pageContext.request.contextPath}/scene/delete?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">delete</a></small></h1>
             </div>
-            <table id="table-blocks" class="table table-hover">
-                <tbody>
+            <div id="blocks-container">
+                <div id="blocks-list">
                 <c:forEach items="${viewModel.blocks}" var="block" varStatus="loop">
-                    <tr data-block-id="${block.id}">
-                        <td>
+                    <div class="block-row" data-block-id="${block.id}">
+                        <div class="block-column block-column-handle">
                             <span class="drag-handle" title="Drag to reorder">&#8942;&#8942;</span>
-                        </td>
-                        <td>
+                        </div>
+                        <div class="block-column block-column-content">
                             <div class="block-display"
                                  hx-get="${pageContext.request.contextPath}/block/editForm?id=${block.id}"
-                                 hx-target="closest td"
+                                 hx-target="closest .block-column-content"
                                  hx-swap="innerHTML">
                                 <c:choose>
                                     <c:when test="${not empty block.personName}">
@@ -76,8 +76,8 @@
                                     </c:otherwise>
                                 </c:choose>
                             </div>
-                        </td>
-                        <td>
+                        </div>
+                        <div class="block-column block-column-actions">
                             <div class="nowrap">
                                 <a href="${pageContext.request.contextPath}/block/delete?id=${block.id}" class="btn btn-default btn-xs" role="button">delete</a>
                                 <c:if test="${not loop.last}">
@@ -87,16 +87,16 @@
                                     <a href="${pageContext.request.contextPath}/block/moveUp?id=${block.id}" class="btn btn-default btn-xs move-up" role="button">↑</a>
                                 </c:if>
                                 <a hx-get="${pageContext.request.contextPath}/block/createBelowForm?id=${block.id}"
-                                   hx-target="closest tr"
+                                   hx-target="closest .block-row"
                                    hx-swap="afterend"
                                    class="btn btn-primary btn-xs create-below"
                                    role="button">+ block</a>
                             </div>
-                        </td>
-                    </tr>
+                        </div>
+                    </div>
                 </c:forEach>
-                </tbody>
-            </table>
+                </div>
+            </div>
             <p>
                 <a href="${pageContext.request.contextPath}/scene/createBelow?id=${viewModel.id}" class="btn btn-default" role="button">Create New Scene</a>
                 <a href="${pageContext.request.contextPath}/character/create?projectId=${viewModel.projectId}" class="btn btn-default" role="button">Create New Character</a>

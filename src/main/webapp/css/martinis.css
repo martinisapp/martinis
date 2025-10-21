@@ -47,25 +47,67 @@
 #table-actors a,
 #table-projects a,
 #table-scenes a,
-#table-blocks a.character-name {
+#blocks-container a.character-name {
     color: #000;
 }
 
 #table-actors td,
 #table-projects td,
-#table-scenes td,
-#table-blocks td {
+#table-scenes td {
     border-top: none;
 }
 
-#table-scenes td:nth-child(2),
-#table-blocks td:nth-child(2) {
+#table-scenes td:nth-child(2) {
     width: 99%;
+}
+
+/* Block container layout using flexbox */
+#blocks-container {
+    width: 100%;
+}
+
+#blocks-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.block-row {
+    display: flex;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px solid #f5f5f5;
+    transition: background-color 0.2s;
+}
+
+.block-row:hover {
+    background-color: #f9f9f9;
+}
+
+.block-column {
+    display: flex;
+    align-items: flex-start;
+}
+
+.block-column-handle {
+    flex: 0 0 auto;
+    padding-right: 10px;
+    cursor: move;
+}
+
+.block-column-content {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.block-column-actions {
+    flex: 0 0 auto;
+    padding-left: 10px;
 }
 
 .page-header small a,
 #table-scenes .btn,
-#table-blocks .btn {
+.block-row .btn {
     opacity: 0;
 }
 
@@ -73,14 +115,14 @@
 .page-header:hover small a,
 #table-scenes tr .btn:focus,
 #table-scenes tr:hover .btn,
-#table-blocks tr .btn:focus,
-#table-blocks tr:hover .btn {
+.block-row .btn:focus,
+.block-row:hover .btn {
     opacity: 1;
 }
 
-#table-blocks tr:first-child .btn.create-below,
+.block-row:first-child .btn.create-below,
 #table-scenes tr:last-child .btn.move-up,
-#table-blocks tr:last-child .btn.move-up {
+.block-row:last-child .btn.move-up {
     margin-left: 22px;
 }
 
@@ -89,7 +131,7 @@
     /* Make buttons always visible on mobile (no hover needed) */
     .page-header small a,
     #table-scenes .btn,
-    #table-blocks .btn {
+    .block-row .btn {
         opacity: 1;
     }
 
@@ -150,9 +192,9 @@
     }
 
     /* Remove fixed button margin on mobile */
-    #table-blocks tr:first-child .btn.create-below,
+    .block-row:first-child .btn.create-below,
     #table-scenes tr:last-child .btn.move-up,
-    #table-blocks tr:last-child .btn.move-up {
+    .block-row:last-child .btn.move-up {
         margin-left: 0;
     }
 }

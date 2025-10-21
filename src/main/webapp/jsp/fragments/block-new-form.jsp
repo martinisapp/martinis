@@ -1,15 +1,15 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<tr>
-    <td>
+<div class="block-row">
+    <div class="block-column block-column-handle">
         <span class="drag-handle" title="Drag to reorder">&#8942;&#8942;</span>
-    </td>
-    <td>
+    </div>
+    <div class="block-column block-column-content">
         <div class="block-edit">
             <c:choose>
                 <c:when test="${insertAfterBlockId != null}">
                     <form hx-post="${pageContext.request.contextPath}/block/createBelowInline"
-                          hx-target="closest tr"
+                          hx-target="closest .block-row"
                           hx-swap="outerHTML">
                         <input type="hidden" name="id" value="${insertAfterBlockId}">
                         <input type="hidden" name="sceneId" value="${sceneId}">
@@ -18,7 +18,7 @@
                             <select class="form-control" name="personId"
                                     hx-post="${pageContext.request.contextPath}/block/createBelowInline"
                                     hx-include="closest form"
-                                    hx-target="closest tr"
+                                    hx-target="closest .block-row"
                                     hx-swap="outerHTML"
                                     hx-trigger="change">
                                 <option value="">-- No Character --</option>
@@ -32,7 +32,7 @@
                             <textarea class="form-control" name="content" rows="8" autofocus
                                       hx-post="${pageContext.request.contextPath}/block/createBelowInline"
                                       hx-include="closest form"
-                                      hx-target="closest tr"
+                                      hx-target="closest .block-row"
                                       hx-swap="outerHTML"
                                       hx-trigger="keyup changed delay:1500ms[event.target.value.trim().length > 0], blur[event.target.value.trim().length > 0]"></textarea>
                         </div>
@@ -48,7 +48,7 @@
                 </c:when>
                 <c:otherwise>
                     <form hx-post="${pageContext.request.contextPath}/block/createInline"
-                          hx-target="closest tr"
+                          hx-target="closest .block-row"
                           hx-swap="outerHTML">
                         <input type="hidden" name="sceneId" value="${sceneId}">
                         <div class="form-group">
@@ -56,7 +56,7 @@
                             <select class="form-control" name="personId"
                                     hx-post="${pageContext.request.contextPath}/block/createInline"
                                     hx-include="closest form"
-                                    hx-target="closest tr"
+                                    hx-target="closest .block-row"
                                     hx-swap="outerHTML"
                                     hx-trigger="change">
                                 <option value="">-- No Character --</option>
@@ -70,7 +70,7 @@
                             <textarea class="form-control" name="content" rows="8" autofocus
                                       hx-post="${pageContext.request.contextPath}/block/createInline"
                                       hx-include="closest form"
-                                      hx-target="closest tr"
+                                      hx-target="closest .block-row"
                                       hx-swap="outerHTML"
                                       hx-trigger="keyup changed delay:1500ms[event.target.value.trim().length > 0], blur[event.target.value.trim().length > 0]"></textarea>
                         </div>
@@ -86,6 +86,6 @@
                 </c:otherwise>
             </c:choose>
         </div>
-    </td>
-    <td></td>
-</tr>
+    </div>
+    <div class="block-column block-column-actions"></div>
+</div>
