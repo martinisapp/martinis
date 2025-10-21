@@ -12,6 +12,16 @@
         <link href="${pageContext.request.contextPath}/css/martinis.css" rel="stylesheet">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+        <script>
+            // Configure HTMX to send CSRF tokens with all requests
+            document.addEventListener('DOMContentLoaded', function() {
+                document.body.addEventListener('htmx:configRequest', function(evt) {
+                    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+                    evt.detail.headers[csrfHeader] = csrfToken;
+                });
+            });
+        </script>
         <style>
             .drag-handle {
                 cursor: move;
@@ -133,7 +143,11 @@
                                 <c:if test="${not loop.first}">
                                     <a href="${pageContext.request.contextPath}/block/moveUp?id=${block.id}" class="btn btn-default btn-xs move-up" role="button">↑</a>
                                 </c:if>
-                                <a href="${pageContext.request.contextPath}/block/createBelow?id=${block.id}" class="btn btn-primary btn-xs create-below" role="button">+ block</a>
+                                <a hx-get="${pageContext.request.contextPath}/block/createBelowForm?id=${block.id}"
+                                   hx-target="closest tr"
+                                   hx-swap="afterend"
+                                   class="btn btn-primary btn-xs create-below"
+                                   role="button">+ block</a>
                             </div>
                         </td>
                     </tr>
