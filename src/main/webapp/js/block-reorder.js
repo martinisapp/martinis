@@ -4,6 +4,10 @@
 $(document).ready(function() {
     var tableBody = document.getElementById('table-blocks');
     if (tableBody) {
+        // Get CSRF token from meta tags
+        var csrfToken = $('meta[name="_csrf"]').attr('content');
+        var csrfHeader = $('meta[name="_csrf_header"]').attr('content');
+
         // Initialize SortableJS on the table body
         var sortable = new Sortable(tableBody.querySelector('tbody'), {
             animation: 150,
@@ -22,8 +26,8 @@ $(document).ready(function() {
                     }
                 });
 
-                // Send the new order to the server
-                $.ajax({
+                // Send the new order to the server with CSRF token
+                var ajaxOptions = {
                     url: contextPath + '/block/reorder',
                     method: 'POST',
                     contentType: 'application/json',
@@ -37,7 +41,16 @@ $(document).ready(function() {
                         // Reload the page to restore original order
                         location.reload();
                     }
-                });
+                };
+
+                // Add CSRF token to request header
+                if (csrfToken && csrfHeader) {
+                    ajaxOptions.beforeSend = function(xhr) {
+                        xhr.setRequestHeader(csrfHeader, csrfToken);
+                    };
+                }
+
+                $.ajax(ajaxOptions);
             }
         });
     }
