@@ -13,7 +13,6 @@
                 class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
                 
     <http pattern="/favicon.ico" security="none" />
-    <http pattern="/login" security="none" />
     <http pattern="/dbcheck" security="none" />
     <http pattern="/css/**" security="none" />
     <http pattern="/js/**" security="none" />
@@ -23,6 +22,8 @@
         <form-login login-processing-url="/j_spring_security_check"
                     login-page="/login"
                     authentication-failure-url="/login?login_error=1" />
+        <intercept-url pattern="/login"
+                       access="permitAll" />
         <intercept-url pattern="/"
                        access="permitAll" />
         <intercept-url pattern="/**"
