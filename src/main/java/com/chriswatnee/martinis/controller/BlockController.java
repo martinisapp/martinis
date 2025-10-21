@@ -189,7 +189,7 @@ public class BlockController {
 
         Block block = blockWebService.saveCreateBlockCommandModel(commandModel);
 
-        return "redirect:/scene/show?id=" + block.getScene().getId();
+        return "redirect:/scene/show?id=" + block.getScene().getId() + "&editBlock=" + block.getId();
     }
     
     // Show Form
@@ -219,6 +219,6 @@ public class BlockController {
 
         Block block = blockWebService.saveCreateBlockBelowCommandModel(commandModel);
 
-        return "redirect:/scene/show?id=" + block.getScene().getId();
+        return "redirect:/scene/show?id=" + block.getScene().getId() + "&editBlock=" + block.getId();
     }
 }
