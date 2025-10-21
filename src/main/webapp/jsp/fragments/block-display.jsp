@@ -6,10 +6,10 @@
      hx-swap="innerHTML">
     <c:choose>
         <c:when test="${not empty block.person}">
-            <p class="mb-0 text-center">
-                <a href="${pageContext.request.contextPath}/character/show?id=${block.person.id}" class="character-name text-uppercase" onclick="event.stopPropagation()">${block.person.name}</a>
+            <p style="margin-bottom: 0; text-align: center;">
+                <a href="${pageContext.request.contextPath}/character/show?id=${block.person.id}" class="character-name" style="text-transform: uppercase;" onclick="event.stopPropagation()">${block.person.name}</a>
             </p>
-            <div class="text-center block-content">
+            <div class="block-content" style="text-align: center;">
                 ${block.content}
             </div>
         </c:when>

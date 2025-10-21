@@ -10,10 +10,10 @@
          hx-swap="innerHTML">
         <c:choose>
             <c:when test="${not empty block.personName}">
-                <p class="mb-0 text-center">
-                    <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name text-uppercase" onclick="event.stopPropagation()">${block.personName}</a>
+                <p style="margin-bottom: 0; text-align: center;">
+                    <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name" style="text-transform: uppercase;" onclick="event.stopPropagation()">${block.personName}</a>
                 </p>
-                <div class="text-center block-content">
+                <div class="block-content" style="text-align: center;">
                     ${block.content}
                 </div>
             </c:when>
@@ -25,7 +25,7 @@
 </div>
 <div class="block-column block-column-actions">
     <div class="nowrap">
-        <a href="${pageContext.request.contextPath}/block/delete?id=${block.id}" class="btn btn-default btn-xs" role="button">delete</a>
+        <a href="${pageContext.request.contextPath}/block/delete?id=${block.id}" role="button" class="secondary" role="button">delete</a>
         <c:if test="${not isLast}">
             <a href="${pageContext.request.contextPath}/block/moveDown?id=${block.id}" class="btn btn-default btn-xs move-down" role="button">↓</a>
         </c:if>

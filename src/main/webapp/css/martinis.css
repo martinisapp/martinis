@@ -6,42 +6,41 @@
     white-space: nowrap;
 }
 
-/* Compact navbar styling */
-.navbar {
-    min-height: 40px;
-    margin-bottom: 10px;
+/* Navigation styling for Pico CSS */
+nav.container {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
 }
 
-.navbar-inverse .navbar-brand {
-    padding: 8px 15px;
-    font-size: 16px;
-    line-height: 24px;
+nav.container ul {
+    margin-bottom: 0;
 }
 
-.navbar-inverse .navbar-nav > li > a {
-    padding: 8px 12px;
-    font-size: 13px;
-    line-height: 24px;
+nav.container li {
+    padding: 0.25rem 0;
 }
 
-.navbar-header {
-    min-height: 40px;
+nav.container a {
+    padding: 0.5rem 0.75rem;
+    text-decoration: none;
 }
 
-.navbar-inverse .navbar-toggle {
-    margin-top: 3px;
-    margin-bottom: 3px;
-    padding: 6px 10px;
-    border-color: #333;
+nav.container a.active {
+    font-weight: bold;
 }
 
-.navbar-inverse .navbar-toggle:hover,
-.navbar-inverse .navbar-toggle:focus {
-    background-color: #333;
+/* Breadcrumb styling */
+nav[aria-label="breadcrumb"] ul {
+    display: flex;
+    list-style: none;
+    padding: 0.5rem 0;
+    margin-bottom: 1rem;
 }
 
-.navbar-inverse .navbar-toggle .icon-bar {
-    background-color: #fff;
+nav[aria-label="breadcrumb"] li:not(:last-child)::after {
+    content: " / ";
+    margin: 0 0.5rem;
 }
 
 #table-actors a,
@@ -105,109 +104,87 @@
     padding-left: 10px;
 }
 
-.page-header small a,
-#table-scenes .btn,
-.block-row .btn {
+header p a,
+#table-scenes [role="button"],
+.block-row [role="button"] {
     opacity: 0;
 }
 
-.page-header small a:focus,
-.page-header:hover small a,
-#table-scenes tr .btn:focus,
-#table-scenes tr:hover .btn,
-.block-row .btn:focus,
-.block-row:hover .btn {
+header p a:focus,
+header:hover p a,
+#table-scenes tr [role="button"]:focus,
+#table-scenes tr:hover [role="button"],
+.block-row [role="button"]:focus,
+.block-row:hover [role="button"] {
     opacity: 1;
 }
 
-.block-row:first-child .btn.create-below,
-#table-scenes tr:last-child .btn.move-up,
-.block-row:last-child .btn.move-up {
+.block-row:first-child .create-below,
+#table-scenes tr:last-child .move-up,
+.block-row:last-child .move-up {
     margin-left: 22px;
+}
+
+/* Grid layout for 2-column layouts */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: 2fr 1fr;
+    }
 }
 
 /* Mobile-responsive styles */
 @media (max-width: 767px) {
     /* Make buttons always visible on mobile (no hover needed) */
-    .page-header small a,
-    #table-scenes .btn,
-    .block-row .btn {
+    header p a,
+    #table-scenes [role="button"],
+    .block-row [role="button"] {
         opacity: 1;
     }
 
     /* Improve touch targets for mobile */
-    .btn {
+    [role="button"] {
         min-height: 44px;
         padding: 10px 12px;
         margin: 2px 0;
     }
 
-    /* Stack form controls vertically on mobile */
-    .form-horizontal .control-label {
-        text-align: left;
-        margin-bottom: 5px;
-    }
-
-    /* Add spacing for page headers */
-    .page-header {
+    /* Add spacing for headers */
+    header {
         margin-top: 20px;
         padding-bottom: 9px;
     }
 
-    .page-header h1 {
+    header h1 {
         font-size: 28px;
     }
 
-    /* Improve breadcrumb spacing */
-    .breadcrumb {
-        margin-bottom: 15px;
-        padding: 8px 10px;
-    }
-
     /* Make tables more readable on mobile */
-    .table {
+    table {
         font-size: 14px;
     }
 
-    .table td,
-    .table th {
+    table td,
+    table th {
         padding: 8px 5px;
     }
 
-    /* Improve container padding on mobile */
-    .container {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    /* Stack action buttons */
-    .btn-group {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .btn-group .btn {
-        width: 100%;
-        margin: 2px 0;
-    }
-
     /* Remove fixed button margin on mobile */
-    .block-row:first-child .btn.create-below,
-    #table-scenes tr:last-child .btn.move-up,
-    .block-row:last-child .btn.move-up {
+    .block-row:first-child .create-below,
+    #table-scenes tr:last-child .move-up,
+    .block-row:last-child .move-up {
         margin-left: 0;
     }
 }
 
 /* Tablet-specific styles */
 @media (min-width: 768px) and (max-width: 991px) {
-    /* Improve spacing for medium devices */
-    .container {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .btn {
+    [role="button"] {
         padding: 8px 12px;
     }
 }

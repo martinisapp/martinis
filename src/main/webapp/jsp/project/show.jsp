@@ -6,29 +6,29 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Martinis - Project Profile</title>
-        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
         <link href="${pageContext.request.contextPath}/css/martinis.css" rel="stylesheet">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     </head>
     <body>
         <jsp:include page="../includes/nav.jsp" />
-        <div class="container">
+        <main class="container">
             <jsp:include page="../includes/logout.jsp" />
-            <ol class="breadcrumb">
+            <nav aria-label="breadcrumb"><ul>
                 <li><a href="${pageContext.request.contextPath}/project/list">Projects</a></li>
-                <li class="active">${viewModel.title}</li>
-            </ol>
-            <div class="page-header">
-                <h1>${viewModel.title} <small><a href="${pageContext.request.contextPath}/project/edit?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">edit</a> <a href="${pageContext.request.contextPath}/project/delete?id=${viewModel.id}" class="btn btn-default btn-xs" role="button">delete</a></small></h1>
+                <li>${viewModel.title}</li>
+            </ul></nav>
+            <div >
+                <h1>${viewModel.title} <small><a href="${pageContext.request.contextPath}/project/edit?id=${viewModel.id}" role="button" class="secondary" role="button">edit</a> <a href="${pageContext.request.contextPath}/project/delete?id=${viewModel.id}" role="button" class="secondary" role="button">delete</a></small></h1>
             </div>
-            <div class="row">
-                <div class="col-md-9">
+            <div class="grid">
+                <div >
                     <h2>Scenes</h2>
-                    <table id="table-scenes" class="table table-hover">
+                    <table id="table-scenes" >
                         <c:forEach items="${viewModel.scenes}" var="scene" varStatus="loop">
                             <tr>
-                                <td><a href="${pageContext.request.contextPath}/scene/show?id=${scene.id}" class="text-uppercase">${scene.name}</a></td>
+                                <td><a href="${pageContext.request.contextPath}/scene/show?id=${scene.id}" style="text-transform: uppercase;">${scene.name}</a></td>
                                 <td>
                                     <div class="nowrap">
                                         <c:if test="${not loop.last}">
@@ -42,24 +42,24 @@
                             </tr>
                         </c:forEach>
                     </table>
-                    <p><a href="${pageContext.request.contextPath}/scene/create?projectId=${viewModel.id}" class="btn btn-primary" role="button">Create New Scene</a></p>
+                    <p><a href="${pageContext.request.contextPath}/scene/create?projectId=${viewModel.id}" role="button">Create New Scene</a></p>
                 </div>
-                <div class="col-md-3">
+                <div >
                     <c:if test="${not empty viewModel.persons}">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h3 class="panel-title">Characters</h3>
+                        <article>
+                            <header>
+                                <h3>Characters</h3>
                             </div>
-                            <ul class="list-group">
+                            <ul>
                             <c:forEach items="${viewModel.persons}" var="character">
-                                <li class="list-group-item"><a href="${pageContext.request.contextPath}/character/show?id=${character.id}">${character.name}</a></li>
+                                <li><a href="${pageContext.request.contextPath}/character/show?id=${character.id}">${character.name}</a></li>
                             </c:forEach>
                             </ul>
                         </div>
                     </c:if>
-                    <a href="${pageContext.request.contextPath}/character/create?projectId=${viewModel.id}" class="btn btn-primary" role="button">Create New Character</a>
+                    <a href="${pageContext.request.contextPath}/character/create?projectId=${viewModel.id}" role="button">Create New Character</a>
                 </div>
             </div>
-        </div>
+        </main>
     </body>
 </html>

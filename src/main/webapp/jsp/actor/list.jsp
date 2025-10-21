@@ -6,7 +6,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Martinis - Casting</title>
-        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
         <link href="${pageContext.request.contextPath}/css/martinis.css" rel="stylesheet">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
@@ -15,22 +15,22 @@
         <jsp:include page="../includes/nav.jsp">
             <jsp:param name="page" value="casting" />
         </jsp:include>
-        <div class="container">
+        <main class="container">
             <jsp:include page="../includes/logout.jsp" />
-            <ol class="breadcrumb">
-                <li class="active">Casting</li>
-            </ol>
-            <div class="page-header">
+            <nav aria-label="breadcrumb"><ul>
+                <li>Casting</li>
+            </ul></nav>
+            <div >
                 <h1>Casting</h1>
             </div>
-            <table id="table-actors" class="table table-hover">
+            <table id="table-actors" >
                 <c:forEach items="${viewModel.actors}" var="actor">
                     <tr>
                         <td><a href="${pageContext.request.contextPath}/actor/show?id=${actor.id}">${actor.first} ${actor.last}</a></td>  
                     </tr>
                 </c:forEach>
             </table>
-            <a href="${pageContext.request.contextPath}/actor/create" class="btn btn-primary" role="button">Create New Actor</a>
-        </div>
+            <a href="${pageContext.request.contextPath}/actor/create" role="button">Create New Actor</a>
+        </main>
     </body>
 </html>

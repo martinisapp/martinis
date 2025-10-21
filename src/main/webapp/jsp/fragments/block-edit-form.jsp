@@ -7,7 +7,7 @@
           hx-trigger="submit">
         <input type="hidden" name="id" value="${block.id}">
         <input type="hidden" name="sceneId" value="${block.scene.id}">
-        <div class="form-group">
+        <div >
             <label>Character:</label>
             <select class="form-control edit-person-select" name="personId"
                     hx-post="${pageContext.request.contextPath}/block/updateInline"
@@ -20,23 +20,23 @@
                     <option value="${person.id}" ${block.person != null && person.id == block.person.id ? 'selected' : ''}>${person.name}</option>
                 </c:forEach>
             </select>
-        </div>
-        <div class="form-group">
+        </main>
+        <div >
             <label>Content:</label>
-            <textarea class="form-control" name="content" rows="8"
+            <textarea  name="content" rows="8"
                       hx-post="${pageContext.request.contextPath}/block/updateInline"
                       hx-include="closest form"
                       hx-target="closest .block-column-content"
                       hx-swap="innerHTML"
                       hx-trigger="keyup changed delay:1500ms, blur">${block.content}</textarea>
-        </div>
-        <div class="form-group">
+        </main>
+        <div >
             <div class="save-status">
                 <span class="text-muted htmx-indicator">Saving...</span>
             </div>
-            <div class="text-muted small">
+            <div style="opacity: 0.7;">
                 <i>Click outside or press Escape to finish editing</i>
             </div>
-        </div>
+        </main>
     </form>
 </div>
