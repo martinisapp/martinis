@@ -78,7 +78,14 @@
             <c:if test="${blockDeleted}">
                 <div id="undo-notification" class="alert alert-success" role="alert" style="margin-top: 20px; margin-bottom: 20px;">
                     <strong>Block deleted.</strong>
-                    <a href="${pageContext.request.contextPath}/block/undo" class="btn btn-sm btn-warning" style="margin-left: 10px;">Undo</a>
+                    <c:choose>
+                        <c:when test="${undoCount > 1}">
+                            <a href="${pageContext.request.contextPath}/block/undo" class="btn btn-sm btn-warning" style="margin-left: 10px;">Undo (${undoCount} available)</a>
+                        </c:when>
+                        <c:otherwise>
+                            <a href="${pageContext.request.contextPath}/block/undo" class="btn btn-sm btn-warning" style="margin-left: 10px;">Undo</a>
+                        </c:otherwise>
+                    </c:choose>
                 </div>
             </c:if>
             <ol class="breadcrumb">
