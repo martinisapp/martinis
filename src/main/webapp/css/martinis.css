@@ -6,6 +6,28 @@
     white-space: nowrap;
 }
 
+/* Compact navbar styling */
+.navbar {
+    min-height: 40px;
+    margin-bottom: 10px;
+}
+
+.navbar-inverse .navbar-brand {
+    padding: 8px 15px;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    padding: 8px 12px;
+    font-size: 13px;
+    line-height: 24px;
+}
+
+.navbar-header {
+    min-height: 40px;
+}
+
 #table-actors a,
 #table-projects a,
 #table-scenes a,
