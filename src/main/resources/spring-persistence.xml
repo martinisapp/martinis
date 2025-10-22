@@ -140,4 +140,9 @@
         <constructor-arg ref="personService" />
     </bean>
 
+    <bean id="userService" class="com.martinis.service.UserServiceImpl">
+        <constructor-arg ref="jdbcTemplate" />
+        <constructor-arg ref="encoder" />
+    </bean>
+
 </beans>
