@@ -114,10 +114,30 @@
         <constructor-arg ref="sceneDao" />
     </bean>
 
-    <bean id="actorWebService" class="com.martinis.webservice.ActorWebServiceImpl" />
-    <bean id="blockWebService" class="com.martinis.webservice.BlockWebServiceImpl" />
-    <bean id="personWebService" class="com.martinis.webservice.PersonWebServiceImpl" />
-    <bean id="projectWebService" class="com.martinis.webservice.ProjectWebServiceImpl" />
-    <bean id="sceneWebService" class="com.martinis.webservice.SceneWebServiceImpl" />
+    <bean id="actorWebService" class="com.martinis.webservice.ActorWebServiceImpl">
+        <constructor-arg ref="actorService" />
+    </bean>
+    <bean id="blockWebService" class="com.martinis.webservice.BlockWebServiceImpl">
+        <constructor-arg ref="blockService" />
+        <constructor-arg ref="personService" />
+        <constructor-arg ref="sceneService" />
+        <constructor-arg ref="projectService" />
+    </bean>
+    <bean id="personWebService" class="com.martinis.webservice.PersonWebServiceImpl">
+        <constructor-arg ref="personService" />
+        <constructor-arg ref="actorService" />
+        <constructor-arg ref="projectService" />
+    </bean>
+    <bean id="projectWebService" class="com.martinis.webservice.ProjectWebServiceImpl">
+        <constructor-arg ref="projectService" />
+        <constructor-arg ref="sceneService" />
+        <constructor-arg ref="personService" />
+    </bean>
+    <bean id="sceneWebService" class="com.martinis.webservice.SceneWebServiceImpl">
+        <constructor-arg ref="sceneService" />
+        <constructor-arg ref="blockService" />
+        <constructor-arg ref="projectService" />
+        <constructor-arg ref="personService" />
+    </bean>
 
 </beans>
