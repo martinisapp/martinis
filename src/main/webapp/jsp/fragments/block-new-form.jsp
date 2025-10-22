@@ -14,7 +14,6 @@
                         <input type="hidden" name="id" value="${insertAfterBlockId}">
                         <input type="hidden" name="sceneId" value="${sceneId}">
                         <div class="form-group">
-                            <label>Character:</label>
                             <select class="form-control" name="personId"
                                     hx-post="${pageContext.request.contextPath}/block/createBelowInline"
                                     hx-include="closest form"
@@ -52,7 +51,6 @@
                           hx-swap="outerHTML">
                         <input type="hidden" name="sceneId" value="${sceneId}">
                         <div class="form-group">
-                            <label>Character:</label>
                             <select class="form-control" name="personId"
                                     hx-post="${pageContext.request.contextPath}/block/createInline"
                                     hx-include="closest form"

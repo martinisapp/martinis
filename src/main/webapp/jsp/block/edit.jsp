@@ -29,7 +29,6 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="projectId" class="col-md-2 control-label">Character:</label>
                     <div class="col-md-10">
                         <sf:select class="form-control" path="personId">
                             <sf:option value="" label="No character" />
