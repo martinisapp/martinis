@@ -1,1 +1,1 @@
-web:    java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --expand-war --port $PORT target/spring-mvc-webapp.war
+web: java -jar target/martinis.jar
