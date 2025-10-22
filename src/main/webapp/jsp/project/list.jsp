@@ -30,6 +30,7 @@
                 </c:forEach>
             </table>
             <a href="${pageContext.request.contextPath}/project/create" class="btn btn-primary" role="button">Create New Project</a>
+            <a href="${pageContext.request.contextPath}/import/word" class="btn btn-success" role="button">Import Word Document</a>
         </div>
         <script src="${pageContext.request.contextPath}/js/jquery-3.1.1.min.js"></script>
         <script src="${pageContext.request.contextPath}/js/bootstrap.min.js"></script>
