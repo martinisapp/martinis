@@ -15,6 +15,7 @@ import jakarta.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
  *
  * @author chris
  */
+@Repository
 public class BlockDaoImpl implements BlockDao {
     
     JdbcTemplate jdbcTemplate;
