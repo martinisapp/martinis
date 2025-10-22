@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Context path="/">
-    <!-- Disable TLD scanning for JARs that don't contain TLDs to speed up startup -->
-    <!-- Note: Tomcat will automatically scan JARs with TLDs when needed -->
-    <JarScanner>
-        <JarScanFilter defaultTldScan="false" />
-    </JarScanner>
-</Context>
