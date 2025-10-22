@@ -38,7 +38,7 @@
     <authentication-manager>
         <authentication-provider>
             <password-encoder ref="encoder" />
-            <jdbc-user-service id="userService"
+            <jdbc-user-service id="jdbcUserDetailsService"
                                data-source-ref="dataSource"
                                users-by-username-query="SELECT username, `password`, enabled FROM `user` WHERE username = ?"
                                authorities-by-username-query="SELECT username, authority FROM authority WHERE username = ?" />
