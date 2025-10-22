@@ -35,7 +35,7 @@
 
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
-        <property name="url" value="#{ 'jdbc:mysql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() + '?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true&amp;connectTimeout=10000&amp;socketTimeout=30000' }" />
+        <property name="url" value="#{ 'jdbc:mysql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() + '?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true&amp;connectTimeout=5000&amp;socketTimeout=30000' }" />
         <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }" />
         <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }" />
         <property name="initialSize" value="0" />
@@ -43,10 +43,11 @@
         <property name="minIdle" value="0" />
         <property name="maxIdle" value="5" />
         <property name="maxWaitMillis" value="10000" />
-        <property name="testOnBorrow" value="true" />
+        <!-- Disable validation on startup for faster boot -->
+        <property name="testOnBorrow" value="false" />
         <property name="testWhileIdle" value="true" />
         <property name="validationQuery" value="SELECT 1" />
-        <property name="validationQueryTimeout" value="5" />
+        <property name="validationQueryTimeout" value="3" />
         <property name="timeBetweenEvictionRunsMillis" value="30000" />
     </bean>
 
@@ -64,7 +65,8 @@
     <bean id="dataSourceInitializer" class="org.springframework.jdbc.datasource.init.DataSourceInitializer">
         <property name="dataSource" ref="dataSource"/>
         <property name="databasePopulator" ref="databasePopulator"/>
-        <property name="enabled" value="true"/>
+        <!-- Skip schema initialization on subsequent deployments to speed up startup -->
+        <property name="enabled" value="#{systemEnvironment['SKIP_SCHEMA_INIT'] == null ? true : !systemEnvironment['SKIP_SCHEMA_INIT'].equals('true')}"/>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">

@@ -12,4 +12,4 @@ cmd = "java $JAVA_OPTS -jar target/dependency/webapp-runner.jar --expand-war --p
 
 [variables]
 MAVEN_OPTS = "-Xmx1024m -Xms512m"
-JAVA_OPTS = "-Xmx512m"
+JAVA_OPTS = "-Xmx1024m -Xms512m -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:+TieredCompilation -XX:TieredStopAtLevel=1"
