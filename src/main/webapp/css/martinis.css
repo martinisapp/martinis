@@ -116,6 +116,17 @@
     background-color: #f0f0f0;
 }
 
+/* When editing or creating a block, extend the form to full row width */
+.block-row:has(.block-edit) .block-column-content {
+    flex: 1 1 100%;
+    max-width: 100%;
+}
+
+.block-row:has(.block-edit) .block-column-handle,
+.block-row:has(.block-edit) .block-column-actions {
+    display: none;
+}
+
 .page-header small a,
 #table-scenes .btn,
 .block-row .btn {
