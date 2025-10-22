@@ -1,3 +1,4 @@
+/* Utility classes */
 .mb-0 {
     margin-bottom: 0 !important;
 }
@@ -6,55 +7,26 @@
     white-space: nowrap;
 }
 
-/* Compact navbar styling */
-.navbar {
-    min-height: 40px;
-    margin-bottom: 10px;
+/* Navigation styling */
+nav ul li a.active {
+    text-decoration: underline;
+    font-weight: bold;
 }
 
-.navbar-inverse .navbar-brand {
-    padding: 8px 15px;
-    font-size: 16px;
-    line-height: 24px;
-}
-
-.navbar-inverse .navbar-nav > li > a {
-    padding: 8px 12px;
-    font-size: 13px;
-    line-height: 24px;
-}
-
-.navbar-header {
-    min-height: 40px;
-}
-
-.navbar-inverse .navbar-toggle {
-    margin-top: 3px;
-    margin-bottom: 3px;
-    padding: 6px 10px;
-    border-color: #333;
-}
-
-.navbar-inverse .navbar-toggle:hover,
-.navbar-inverse .navbar-toggle:focus {
-    background-color: #333;
-}
-
-.navbar-inverse .navbar-toggle .icon-bar {
-    background-color: #fff;
-}
-
+/* Table styling */
 #table-actors a,
 #table-projects a,
 #table-scenes a,
 #blocks-container a.character-name {
-    color: #000;
+    color: inherit;
+    text-decoration: none;
 }
 
-#table-actors td,
-#table-projects td,
-#table-scenes td {
-    border-top: none;
+#table-actors a:hover,
+#table-projects a:hover,
+#table-scenes a:hover,
+#blocks-container a.character-name:hover {
+    text-decoration: underline;
 }
 
 #table-scenes td:nth-child(2) {
@@ -139,34 +111,38 @@
     width: 100%;
 }
 
-.block-edit .form-group {
+.block-edit label,
+.block-edit div {
     width: 100%;
     margin-bottom: 15px;
 }
 
-.block-edit .form-control {
+.block-edit input,
+.block-edit select,
+.block-edit textarea {
     width: 100% !important;
     box-sizing: border-box;
 }
 
-.page-header small a,
-#table-scenes .btn,
-.block-row .btn {
+/* Button visibility on hover */
+hgroup a[role="button"],
+#table-scenes a[role="button"],
+.block-row a[role="button"] {
     opacity: 0;
 }
 
-.page-header small a:focus,
-.page-header:hover small a,
-#table-scenes tr .btn:focus,
-#table-scenes tr:hover .btn,
-.block-row .btn:focus,
-.block-row:hover .btn {
+hgroup a[role="button"]:focus,
+hgroup:hover a[role="button"],
+#table-scenes tr a[role="button"]:focus,
+#table-scenes tr:hover a[role="button"],
+.block-row a[role="button"]:focus,
+.block-row:hover a[role="button"] {
     opacity: 1;
 }
 
-.block-row:first-child .btn.create-below,
-#table-scenes tr:last-child .btn.move-up,
-.block-row:last-child .btn.move-up {
+.block-row:first-child .create-below,
+#table-scenes tr:last-child .move-up,
+.block-row:last-child .move-up {
     margin-left: 22px;
 }
 
@@ -197,85 +173,49 @@
 /* Mobile-responsive styles */
 @media (max-width: 767px) {
     /* Make buttons always visible on mobile (no hover needed) */
-    .page-header small a,
-    #table-scenes .btn,
-    .block-row .btn {
+    hgroup a[role="button"],
+    #table-scenes a[role="button"],
+    .block-row a[role="button"] {
         opacity: 1;
     }
 
     /* Improve touch targets for mobile */
-    .btn {
+    a[role="button"],
+    button {
         min-height: 44px;
         padding: 10px 12px;
         margin: 2px 0;
     }
 
-    /* Stack form controls vertically on mobile */
-    .form-horizontal .control-label {
-        text-align: left;
-        margin-bottom: 5px;
-    }
-
     /* Add spacing for page headers */
-    .page-header {
+    hgroup {
         margin-top: 20px;
         padding-bottom: 9px;
     }
 
-    .page-header h1 {
+    hgroup h1 {
         font-size: 28px;
     }
 
     /* Improve breadcrumb spacing */
-    .breadcrumb {
+    nav[aria-label="breadcrumb"] {
         margin-bottom: 15px;
-        padding: 8px 10px;
     }
 
     /* Make tables more readable on mobile */
-    .table {
+    table {
         font-size: 14px;
     }
 
-    .table td,
-    .table th {
+    table td,
+    table th {
         padding: 8px 5px;
     }
 
-    /* Improve container padding on mobile */
-    .container {
-        padding-left: 10px;
-        padding-right: 10px;
-    }
-
-    /* Stack action buttons */
-    .btn-group {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .btn-group .btn {
-        width: 100%;
-        margin: 2px 0;
-    }
-
     /* Remove fixed button margin on mobile */
-    .block-row:first-child .btn.create-below,
-    #table-scenes tr:last-child .btn.move-up,
-    .block-row:last-child .btn.move-up {
+    .block-row:first-child .create-below,
+    #table-scenes tr:last-child .move-up,
+    .block-row:last-child .move-up {
         margin-left: 0;
-    }
-}
-
-/* Tablet-specific styles */
-@media (min-width: 768px) and (max-width: 991px) {
-    /* Improve spacing for medium devices */
-    .container {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .btn {
-        padding: 8px 12px;
     }
 }

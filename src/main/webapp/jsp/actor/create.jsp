@@ -6,51 +6,51 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Martinis - Create New Actor</title>
-        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
         <link href="${pageContext.request.contextPath}/css/martinis.css" rel="stylesheet">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     </head>
     <body>
         <jsp:include page="../includes/nav.jsp" />
-        <div class="container">
+        <main class="container">
             <jsp:include page="../includes/logout.jsp" />
-            <div class="page-header">
+            <hgroup>
                 <h1>Create New Actor</h1>
             </div>
-            <sf:form class="form-horizontal" action="${pageContext.request.contextPath}/actor/create" method="post" modelAttribute="commandModel">
+            <sf:form  action="${pageContext.request.contextPath}/actor/create" method="post" modelAttribute="commandModel">
                 <div class="form-group">
-                    <label for="first" class="col-md-2 control-label">First Name:</label>
-                    <div class="col-md-10">
-                        <sf:input type="text" class="form-control" path="first" />
+                    <label for="first" >First Name:</label>
+                    
+                        <sf:input type="text" "" path="first" />
                         <sf:errors path="first" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="last" class="col-md-2 control-label">Last Name:</label>
-                    <div class="col-md-10">
-                        <sf:input type="text" class="form-control" path="last" />
+                    <label for="last" >Last Name:</label>
+                    
+                        <sf:input type="text" "" path="last" />
                         <sf:errors path="last" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="phone" class="col-md-2 control-label">Phone:</label>
-                    <div class="col-md-10">
-                        <sf:input type="text" class="form-control" path="phone" />
+                    <label for="phone" >Phone:</label>
+                    
+                        <sf:input type="text" "" path="phone" />
                         <sf:errors path="phone" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="email" class="col-md-2 control-label">Email:</label>
-                    <div class="col-md-10">
-                        <sf:input type="text" class="form-control" path="email" />
+                    <label for="email" >Email:</label>
+                    
+                        <sf:input type="text" "" path="email" />
                         <sf:errors path="email" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <a href="${pageContext.request.contextPath}/actor/list" class="btn btn-default" role="button">Cancel</a>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                    
+                        <a href="${pageContext.request.contextPath}/actor/list" role="button" class="secondary" role="button">Cancel</a>
+                        <button type="submit" role="button">Submit</button>
                     </div>
                 </div>
             </sf:form>
