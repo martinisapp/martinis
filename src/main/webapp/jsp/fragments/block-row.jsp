@@ -10,10 +10,10 @@
          hx-swap="innerHTML">
         <c:choose>
             <c:when test="${not empty block.personName}">
-                <p class="mb-0 text-center">
-                    <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name text-uppercase" onclick="event.stopPropagation()">${block.personName}</a>
+                <p style="margin-bottom: 0; text-align: center;">
+                    <a href="${pageContext.request.contextPath}/character/show?id=${block.personId}" class="character-name" style="text-transform: uppercase;" onclick="event.stopPropagation()">${block.personName}</a>
                 </p>
-                <div class="text-center block-content">
+                <div style="text-align: center;" class="block-content">
                     ${block.content}
                 </div>
             </c:when>
@@ -26,23 +26,23 @@
 <div class="block-column block-column-actions">
     <div class="nowrap">
         <button type="button"
-                class="btn btn-default btn-xs bookmark-toggle ${block.isBookmarked ? 'bookmarked' : ''}"
+                class="bookmark-toggle ${block.isBookmarked ? 'bookmarked' : ''}"
                 data-block-id="${block.id}"
                 onclick="toggleBookmark(${block.id}, this)"
                 title="${block.isBookmarked ? 'Remove bookmark' : 'Add bookmark'}">
             <span class="bookmark-icon">${block.isBookmarked ? '★' : '☆'}</span>
         </button>
-        <a href="${pageContext.request.contextPath}/block/delete?id=${block.id}" class="btn btn-default btn-xs" role="button">delete</a>
+        <a href="${pageContext.request.contextPath}/block/delete?id=${block.id}" role="button" class="secondary outline">delete</a>
         <c:if test="${not isLast}">
-            <a href="${pageContext.request.contextPath}/block/moveDown?id=${block.id}" class="btn btn-default btn-xs move-down" role="button">↓</a>
+            <a href="${pageContext.request.contextPath}/block/moveDown?id=${block.id}" role="button" class="secondary outline move-down">↓</a>
         </c:if>
         <c:if test="${not isFirst}">
-            <a href="${pageContext.request.contextPath}/block/moveUp?id=${block.id}" class="btn btn-default btn-xs move-up" role="button">↑</a>
+            <a href="${pageContext.request.contextPath}/block/moveUp?id=${block.id}" role="button" class="secondary outline move-up">↑</a>
         </c:if>
         <a hx-get="${pageContext.request.contextPath}/block/createBelowForm?id=${block.id}"
            hx-target="closest .block-row"
            hx-swap="afterend"
-           class="btn btn-primary btn-xs create-below"
-           role="button">+ block</a>
+           role="button"
+           class="create-below">+ block</a>
     </div>
 </div>

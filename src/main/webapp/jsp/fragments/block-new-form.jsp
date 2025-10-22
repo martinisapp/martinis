@@ -13,8 +13,8 @@
                           hx-swap="outerHTML">
                         <input type="hidden" name="id" value="${insertAfterBlockId}">
                         <input type="hidden" name="sceneId" value="${sceneId}">
-                        <div class="form-group">
-                            <select class="form-control" name="personId"
+                        <div>
+                            <select "" name="personId"
                                     hx-post="${pageContext.request.contextPath}/block/createBelowInline"
                                     hx-include="closest form"
                                     hx-target="closest .block-row"
@@ -26,20 +26,20 @@
                                 </c:forEach>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label>Content:</label>
-                            <textarea class="form-control" name="content" rows="8" autofocus
+                            <textarea "" name="content" rows="8" autofocus
                                       hx-post="${pageContext.request.contextPath}/block/createBelowInline"
                                       hx-include="closest form"
                                       hx-target="closest .block-row"
                                       hx-swap="outerHTML"
                                       hx-trigger="keyup changed delay:1500ms, blur"></textarea>
                         </div>
-                        <div class="form-group">
+                        <div>
                             <div class="save-status">
-                                <span class="text-muted htmx-indicator">Saving...</span>
+                                <span class="htmx-indicator" style="font-size: 0.875rem;">Saving...</span>
                             </div>
-                            <div class="text-muted small">
+                            <div style="font-size: 0.875rem;">
                                 <i>Auto-saves as you type.</i>
                             </div>
                         </div>
@@ -50,8 +50,8 @@
                           hx-target="closest .block-row"
                           hx-swap="outerHTML">
                         <input type="hidden" name="sceneId" value="${sceneId}">
-                        <div class="form-group">
-                            <select class="form-control" name="personId"
+                        <div>
+                            <select "" name="personId"
                                     hx-post="${pageContext.request.contextPath}/block/createInline"
                                     hx-include="closest form"
                                     hx-target="closest .block-row"
@@ -63,20 +63,20 @@
                                 </c:forEach>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div>
                             <label>Content:</label>
-                            <textarea class="form-control" name="content" rows="8" autofocus
+                            <textarea "" name="content" rows="8" autofocus
                                       hx-post="${pageContext.request.contextPath}/block/createInline"
                                       hx-include="closest form"
                                       hx-target="closest .block-row"
                                       hx-swap="outerHTML"
                                       hx-trigger="keyup changed delay:1500ms, blur"></textarea>
                         </div>
-                        <div class="form-group">
+                        <div>
                             <div class="save-status">
-                                <span class="text-muted htmx-indicator">Saving...</span>
+                                <span class="htmx-indicator" style="font-size: 0.875rem;">Saving...</span>
                             </div>
-                            <div class="text-muted small">
+                            <div style="font-size: 0.875rem;">
                                 <i>Auto-saves as you type.</i>
                             </div>
                         </div>

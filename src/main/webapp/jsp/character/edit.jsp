@@ -6,39 +6,39 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Martinis - Edit Character</title>
-        <link href="${pageContext.request.contextPath}/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
         <link href="${pageContext.request.contextPath}/css/martinis.css" rel="stylesheet">
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     </head>
     <body>
         <jsp:include page="../includes/nav.jsp" />
-        <div class="container">
+        <main class="container">
             <jsp:include page="../includes/logout.jsp" />
-            <div class="page-header">
+            <hgroup>
                 <h1>Edit Character</h1>
             </div>
-            <sf:form class="form-horizontal" action="${pageContext.request.contextPath}/character/edit" method="post" modelAttribute="commandModel">
+            <sf:form  action="${pageContext.request.contextPath}/character/edit" method="post" modelAttribute="commandModel">
                 <sf:hidden path="id" />
                 <sf:hidden path="projectId" />
                 <div class="form-group">
-                    <label for="name" class="col-md-2 control-label">Name:</label>
-                    <div class="col-md-10">
-                        <sf:input type="text" class="form-control" path="name" />
+                    <label for="name" >Name:</label>
+                    
+                        <sf:input type="text" "" path="name" />
                         <sf:errors path="name" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="fullName" class="col-md-2 control-label">Full Name:</label>
-                    <div class="col-md-10">
-                        <sf:input type="text" class="form-control" path="fullName" />
+                    <label for="fullName" >Full Name:</label>
+                    
+                        <sf:input type="text" "" path="fullName" />
                         <sf:errors path="fullName" />
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="actorId" class="col-md-2 control-label">Actor:</label>
-                    <div class="col-md-10">
-                        <sf:select class="form-control" path="actorId">
+                    <label for="actorId" >Actor:</label>
+                    
+                        <sf:select "" path="actorId">
                             <sf:option value="" label="No actor" />
                             <sf:options items="${viewModel.actors}" itemValue="id" itemLabel="name" />
                         </sf:select>
@@ -46,9 +46,9 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <div class="col-sm-offset-2 col-sm-10">
-                        <a href="${pageContext.request.contextPath}/character/show?id=${viewModel.id}" class="btn btn-default" role="button">Cancel</a>
-                        <button type="submit" class="btn btn-primary">Submit</button>
+                    
+                        <a href="${pageContext.request.contextPath}/character/show?id=${viewModel.id}" role="button" class="secondary" role="button">Cancel</a>
+                        <button type="submit" role="button">Submit</button>
                     </div>
                 </div>
             </sf:form>

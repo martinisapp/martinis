@@ -7,8 +7,9 @@
           hx-trigger="submit">
         <input type="hidden" name="id" value="${block.id}">
         <input type="hidden" name="sceneId" value="${block.scene.id}">
-        <div class="form-group">
-            <select class="form-control edit-person-select" name="personId"
+        <label>
+            Character:
+            <select class="edit-person-select" name="personId"
                     hx-post="${pageContext.request.contextPath}/block/updateInline"
                     hx-include="closest form"
                     hx-target="closest .block-column-content"
@@ -19,23 +20,23 @@
                     <option value="${person.id}" ${block.person != null && person.id == block.person.id ? 'selected' : ''}>${person.name}</option>
                 </c:forEach>
             </select>
-        </div>
-        <div class="form-group">
-            <label>Content:</label>
-            <textarea class="form-control" name="content" rows="8"
+        </label>
+        <label>
+            Content:
+            <textarea name="content" rows="8"
                       hx-post="${pageContext.request.contextPath}/block/updateInline"
                       hx-include="closest form"
                       hx-target="closest .block-column-content"
                       hx-swap="innerHTML"
                       hx-trigger="keyup changed delay:1500ms, blur">${block.content}</textarea>
-        </div>
-        <div class="form-group">
+        </label>
+        <div>
             <div class="save-status">
-                <span class="text-muted htmx-indicator">Saving...</span>
+                <small class="htmx-indicator">Saving...</small>
             </div>
-            <div class="text-muted small">
+            <small>
                 <i>Click outside or press Escape to finish editing</i>
-            </div>
+            </small>
         </div>
     </form>
 </div>
