@@ -79,19 +79,29 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <bean id="actorDao" class="com.martinis.dao.ActorDaoImpl" />
+    <bean id="actorDao" class="com.martinis.dao.ActorDaoImpl">
+        <constructor-arg ref="jdbcTemplate" />
+    </bean>
     <bean id="actorService" class="com.martinis.service.ActorServiceImpl" />
 
-    <bean id="blockDao" class="com.martinis.dao.BlockDaoImpl" />
+    <bean id="blockDao" class="com.martinis.dao.BlockDaoImpl">
+        <constructor-arg ref="jdbcTemplate" />
+    </bean>
     <bean id="blockService" class="com.martinis.service.BlockServiceImpl" />
 
-    <bean id="personDao" class="com.martinis.dao.PersonDaoImpl" />
+    <bean id="personDao" class="com.martinis.dao.PersonDaoImpl">
+        <constructor-arg ref="jdbcTemplate" />
+    </bean>
     <bean id="personService" class="com.martinis.service.PersonServiceImpl" />
 
-    <bean id="projectDao" class="com.martinis.dao.ProjectDaoImpl" />
+    <bean id="projectDao" class="com.martinis.dao.ProjectDaoImpl">
+        <constructor-arg ref="jdbcTemplate" />
+    </bean>
     <bean id="projectService" class="com.martinis.service.ProjectServiceImpl" />
 
-    <bean id="sceneDao" class="com.martinis.dao.SceneDaoImpl" />
+    <bean id="sceneDao" class="com.martinis.dao.SceneDaoImpl">
+        <constructor-arg ref="jdbcTemplate" />
+    </bean>
     <bean id="sceneService" class="com.martinis.service.SceneServiceImpl" />
 
     <bean id="actorWebService" class="com.martinis.webservice.ActorWebServiceImpl" />
