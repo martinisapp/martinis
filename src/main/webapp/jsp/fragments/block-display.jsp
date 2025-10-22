@@ -3,7 +3,8 @@
 <div class="block-display"
      hx-get="${pageContext.request.contextPath}/block/editForm?id=${block.id}"
      hx-target="closest .block-column-content"
-     hx-swap="innerHTML">
+     hx-swap="innerHTML"
+     hx-trigger="click">
     <c:choose>
         <c:when test="${not empty block.person}">
             <p class="mb-0 text-center">
