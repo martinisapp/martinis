@@ -11,7 +11,7 @@
         <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico" type="image/x-icon">
         <script src="https://unpkg.com/htmx.org@1.9.10"></script>
     </head>
-    <body>
+    <body class="${viewModel.cleanView ? 'clean-view' : ''}">
         <jsp:include page="../includes/nav.jsp" />
         <main class="container">
             <jsp:include page="../includes/logout.jsp" />
@@ -49,7 +49,7 @@
                             </tbody>
                         </table>
                     </figure>
-                    <p><a href="${pageContext.request.contextPath}/scene/create?projectId=${viewModel.id}" role="button">Create New Scene</a></p>
+                    <p><a href="${pageContext.request.contextPath}/scene/create?projectId=${viewModel.id}" role="button" class="create-new-scene">Create New Scene</a></p>
                 </div>
                 <aside>
                     <c:if test="${not empty viewModel.persons}">
@@ -62,9 +62,33 @@
                             </ul>
                         </article>
                     </c:if>
-                    <a href="${pageContext.request.contextPath}/character/create?projectId=${viewModel.id}" role="button">Create New Character</a>
+                    <a href="${pageContext.request.contextPath}/character/create?projectId=${viewModel.id}" role="button" class="create-new-character">Create New Character</a>
                 </aside>
             </div>
         </main>
+
+        <!-- Clean View Toggle Button -->
+        <button class="clean-view-toggle" onclick="toggleCleanView()">
+            ${viewModel.cleanView ? 'Exit Clean View' : 'Clean View'}
+        </button>
+
+        <script>
+            function toggleCleanView() {
+                fetch('${pageContext.request.contextPath}/project/toggleCleanView', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    }
+                })
+                .then(response => response.text())
+                .then(data => {
+                    // Reload the page to apply the new view mode
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error toggling clean view:', error);
+                });
+            }
+        </script>
     </body>
 </html>

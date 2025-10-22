@@ -219,3 +219,34 @@ hgroup:hover a[role="button"],
         margin-left: 0;
     }
 }
+
+/* Clean View Mode - Hide UI elements for presentation */
+body.clean-view nav[role="navigation"],
+body.clean-view .logout-section,
+body.clean-view nav[aria-label="breadcrumb"],
+body.clean-view hgroup p,
+body.clean-view .create-new-scene,
+body.clean-view .create-new-character,
+body.clean-view a[role="button"],
+body.clean-view aside {
+    display: none !important;
+}
+
+/* Clean view toggle button positioning */
+.clean-view-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    padding: 10px 15px;
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.clean-view-toggle:hover {
+    background-color: rgba(255, 255, 255, 1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}

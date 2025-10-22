@@ -1,4 +1,4 @@
-<nav>
+<nav role="navigation">
     <ul>
         <li><strong><a href="${pageContext.request.contextPath}">Martinis</a></strong></li>
     </ul>
