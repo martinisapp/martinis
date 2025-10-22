@@ -1,14 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context path="/">
     <!-- Disable TLD scanning for JARs that don't contain TLDs to speed up startup -->
+    <!-- Note: Tomcat will automatically scan JARs with TLDs when needed -->
     <JarScanner>
-        <!-- Scan only JARs that typically contain TLDs -->
-        <JarScanFilter defaultTldScan="false">
-            <!-- Enable TLD scanning only for JSTL and Spring tags -->
-            <Include name="jstl-*.jar" />
-            <Include name="taglibs-standard-*.jar" />
-            <Include name="spring-webmvc-*.jar" />
-            <Include name="spring-security-taglibs-*.jar" />
-        </JarScanFilter>
+        <JarScanFilter defaultTldScan="false" />
     </JarScanner>
 </Context>
