@@ -26,6 +26,8 @@
                     authentication-failure-url="/login?login_error=1" />
         <intercept-url pattern="/login"
                        access="permitAll" />
+        <intercept-url pattern="/register"
+                       access="permitAll" />
         <intercept-url pattern="/"
                        access="permitAll" />
         <intercept-url pattern="/**"
