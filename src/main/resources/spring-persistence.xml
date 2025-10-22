@@ -82,27 +82,37 @@
     <bean id="actorDao" class="com.martinis.dao.ActorDaoImpl">
         <constructor-arg ref="jdbcTemplate" />
     </bean>
-    <bean id="actorService" class="com.martinis.service.ActorServiceImpl" />
+    <bean id="actorService" class="com.martinis.service.ActorServiceImpl">
+        <constructor-arg ref="actorDao" />
+    </bean>
 
     <bean id="blockDao" class="com.martinis.dao.BlockDaoImpl">
         <constructor-arg ref="jdbcTemplate" />
     </bean>
-    <bean id="blockService" class="com.martinis.service.BlockServiceImpl" />
+    <bean id="blockService" class="com.martinis.service.BlockServiceImpl">
+        <constructor-arg ref="blockDao" />
+    </bean>
 
     <bean id="personDao" class="com.martinis.dao.PersonDaoImpl">
         <constructor-arg ref="jdbcTemplate" />
     </bean>
-    <bean id="personService" class="com.martinis.service.PersonServiceImpl" />
+    <bean id="personService" class="com.martinis.service.PersonServiceImpl">
+        <constructor-arg ref="personDao" />
+    </bean>
 
     <bean id="projectDao" class="com.martinis.dao.ProjectDaoImpl">
         <constructor-arg ref="jdbcTemplate" />
     </bean>
-    <bean id="projectService" class="com.martinis.service.ProjectServiceImpl" />
+    <bean id="projectService" class="com.martinis.service.ProjectServiceImpl">
+        <constructor-arg ref="projectDao" />
+    </bean>
 
     <bean id="sceneDao" class="com.martinis.dao.SceneDaoImpl">
         <constructor-arg ref="jdbcTemplate" />
     </bean>
-    <bean id="sceneService" class="com.martinis.service.SceneServiceImpl" />
+    <bean id="sceneService" class="com.martinis.service.SceneServiceImpl">
+        <constructor-arg ref="sceneDao" />
+    </bean>
 
     <bean id="actorWebService" class="com.martinis.webservice.ActorWebServiceImpl" />
     <bean id="blockWebService" class="com.martinis.webservice.BlockWebServiceImpl" />
