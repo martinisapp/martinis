@@ -25,6 +25,13 @@
 </div>
 <div class="block-column block-column-actions">
     <div class="nowrap">
+        <button type="button"
+                class="btn btn-default btn-xs bookmark-toggle ${block.isBookmarked ? 'bookmarked' : ''}"
+                data-block-id="${block.id}"
+                onclick="toggleBookmark(${block.id}, this)"
+                title="${block.isBookmarked ? 'Remove bookmark' : 'Add bookmark'}">
+            <span class="bookmark-icon">${block.isBookmarked ? '★' : '☆'}</span>
+        </button>
         <a href="${pageContext.request.contextPath}/block/delete?id=${block.id}" class="btn btn-default btn-xs" role="button">delete</a>
         <c:if test="${not isLast}">
             <a href="${pageContext.request.contextPath}/block/moveDown?id=${block.id}" class="btn btn-default btn-xs move-down" role="button">↓</a>

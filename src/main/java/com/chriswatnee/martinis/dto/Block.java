@@ -20,6 +20,7 @@ public class Block implements Serializable {
     private String content;
     private Person person;
     private Scene scene;
+    private Boolean isBookmarked;
 
     public Integer getId() {
         return id;
@@ -59,5 +60,13 @@ public class Block implements Serializable {
 
     public void setScene(Scene scene) {
         this.scene = scene;
+    }
+
+    public Boolean getIsBookmarked() {
+        return isBookmarked;
+    }
+
+    public void setIsBookmarked(Boolean isBookmarked) {
+        this.isBookmarked = isBookmarked;
     }
 }

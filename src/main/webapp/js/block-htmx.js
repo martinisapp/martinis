@@ -149,3 +149,45 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+/**
+ * Toggle bookmark status for a block
+ */
+function toggleBookmark(blockId, buttonElement) {
+    // Get CSRF token from meta tags
+    var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+    var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+    // Send request to toggle bookmark
+    fetch(contextPath + '/block/toggleBookmark?id=' + blockId, {
+        method: 'POST',
+        headers: {
+            [csrfHeader]: csrfToken
+        }
+    })
+    .then(function(response) {
+        if (response.ok) {
+            // Toggle the UI
+            var icon = buttonElement.querySelector('.bookmark-icon');
+            var isBookmarked = buttonElement.classList.contains('bookmarked');
+
+            if (isBookmarked) {
+                // Remove bookmark
+                buttonElement.classList.remove('bookmarked');
+                icon.textContent = '☆';
+                buttonElement.setAttribute('title', 'Add bookmark');
+            } else {
+                // Add bookmark
+                buttonElement.classList.add('bookmarked');
+                icon.textContent = '★';
+                buttonElement.setAttribute('title', 'Remove bookmark');
+            }
+        } else {
+            throw new Error('Failed to toggle bookmark');
+        }
+    })
+    .catch(function(error) {
+        console.error('Error toggling bookmark:', error);
+        alert('Failed to toggle bookmark. Please try again.');
+    });
+}

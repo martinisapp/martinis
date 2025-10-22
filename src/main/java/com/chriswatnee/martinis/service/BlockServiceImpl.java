@@ -75,6 +75,11 @@ public class BlockServiceImpl implements BlockService {
     }
 
     @Override
+    public void toggleBookmark(Integer blockId) {
+        blockDao.toggleBookmark(blockId);
+    }
+
+    @Override
     public List<Block> list() {
         return blockDao.list();
     }

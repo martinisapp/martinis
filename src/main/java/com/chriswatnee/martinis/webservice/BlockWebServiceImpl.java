@@ -273,6 +273,11 @@ public class BlockWebServiceImpl implements BlockWebService {
     }
 
     @Override
+    public void toggleBookmark(Integer id) {
+        blockService.toggleBookmark(id);
+    }
+
+    @Override
     public List<Person> getPersonsForScene(Integer sceneId) {
         Scene scene = sceneService.read(sceneId);
         Project project = projectService.getProjectByScene(scene);

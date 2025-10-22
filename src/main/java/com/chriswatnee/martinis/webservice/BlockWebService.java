@@ -34,6 +34,7 @@ public interface BlockWebService {
     public Block moveBlockUp(Integer id);
     public Block moveBlockDown(Integer id);
     public void reorderBlocks(List<Integer> blockIds);
+    public void toggleBookmark(Integer id);
 
     public List<Person> getPersonsForScene(Integer sceneId);
     public Block getBlock(Integer id);

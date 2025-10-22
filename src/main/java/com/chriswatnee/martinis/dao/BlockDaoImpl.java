@@ -26,14 +26,15 @@ public class BlockDaoImpl implements BlockDao {
     
     JdbcTemplate jdbcTemplate;
     
-    static String CREATE_QUERY = "INSERT INTO block (`order`, content, person_id, scene_id) VALUES (?,?,?,?)";
+    static String CREATE_QUERY = "INSERT INTO block (`order`, content, person_id, scene_id, is_bookmarked) VALUES (?,?,?,?,?)";
     static String READ_QUERY = "SELECT * FROM block WHERE id = ?";
-    static String UPDATE_QUERY = "UPDATE block SET `order` = ?, content = ?, person_id = ?, scene_id = ? WHERE id = ?";
+    static String UPDATE_QUERY = "UPDATE block SET `order` = ?, content = ?, person_id = ?, scene_id = ?, is_bookmarked = ? WHERE id = ?";
     static String DELETE_QUERY = "DELETE FROM block WHERE id = ?";
     static String LIST_QUERY = "SELECT * FROM block";
     static String GET_BLOCK_BY_ORDER_QUERY = "SELECT * FROM block WHERE `order` = ? AND scene_id = ?";
     static String GET_ORDER_QUERY = "SELECT `order` FROM block WHERE id = ?";
     static String UPDATE_ORDER_QUERY = "UPDATE block SET `order` = ? WHERE id = ?";
+    static String TOGGLE_BOOKMARK_QUERY = "UPDATE block SET is_bookmarked = NOT is_bookmarked WHERE id = ?";
     static String ADD_ORDERS_QUERY = "UPDATE block SET `order` = `order` + 1 WHERE `order` > ? AND scene_id = ?";
     static String SUBTRACT_ORDERS_QUERY = "UPDATE block SET `order` = `order` - 1 WHERE `order` > ? AND scene_id = ?";
     static String GET_BLOCKS_BY_SCENE_QUERY = "SELECT * FROM block WHERE scene_id = ? ORDER BY `order`";
@@ -61,18 +62,21 @@ public class BlockDaoImpl implements BlockDao {
         }
         
         Integer order = jdbcTemplate.queryForObject(GET_BLOCK_COUNT_BY_SCENE_QUERY, Integer.class, sceneId) + 1;
-        
+
+        Boolean isBookmarked = block.getIsBookmarked() != null ? block.getIsBookmarked() : false;
+
         jdbcTemplate.update(CREATE_QUERY,
                             order,
                             block.getContent(),
                             personId,
-                            sceneId
+                            sceneId,
+                            isBookmarked
         );
-        
+
         int createdId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-        
+
         block.setId(createdId);
-        
+
         return block;
     }
 
@@ -103,17 +107,20 @@ public class BlockDaoImpl implements BlockDao {
                             sceneId
         );
         
+        Boolean isBookmarked = block.getIsBookmarked() != null ? block.getIsBookmarked() : false;
+
         jdbcTemplate.update(CREATE_QUERY,
                             order,
                             block.getContent(),
                             personId,
-                            sceneId
+                            sceneId,
+                            isBookmarked
         );
-        
+
         int createdId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-        
+
         block.setId(createdId);
-        
+
         return block;
     }
 
@@ -144,11 +151,14 @@ public class BlockDaoImpl implements BlockDao {
             sceneId = block.getScene().getId();
         }
         
+        Boolean isBookmarked = block.getIsBookmarked() != null ? block.getIsBookmarked() : false;
+
         jdbcTemplate.update(UPDATE_QUERY,
                             block.getOrder(),
                             block.getContent(),
                             personId,
                             sceneId,
+                            isBookmarked,
                             block.getId()
         );
     }
@@ -187,12 +197,15 @@ public class BlockDaoImpl implements BlockDao {
                             sceneId
         );
 
+        Boolean isBookmarked = block.getIsBookmarked() != null ? block.getIsBookmarked() : false;
+
         // Insert the block at its original order position
         jdbcTemplate.update(CREATE_QUERY,
                             block.getOrder(),
                             block.getContent(),
                             personId,
-                            sceneId
+                            sceneId,
+                            isBookmarked
         );
     }
 
@@ -240,6 +253,11 @@ public class BlockDaoImpl implements BlockDao {
     }
 
     @Override
+    public void toggleBookmark(Integer blockId) {
+        jdbcTemplate.update(TOGGLE_BOOKMARK_QUERY, blockId);
+    }
+
+    @Override
     public List<Block> list() {
         return jdbcTemplate.query(LIST_QUERY, new BlockMapper());
     }
@@ -262,7 +280,8 @@ public class BlockDaoImpl implements BlockDao {
             block.setId(resultSet.getInt("id"));
             block.setOrder(resultSet.getInt("order"));
             block.setContent(resultSet.getString("content"));
-            
+            block.setIsBookmarked(resultSet.getBoolean("is_bookmarked"));
+
             Integer personId = resultSet.getInt("person_id");
             
             if (personId != null) {
