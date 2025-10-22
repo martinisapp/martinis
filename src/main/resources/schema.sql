@@ -66,5 +66,22 @@ CREATE TABLE IF NOT EXISTS `block` (
 	FOREIGN KEY (scene_id) REFERENCES scene(id) ON DELETE CASCADE
 );
 
--- Add is_bookmarked column to existing block tables
-ALTER TABLE `block` ADD COLUMN IF NOT EXISTS is_bookmarked tinyint(1) NOT NULL DEFAULT 0;
+-- Add is_bookmarked column to existing block tables (MySQL compatible)
+-- MySQL doesn't support IF NOT EXISTS in ALTER TABLE, so we use a conditional approach
+SET @dbname = DATABASE();
+SET @tablename = 'block';
+SET @columnname = 'is_bookmarked';
+SET @preparedStatement = (SELECT IF(
+  (
+    SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE
+      TABLE_SCHEMA = @dbname
+      AND TABLE_NAME = @tablename
+      AND COLUMN_NAME = @columnname
+  ) > 0,
+  'SELECT 1',
+  'ALTER TABLE `block` ADD COLUMN is_bookmarked tinyint(1) NOT NULL DEFAULT 0'
+));
+PREPARE alterIfNotExists FROM @preparedStatement;
+EXECUTE alterIfNotExists;
+DEALLOCATE PREPARE alterIfNotExists;
