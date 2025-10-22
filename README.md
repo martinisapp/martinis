@@ -1,108 +1,318 @@
-# Martinis
+# Martinis - Professional Screenplay Management System
 
-A Spring MVC web application for managing screenplay projects, scenes, actors, and shooting schedules.
+A modern Spring Boot 3.2.0 web application for managing screenplay projects, scenes, actors, and shooting schedules. Optimized for deployment on Railway.com.
 
-## Deployment
+## Features
 
-### Railway.com
+- **Project Management** - Create and manage multiple screenplay projects
+- **Scene Organization** - Organize scenes with detailed metadata and scheduling
+- **Actor Database** - Maintain a comprehensive actor database
+- **Character Management** - Track characters and their relationships to projects
+- **Block Management** - Manage screenplay blocks/lines with bookmarking
+- **File Upload** - Import screenplay documents (Word format)
+- **RESTful API** - Complete REST API for all features
+- **Role-Based Security** - User and admin roles with Spring Security
+- **Responsive Design** - JSP-based views optimized for web
 
-This application is configured for deployment on Railway.com.
+## Technology Stack
 
-#### Prerequisites
-- A Railway account (https://railway.app)
-- A MySQL database (Railway provides MySQL as an add-on)
+- **Framework:** Spring Boot 3.2.0
+- **Java Version:** 17 (LTS)
+- **Build Tool:** Maven 3.9
+- **Database:** MySQL 8.0+ (with HikariCP connection pooling)
+- **Security:** Spring Security with BCrypt password hashing
+- **View Technology:** JSP with JSTL
+- **Server:** Embedded Tomcat
+- **Cloud Platform:** Railway.com (optimized)
 
-#### Deployment Steps
+## Quick Deploy to Railway
 
-1. **Create a new project on Railway**
-   - Visit https://railway.app and create a new project
-   - Connect your GitHub repository
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template)
 
-2. **Add a MySQL database**
-   - In your Railway project, click "New Service"
-   - Select "Database" → "MySQL"
-   - Railway will automatically create a `MYSQL_URL` environment variable
+### Prerequisites
 
-3. **Deploy the application**
-   - Railway will automatically detect the Java/Maven project
-   - The build process is configured in `nixpacks.toml`
-   - The app will start using the command specified in `railway.json`
+- A [Railway.com](https://railway.com) account (free tier available)
+- GitHub account (for repository connection)
 
-4. **Environment Variables**
-   - The application automatically reads the `MYSQL_URL` environment variable provided by Railway
-   - The application also supports `DATABASE_URL` and `JAWSDB_URL` for compatibility
-   - No manual configuration needed for the database connection
+### Deployment Steps
 
-5. **Create Initial Admin User**
+1. **Create New Railway Project**
+   - Visit [Railway.com](https://railway.com) and sign in
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select the `martinisapp/martinis` repository
 
-   **IMPORTANT**: For security reasons, no default users are created. You must create an admin user before you can log in.
+2. **Add MySQL Database**
+   - Click "New" → "Database" → "Add MySQL"
+   - Railway automatically provides `DATABASE_URL` environment variable
+   - No manual configuration needed
 
-   Set the following environment variables in Railway:
-   - `ADMIN_USERNAME` - Your desired admin username (e.g., "admin")
-   - `ADMIN_PASSWORD` - Your desired admin password (use a strong password!)
-   - `ADMIN_FIRSTNAME` - (Optional) Admin's first name
-   - `ADMIN_LASTNAME` - (Optional) Admin's last name
+3. **Configure Environment Variables**
 
-   The application will automatically create the admin user on startup.
+   Required variables:
+   ```bash
+   DATABASE_URL     # Auto-set by Railway MySQL plugin
+   PORT             # Auto-set by Railway
+   ```
 
-   **Security Best Practice**: After the first successful deployment and user creation, remove the `ADMIN_PASSWORD` environment variable to prevent unauthorized access.
+   Optional variables (for admin user creation):
+   ```bash
+   ADMIN_USERNAME=admin
+   ADMIN_PASSWORD=your-secure-password-here
+   ADMIN_FIRSTNAME=John
+   ADMIN_LASTNAME=Doe
+   ```
 
-6. **Database Setup**
-   - The database schema is automatically initialized on first deployment
-   - SQL scripts are available in the `sql/` directory for reference
+4. **Deploy**
+   - Railway automatically detects the configuration
+   - Build process runs via Nixpacks
+   - Application starts automatically
+   - Database schema initializes on first run
 
-#### Alternative: One-Click Deploy
+5. **Access Your Application**
+   - Railway provides a public URL: `https://your-app.railway.app`
+   - Visit the URL and log in with your admin credentials
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new)
+### Detailed Documentation
 
-### Heroku (Legacy)
+For comprehensive deployment instructions, troubleshooting, and configuration details, see:
 
-The application also supports Heroku deployment using the `JAWSDB_URL` environment variable.
+**[RAILWAY.md](./RAILWAY.md)** - Complete Railway deployment guide
 
 ## Local Development
 
 ### Prerequisites
-- Java 8 or higher
-- Maven 3.x
-- MySQL database
 
-### Database Configuration
+- Java 17 or higher
+- Maven 3.9 or higher
+- MySQL 8.0 or higher (or access to Railway development database)
 
-For local development, uncomment and configure the local database bean in `src/main/resources/spring-persistence.xml`:
+### Setup
 
-```xml
-<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
-    <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-    <property name="url" value="jdbc:mysql://localhost:3306/martinis?serverTimezone=EST"/>
-    <property name="username" value="root"/>
-    <property name="password" value="rootroot"/>
-    <property name="initialSize" value="5"/>
-    <property name="maxTotal" value="10"/>
-</bean>
-```
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/martinisapp/martinis.git
+   cd martinis
+   ```
 
-### Build and Run
+2. **Configure local database**
+
+   Option 1 - Local MySQL:
+   ```bash
+   # Create database
+   mysql -u root -p
+   CREATE DATABASE martinis;
+   EXIT;
+
+   # Set environment variables
+   export DATABASE_URL="jdbc:mysql://localhost:3306/martinis?useSSL=false&serverTimezone=UTC"
+   export ADMIN_USERNAME="admin"
+   export ADMIN_PASSWORD="password"
+   ```
+
+   Option 2 - Use Railway development database:
+   ```bash
+   railway link
+   railway run mvn spring-boot:run
+   ```
+
+3. **Build and run**
+   ```bash
+   # Build
+   mvn clean package
+
+   # Run
+   java -jar target/martinis.jar
+
+   # Or use Maven Spring Boot plugin
+   mvn spring-boot:run
+   ```
+
+4. **Access the application**
+   - Open browser to `http://localhost:8080`
+   - Log in with your admin credentials
+
+### Development with Hot Reload
 
 ```bash
-# Build the project
-mvn clean package
-
-# Run locally (requires webapp-runner)
-java -jar target/dependency/webapp-runner.jar target/*.war
+# Add Spring Boot DevTools dependency (already in pom.xml)
+mvn spring-boot:run
 ```
 
-## Technology Stack
+## Configuration Files
 
-- **Framework**: Spring MVC 4.3.18
-- **Database**: MySQL with JDBC
-- **Build Tool**: Maven
-- **Server**: Tomcat (via webapp-runner)
-- **Java Version**: 8
+### Railway Configuration
 
-## Features
+- **`railway.json`** - Railway service configuration with health checks
+- **`nixpacks.toml`** - Build configuration with JVM optimization
+- **`Procfile`** - Process definition for Railway
+- **`app.json`** - Application manifest with environment variables
+- **`.railwayignore`** - Files to exclude from deployment
 
-- Project management for screenplays
-- Scene organization and scheduling
-- Actor/character management
-- Shooting schedule blocks
-- RESTful web services API
+### Application Configuration
+
+- **`application.properties`** - Spring Boot configuration
+- **`DatabaseConfig.java`** - Database connection and HikariCP setup
+- **`SecurityConfig.java`** - Spring Security configuration
+- **`schema.sql`** - Database schema (auto-initialized)
+
+## Architecture
+
+### Application Layers
+
+```
+┌──────────────────────────────────────┐
+│     Controllers (Web & REST)          │
+│  HomeController, ProjectController,   │
+│  SceneController, ActorController,    │
+│  BlockController, PersonController    │
+├──────────────────────────────────────┤
+│    Services (Business Logic)          │
+│  ProjectService, SceneService,        │
+│  ActorService, BlockService,          │
+│  PersonService                        │
+├──────────────────────────────────────┤
+│    DAOs (Data Access Layer)           │
+│  ProjectDao, SceneDao, ActorDao,      │
+│  BlockDao, PersonDao                  │
+├──────────────────────────────────────┤
+│   HikariCP Connection Pool            │
+├──────────────────────────────────────┤
+│      MySQL Database                   │
+└──────────────────────────────────────┘
+```
+
+### Database Schema
+
+- **`user`** - User accounts with BCrypt passwords
+- **`authority`** - User roles (ROLE_USER, ROLE_ADMIN)
+- **`project`** - Screenplay projects
+- **`scene`** - Scenes within projects
+- **`actor`** - Actor database
+- **`person`** - Characters in projects
+- **`block`** - Screenplay blocks/lines with bookmarking
+
+## API Endpoints
+
+### Projects
+- `GET /api/projects` - List all projects
+- `GET /api/projects/{id}` - Get project details
+- `POST /api/projects` - Create project
+- `PUT /api/projects/{id}` - Update project
+- `DELETE /api/projects/{id}` - Delete project
+
+### Scenes
+- `GET /api/projects/{projectId}/scenes` - List scenes
+- `GET /api/scenes/{id}` - Get scene details
+- `POST /api/scenes` - Create scene
+- `PUT /api/scenes/{id}` - Update scene
+- `DELETE /api/scenes/{id}` - Delete scene
+
+### Actors
+- `GET /api/actors` - List all actors
+- `GET /api/actors/{id}` - Get actor details
+- `POST /api/actors` - Create actor
+- `PUT /api/actors/{id}` - Update actor
+- `DELETE /api/actors/{id}` - Delete actor
+
+### Blocks
+- `GET /api/blocks` - List all blocks
+- `GET /api/blocks/{id}` - Get block details
+- `POST /api/blocks` - Create block
+- `PUT /api/blocks/{id}` - Update block
+- `DELETE /api/blocks/{id}` - Delete block
+
+## Security
+
+### Authentication
+- Form-based login with Spring Security
+- BCrypt password hashing (strength: 10)
+- Session-based authentication
+
+### Authorization
+- **Public:** `/`, `/login`, `/register`, `/dbcheck`, static resources
+- **User:** All authenticated features
+- **Admin:** `/admin/**` routes
+
+## Performance Optimizations
+
+### JVM Settings
+```bash
+-Xmx768m -Xms256m
+-XX:+UseContainerSupport
+-XX:MaxRAMPercentage=80.0
+-XX:+UseG1GC
+-XX:MaxGCPauseMillis=100
+```
+
+### Database Connection Pool (HikariCP)
+- Maximum pool size: 10
+- Minimum idle: 2
+- Connection timeout: 30 seconds
+- Idle timeout: 10 minutes
+- Max lifetime: 30 minutes
+
+### Web Optimizations
+- HTTP/2 enabled
+- Response compression (gzip)
+- Static resource caching
+- Prepared statement caching
+
+## Troubleshooting
+
+### Common Issues
+
+**Database Connection Errors**
+- Verify `DATABASE_URL` is set correctly
+- Check MySQL service is running on Railway
+- Review logs: `railway logs`
+
+**Build Failures**
+- Ensure Java 17 is installed
+- Clear Maven cache: `mvn clean`
+- Verify `pom.xml` is valid
+
+**Login Issues**
+- Ensure admin user environment variables are set
+- Check password was hashed correctly (BCrypt)
+- Review security logs in Railway dashboard
+
+For detailed troubleshooting, see [RAILWAY.md](./RAILWAY.md#monitoring--troubleshooting)
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Support
+
+- **Documentation:** [RAILWAY.md](./RAILWAY.md)
+- **Issues:** [GitHub Issues](https://github.com/martinisapp/martinis/issues)
+- **Railway Support:** [Railway Discord](https://discord.gg/railway)
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Changelog
+
+### Version 2.0.0 - Complete Railway Rewrite (October 2025)
+
+- Complete rewrite of Railway deployment configuration
+- Upgraded to Spring Boot 3.2.0
+- Migrated from Spring MVC 4.3 to Spring Boot 3.2
+- Java 17 support with optimized JVM settings
+- Enhanced database configuration with SSL support
+- PostgreSQL support alongside MySQL
+- Improved security with BCrypt password hashing
+- HikariCP connection pooling optimizations
+- Comprehensive Railway deployment documentation
+- Performance optimizations for production
+- HTTP/2 and response compression
+- Auto-schema initialization on first deployment
+
+---
+
+**Made with Spring Boot 3.2.0 | Optimized for Railway.com**
