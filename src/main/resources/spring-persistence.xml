@@ -29,15 +29,16 @@
     </bean> -->
 
     <!-- Support both Railway (DATABASE_URL or MYSQL_URL) and Heroku (JAWSDB_URL) -->
+    <!-- Default to a dummy URL if no database environment variable is set to prevent startup failure -->
     <bean class="java.net.URI" id="dbUrl">
-        <constructor-arg value="#{systemEnvironment['DATABASE_URL'] ?: systemEnvironment['MYSQL_URL'] ?: systemEnvironment['JAWSDB_URL']}" />
+        <constructor-arg value="#{systemEnvironment['DATABASE_URL'] ?: systemEnvironment['MYSQL_URL'] ?: systemEnvironment['JAWSDB_URL'] ?: 'mysql://user:pass@localhost:3306/martinis'}" />
     </bean>
 
     <bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
         <property name="url" value="#{ 'jdbc:mysql://' + @dbUrl.getHost() + ':' + @dbUrl.getPort() + @dbUrl.getPath() + '?useSSL=false&amp;serverTimezone=UTC&amp;allowPublicKeyRetrieval=true&amp;connectTimeout=5000&amp;socketTimeout=30000' }" />
-        <property name="username" value="#{ @dbUrl.getUserInfo().split(':')[0] }" />
-        <property name="password" value="#{ @dbUrl.getUserInfo().split(':')[1] }" />
+        <property name="username" value="#{ @dbUrl.getUserInfo() != null ? @dbUrl.getUserInfo().split(':')[0] : 'root' }" />
+        <property name="password" value="#{ @dbUrl.getUserInfo() != null ? @dbUrl.getUserInfo().split(':')[1] : '' }" />
         <property name="initialSize" value="0" />
         <property name="maxTotal" value="10" />
         <property name="minIdle" value="0" />
@@ -66,6 +67,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="databasePopulator" ref="databasePopulator"/>
         <!-- Skip schema initialization on subsequent deployments to speed up startup -->
+        <!-- Can be disabled by setting SKIP_SCHEMA_INIT=true environment variable -->
         <property name="enabled" value="#{systemEnvironment['SKIP_SCHEMA_INIT'] == null ? true : !systemEnvironment['SKIP_SCHEMA_INIT'].equals('true')}"/>
     </bean>
 
