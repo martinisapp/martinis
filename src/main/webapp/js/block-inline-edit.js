@@ -339,7 +339,6 @@ $(document).ready(function() {
             '<div class="block-display" style="display: none;"></div>' +
             '<div class="block-edit" style="display: block;">' +
                 '<div class="form-group">' +
-                    '<label>Character:</label>' +
                     '<select class="form-control edit-person-select">' + createPersonSelectOptions('') + '</select>' +
                 '</div>' +
                 '<div class="form-group">' +

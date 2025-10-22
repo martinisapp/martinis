@@ -8,7 +8,6 @@
         <input type="hidden" name="id" value="${block.id}">
         <input type="hidden" name="sceneId" value="${block.scene.id}">
         <div class="form-group">
-            <label>Character:</label>
             <select class="form-control edit-person-select" name="personId">
                 <option value="">-- No Character --</option>
                 <c:forEach items="${persons}" var="person">
