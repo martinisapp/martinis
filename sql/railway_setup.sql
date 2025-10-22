@@ -74,6 +74,7 @@ CREATE TABLE `block` (
 	content TEXT NOT NULL,
 	person_id int NULL,
 	scene_id int NOT NULL,
+	is_bookmarked tinyint(1) NOT NULL DEFAULT 0,
 	PRIMARY KEY (id),
 	FOREIGN KEY (person_id) REFERENCES person(id) ON DELETE SET NULL,
 	FOREIGN KEY (scene_id) REFERENCES scene(id) ON DELETE CASCADE
