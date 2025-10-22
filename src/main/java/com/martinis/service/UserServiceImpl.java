@@ -1,5 +1,8 @@
 package com.martinis.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -54,10 +57,10 @@ public class UserServiceImpl implements UserService {
         String hashedPassword = passwordEncoder.encode(password);
 
         try {
-            // Insert the user
+            // Insert the user as disabled (pending approval)
             jdbcTemplate.update(
                 "INSERT INTO `user` (username, `password`, enabled, first_name, last_name) VALUES (?, ?, ?, ?, ?)",
-                username, hashedPassword, 1, firstName, lastName
+                username, hashedPassword, 0, firstName, lastName
             );
 
             // Grant ROLE_USER authority
@@ -84,6 +87,46 @@ public class UserServiceImpl implements UserService {
         );
 
         return count != null && count > 0;
+    }
+
+    @Override
+    public List<Map<String, Object>> getPendingUsers() {
+        return jdbcTemplate.queryForList(
+            "SELECT id, username, first_name, last_name FROM `user` WHERE enabled = 0 ORDER BY id DESC"
+        );
+    }
+
+    @Override
+    @Transactional
+    public void approveUser(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be empty");
+        }
+
+        jdbcTemplate.update(
+            "UPDATE `user` SET enabled = 1 WHERE username = ?",
+            username.trim()
+        );
+    }
+
+    @Override
+    @Transactional
+    public void rejectUser(String username) {
+        if (username == null || username.trim().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be empty");
+        }
+
+        // Delete from authority table first (foreign key constraint)
+        jdbcTemplate.update(
+            "DELETE FROM authority WHERE username = ?",
+            username.trim()
+        );
+
+        // Delete from user table
+        jdbcTemplate.update(
+            "DELETE FROM `user` WHERE username = ?",
+            username.trim()
+        );
     }
 
 }

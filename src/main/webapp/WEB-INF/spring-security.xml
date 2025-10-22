@@ -30,6 +30,8 @@
                        access="permitAll" />
         <intercept-url pattern="/"
                        access="permitAll" />
+        <intercept-url pattern="/admin/**"
+                       access="hasRole('ADMIN')" />
         <intercept-url pattern="/**"
                        access="hasRole('USER')" />
     </http>

@@ -18,7 +18,7 @@
             <h1>Martinis</h1>
             <c:if test="${param.registered == 'true'}">
                 <article style="background-color: var(--pico-ins-color);">
-                    Registration successful! Please log in with your new account.
+                    Registration successful! Your account is pending admin approval. You will be able to log in once an administrator approves your account.
                 </article>
             </c:if>
             <c:if test="${param.login_error == 1}">
