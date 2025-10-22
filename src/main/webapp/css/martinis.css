@@ -117,14 +117,23 @@
 }
 
 /* When editing or creating a block, extend the form to full row width */
-.block-row:has(.block-edit) .block-column-content {
+.block-row:has(.block-edit) .block-column-content,
+.block-row.editing .block-column-content {
     flex: 1 1 100%;
     max-width: 100%;
 }
 
 .block-row:has(.block-edit) .block-column-handle,
-.block-row:has(.block-edit) .block-column-actions {
+.block-row:has(.block-edit) .block-column-actions,
+.block-row.editing .block-column-handle,
+.block-row.editing .block-column-actions {
     display: none;
+}
+
+/* Make the text box and form controls span full width */
+.block-edit .form-control {
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .page-header small a,

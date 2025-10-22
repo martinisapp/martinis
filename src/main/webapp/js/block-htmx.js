@@ -7,6 +7,46 @@ document.addEventListener('DOMContentLoaded', function() {
 
     var blocksList = document.getElementById('blocks-list');
     if (blocksList) {
+        // Toggle 'editing' class on block-row when block-edit appears/disappears
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeType === 1) { // Element node
+                        if (node.classList && node.classList.contains('block-edit')) {
+                            var blockRow = node.closest('.block-row');
+                            if (blockRow) blockRow.classList.add('editing');
+                        }
+                        // Also check children
+                        var editForms = node.querySelectorAll && node.querySelectorAll('.block-edit');
+                        if (editForms) {
+                            editForms.forEach(function(form) {
+                                var blockRow = form.closest('.block-row');
+                                if (blockRow) blockRow.classList.add('editing');
+                            });
+                        }
+                    }
+                });
+                mutation.removedNodes.forEach(function(node) {
+                    if (node.nodeType === 1) { // Element node
+                        if (node.classList && node.classList.contains('block-edit')) {
+                            var blockRow = node.closest('.block-row');
+                            if (blockRow) blockRow.classList.remove('editing');
+                        }
+                    }
+                });
+            });
+        });
+
+        observer.observe(blocksList, { childList: true, subtree: true });
+
+        // Set initial state for any existing edit forms
+        blocksList.querySelectorAll('.block-edit').forEach(function(form) {
+            var blockRow = form.closest('.block-row');
+            if (blockRow) blockRow.classList.add('editing');
+        });
+    }
+
+    if (blocksList) {
         // Get CSRF token from meta tags
         var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
         var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
