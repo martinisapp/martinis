@@ -24,11 +24,13 @@ import com.chriswatnee.martinis.viewmodel.block.editblock.EditPersonViewModel;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.inject.Inject;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author chris
  */
+@Service
 public class BlockWebServiceImpl implements BlockWebService {
 
     BlockService blockService;
