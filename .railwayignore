@@ -1,0 +1,71 @@
+# Railway Ignore File
+# Files and directories to exclude from Railway deployments
+
+# Documentation
+*.md
+!RAILWAY.md
+docs/
+documentation/
+
+# Development files
+.git/
+.github/
+.gitignore
+.gitattributes
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+
+# Build output (will be rebuilt on Railway)
+target/
+!target/martinis.jar
+
+# Test files
+src/test/
+**/test/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.bak
+*.swp
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# SQL files (schema is auto-loaded from resources)
+sql/
+*.sql
+!src/main/resources/schema.sql
+!src/main/resources/data.sql
+
+# Local environment files
+.env
+.env.local
+.env.*.local
+
+# Maven wrapper (Railway provides Maven)
+.mvn/
+mvnw
+mvnw.cmd
+
+# Other deployment platforms
+.heroku/
+Dockerfile
+docker-compose.yml
+.dockerignore

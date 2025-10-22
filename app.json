@@ -1,16 +1,57 @@
 {
   "name": "Martinis",
-  "description": "Spring MVC application for screenplay management - compatible with Railway and Heroku",
+  "description": "Professional screenplay management application built with Spring Boot 3.2.0. Optimized for Railway.com deployment with MySQL database support.",
   "repository": "https://github.com/martinisapp/martinis",
-  "logo": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Tomcat-logo.svg",
+  "logo": "https://raw.githubusercontent.com/spring-projects/spring-framework/main/src/docs/spring-framework.png",
   "keywords": [
     "java",
-    "tomcat",
-    "spring",
-    "spring-mvc",
+    "spring-boot",
+    "spring-boot-3",
     "maven",
     "railway",
+    "mysql",
     "screenplay",
-    "screenwriting"
-  ]
+    "screenwriting",
+    "film-production",
+    "jsp",
+    "hikaricp"
+  ],
+  "website": "https://github.com/martinisapp/martinis",
+  "success_url": "/",
+  "env": {
+    "DATABASE_URL": {
+      "description": "MySQL database URL provided by Railway (format: mysql://user:pass@host:port/db)",
+      "required": true
+    },
+    "ADMIN_USERNAME": {
+      "description": "Initial admin username for the application",
+      "value": "admin",
+      "required": false
+    },
+    "ADMIN_PASSWORD": {
+      "description": "Initial admin password (will be hashed with BCrypt)",
+      "required": false
+    },
+    "ADMIN_FIRSTNAME": {
+      "description": "Admin user's first name",
+      "value": "System",
+      "required": false
+    },
+    "ADMIN_LASTNAME": {
+      "description": "Admin user's last name",
+      "value": "Administrator",
+      "required": false
+    },
+    "PORT": {
+      "description": "Port number for the web server (automatically set by Railway)",
+      "required": false
+    }
+  },
+  "buildpacks": [],
+  "addons": [],
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  }
 }
