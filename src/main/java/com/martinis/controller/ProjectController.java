@@ -14,6 +14,7 @@ import com.martinis.viewmodel.project.projectlist.ProjectListViewModel;
 import com.martinis.viewmodel.project.projectprofile.ProjectProfileViewModel;
 import com.martinis.webservice.ProjectWebService;
 import javax.inject.Inject;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  *
@@ -45,9 +47,16 @@ public class ProjectController {
     }
     
     @RequestMapping(value = "/show")
-    public String show(@RequestParam Integer id, Model model) {
+    public String show(@RequestParam Integer id, HttpSession session, Model model) {
 
         ProjectProfileViewModel viewModel = projectWebService.getProjectProfileViewModel(id);
+
+        // Check session for clean view preference
+        Boolean cleanView = (Boolean) session.getAttribute("cleanView");
+        if (cleanView == null) {
+            cleanView = false;
+        }
+        viewModel.setCleanView(cleanView);
 
         model.addAttribute("viewModel", viewModel);
 
@@ -56,10 +65,22 @@ public class ProjectController {
     
     @RequestMapping(value = "/delete")
     public String delete(@RequestParam Integer id) {
-        
+
         projectWebService.deleteProject(id);
-        
+
         return "redirect:/project/list";
+    }
+
+    @RequestMapping(value = "/toggleCleanView", method = RequestMethod.POST)
+    @ResponseBody
+    public String toggleCleanView(HttpSession session) {
+        Boolean cleanView = (Boolean) session.getAttribute("cleanView");
+        if (cleanView == null) {
+            cleanView = false;
+        }
+        cleanView = !cleanView;
+        session.setAttribute("cleanView", cleanView);
+        return cleanView ? "enabled" : "disabled";
     }
     
     // Show Form
