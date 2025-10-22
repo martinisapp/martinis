@@ -20,7 +20,7 @@ import com.chriswatnee.martinis.viewmodel.person.editperson.EditPersonViewModel;
 import com.chriswatnee.martinis.viewmodel.person.personprofile.PersonProfileViewModel;
 import java.util.ArrayList;
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  *

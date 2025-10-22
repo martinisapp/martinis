@@ -9,7 +9,7 @@ import com.chriswatnee.martinis.dao.PersonDao;
 import com.chriswatnee.martinis.dto.Person;
 import com.chriswatnee.martinis.dto.Project;
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  *

@@ -16,7 +16,7 @@ import com.chriswatnee.martinis.viewmodel.actor.createactor.CreateActorViewModel
 import com.chriswatnee.martinis.viewmodel.actor.editactor.EditActorViewModel;
 import java.util.ArrayList;
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  *

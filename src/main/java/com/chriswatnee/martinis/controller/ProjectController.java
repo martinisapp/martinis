@@ -13,8 +13,8 @@ import com.chriswatnee.martinis.viewmodel.project.editproject.EditProjectViewMod
 import com.chriswatnee.martinis.viewmodel.project.projectlist.ProjectListViewModel;
 import com.chriswatnee.martinis.viewmodel.project.projectprofile.ProjectProfileViewModel;
 import com.chriswatnee.martinis.webservice.ProjectWebService;
-import javax.inject.Inject;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

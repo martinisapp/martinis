@@ -23,7 +23,7 @@ import com.chriswatnee.martinis.viewmodel.block.editblock.EditBlockViewModel;
 import com.chriswatnee.martinis.viewmodel.block.editblock.EditPersonViewModel;
 import java.util.ArrayList;
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  *

@@ -9,7 +9,7 @@ import com.chriswatnee.martinis.dao.BlockDao;
 import com.chriswatnee.martinis.dto.Block;
 import com.chriswatnee.martinis.dto.Scene;
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  *

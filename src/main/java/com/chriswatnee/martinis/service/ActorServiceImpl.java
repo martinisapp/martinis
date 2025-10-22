@@ -8,7 +8,7 @@ package com.chriswatnee.martinis.service;
 import com.chriswatnee.martinis.dao.ActorDao;
 import com.chriswatnee.martinis.dto.Actor;
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  *
