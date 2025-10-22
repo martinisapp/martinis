@@ -22,7 +22,7 @@ import com.chriswatnee.martinis.viewmodel.project.projectprofile.ProjectProfileV
 import com.chriswatnee.martinis.viewmodel.project.projectprofile.SceneViewModel;
 import java.util.ArrayList;
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 /**
  *

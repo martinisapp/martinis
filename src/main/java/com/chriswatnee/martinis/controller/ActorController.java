@@ -13,8 +13,8 @@ import com.chriswatnee.martinis.viewmodel.actor.actorprofile.ActorProfileViewMod
 import com.chriswatnee.martinis.viewmodel.actor.createactor.CreateActorViewModel;
 import com.chriswatnee.martinis.viewmodel.actor.editactor.EditActorViewModel;
 import com.chriswatnee.martinis.webservice.ActorWebService;
-import javax.inject.Inject;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

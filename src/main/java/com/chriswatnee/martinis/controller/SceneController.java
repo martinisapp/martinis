@@ -14,8 +14,8 @@ import com.chriswatnee.martinis.viewmodel.scene.createscenebelow.CreateSceneBelo
 import com.chriswatnee.martinis.viewmodel.scene.editscene.EditSceneViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.SceneProfileViewModel;
 import com.chriswatnee.martinis.webservice.SceneWebService;
-import javax.inject.Inject;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;

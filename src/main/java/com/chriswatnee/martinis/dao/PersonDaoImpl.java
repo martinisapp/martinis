@@ -11,7 +11,7 @@ import com.chriswatnee.martinis.dto.Project;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
