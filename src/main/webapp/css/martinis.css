@@ -131,8 +131,21 @@
 }
 
 /* Make the text box and form controls span full width */
-.block-edit .form-control {
+.block-edit {
     width: 100%;
+}
+
+.block-edit form {
+    width: 100%;
+}
+
+.block-edit .form-group {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.block-edit .form-control {
+    width: 100% !important;
     box-sizing: border-box;
 }
 
