@@ -10,11 +10,13 @@ import com.chriswatnee.martinis.dto.Block;
 import com.chriswatnee.martinis.dto.Scene;
 import java.util.List;
 import jakarta.inject.Inject;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author chris
  */
+@Service
 public class BlockServiceImpl implements BlockService {
 
     BlockDao blockDao;
