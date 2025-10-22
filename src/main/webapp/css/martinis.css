@@ -235,7 +235,7 @@ body.clean-view aside {
 /* Clean view toggle button positioning */
 .clean-view-toggle {
     position: fixed;
-    bottom: 20px;
+    top: 20px;
     right: 20px;
     z-index: 1000;
     padding: 10px 15px;
