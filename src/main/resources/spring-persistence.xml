@@ -75,25 +75,25 @@
         <property name="dataSource" ref="dataSource" />
     </bean>
 
-    <bean id="actorDao" class="com.chriswatnee.martinis.dao.ActorDaoImpl" />
-    <bean id="actorService" class="com.chriswatnee.martinis.service.ActorServiceImpl" />
-    
-    <bean id="blockDao" class="com.chriswatnee.martinis.dao.BlockDaoImpl" />
-    <bean id="blockService" class="com.chriswatnee.martinis.service.BlockServiceImpl" />
-    
-    <bean id="personDao" class="com.chriswatnee.martinis.dao.PersonDaoImpl" />
-    <bean id="personService" class="com.chriswatnee.martinis.service.PersonServiceImpl" />
-    
-    <bean id="projectDao" class="com.chriswatnee.martinis.dao.ProjectDaoImpl" />
-    <bean id="projectService" class="com.chriswatnee.martinis.service.ProjectServiceImpl" />
-    
-    <bean id="sceneDao" class="com.chriswatnee.martinis.dao.SceneDaoImpl" />
-    <bean id="sceneService" class="com.chriswatnee.martinis.service.SceneServiceImpl" />
-    
-    <bean id="actorWebService" class="com.chriswatnee.martinis.webservice.ActorWebServiceImpl" />
-    <bean id="blockWebService" class="com.chriswatnee.martinis.webservice.BlockWebServiceImpl" />
-    <bean id="personWebService" class="com.chriswatnee.martinis.webservice.PersonWebServiceImpl" />
-    <bean id="projectWebService" class="com.chriswatnee.martinis.webservice.ProjectWebServiceImpl" />
-    <bean id="sceneWebService" class="com.chriswatnee.martinis.webservice.SceneWebServiceImpl" />
+    <bean id="actorDao" class="com.martinis.dao.ActorDaoImpl" />
+    <bean id="actorService" class="com.martinis.service.ActorServiceImpl" />
+
+    <bean id="blockDao" class="com.martinis.dao.BlockDaoImpl" />
+    <bean id="blockService" class="com.martinis.service.BlockServiceImpl" />
+
+    <bean id="personDao" class="com.martinis.dao.PersonDaoImpl" />
+    <bean id="personService" class="com.martinis.service.PersonServiceImpl" />
+
+    <bean id="projectDao" class="com.martinis.dao.ProjectDaoImpl" />
+    <bean id="projectService" class="com.martinis.service.ProjectServiceImpl" />
+
+    <bean id="sceneDao" class="com.martinis.dao.SceneDaoImpl" />
+    <bean id="sceneService" class="com.martinis.service.SceneServiceImpl" />
+
+    <bean id="actorWebService" class="com.martinis.webservice.ActorWebServiceImpl" />
+    <bean id="blockWebService" class="com.martinis.webservice.BlockWebServiceImpl" />
+    <bean id="personWebService" class="com.martinis.webservice.PersonWebServiceImpl" />
+    <bean id="projectWebService" class="com.martinis.webservice.ProjectWebServiceImpl" />
+    <bean id="sceneWebService" class="com.martinis.webservice.SceneWebServiceImpl" />
 
 </beans>
