@@ -17,6 +17,9 @@
     <!-- Bean definitions go here -->
 
     <tx:annotation-driven />
+
+    <!-- Enable annotation-based injection for @Inject, @Autowired, etc. -->
+    <context:annotation-config />
     
     <!-- <bean id="dataSource"
           class="org.apache.commons.dbcp2.BasicDataSource">
@@ -143,6 +146,10 @@
     <bean id="userService" class="com.martinis.service.UserServiceImpl">
         <constructor-arg ref="jdbcTemplate" />
         <constructor-arg ref="encoder" />
+    </bean>
+
+    <bean id="wordImportService" class="com.martinis.service.WordImportServiceImpl">
+        <!-- Dependencies are injected via @Inject annotations -->
     </bean>
 
 </beans>
