@@ -107,6 +107,17 @@ public class BlockController {
         return "redirect:/scene/show?id=" + block.getScene().getId();
     }
 
+    @RequestMapping(value = "/toggleBookmark", method = RequestMethod.POST)
+    @ResponseBody
+    public ResponseEntity<String> toggleBookmark(@RequestParam Integer id) {
+        try {
+            blockWebService.toggleBookmark(id);
+            return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @RequestMapping(value = "/reorder", method = RequestMethod.POST)
     @ResponseBody
     public ResponseEntity<String> reorder(@RequestBody List<Integer> blockIds) {

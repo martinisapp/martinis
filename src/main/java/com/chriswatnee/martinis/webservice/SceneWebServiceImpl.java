@@ -277,6 +277,7 @@ public class SceneWebServiceImpl implements SceneWebService {
         blockViewModel.setOrder(block.getOrder());
         blockViewModel.setContent(block.getContent());
         blockViewModel.setId(block.getId());
+        blockViewModel.setIsBookmarked(block.getIsBookmarked() != null ? block.getIsBookmarked() : false);
 
         if (block.getPerson() != null) {
             Person person = personService.read(block.getPerson().getId());
