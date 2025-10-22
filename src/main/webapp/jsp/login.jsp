@@ -16,8 +16,15 @@
         <jsp:include page="includes/nav.jsp" />
         <div class="container">
             <h1>Martinis</h1>
+            <c:if test="${param.registered == 'true'}">
+                <div class="alert alert-success">
+                    Registration successful! Please log in with your new account.
+                </div>
+            </c:if>
             <c:if test="${param.login_error == 1}">
-                <p>Incorrect Username or Password.</p>
+                <div class="alert alert-danger">
+                    Incorrect Username or Password.
+                </div>
             </c:if>
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
@@ -41,6 +48,9 @@
                             </div>
                         </div>
                     </form>
+                    <div class="text-center" style="margin-top: 15px;">
+                        <p>Don't have an account? <a href="${pageContext.request.contextPath}/register">Create one here</a></p>
+                    </div>
                 </div>
             </div>
         </div>
