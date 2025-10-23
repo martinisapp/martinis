@@ -28,9 +28,12 @@ Before deploying to Railway, ensure you have:
 
 ## Quick Start
 
-### One-Click Deploy
+### Deploy from GitHub
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template)
+The easiest deployment method is directly from this GitHub repository. See the [README.md](./README.md#quick-deploy-to-railway) for step-by-step instructions.
+
+<!-- One-click template deploy coming soon -->
+<!-- [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/YOUR-TEMPLATE-CODE) -->
 
 ### Manual Deployment
 

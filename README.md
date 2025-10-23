@@ -27,62 +27,78 @@ A modern Spring Boot 3.2.0 web application for managing screenplay projects, sce
 
 ## Quick Deploy to Railway
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new?template=https://github.com/martinisapp/martinis)
+### Option 1: Deploy from GitHub (Recommended)
 
-Click the button above to deploy to Railway. The deployment will automatically:
-1. Create a new Railway project
-2. Provision a MySQL 8.0 database with auto-generated credentials
-3. Deploy the Martinis application
-4. Connect the app to the database automatically
+The easiest way to deploy is directly from this GitHub repository:
+
+1. **Sign in to Railway**
+   - Go to [Railway.com](https://railway.com)
+   - Sign in with GitHub (free tier available)
+
+2. **Create New Project**
+   - Click "+ New Project"
+   - Select "Deploy from GitHub repo"
+   - Select `martinisapp/martinis` repository
+   - Railway will automatically detect the configuration
+
+3. **Add MySQL Database**
+   - In your project, click "+ New"
+   - Select "Database" → "Add MySQL"
+   - Railway will automatically create `DATABASE_URL` variable
+
+4. **Configure Environment Variables**
+   - Click on the **martinis** service
+   - Go to **Variables** tab
+   - Add (if not auto-generated):
+     ```
+     ADMIN_USERNAME=admin
+     ADMIN_PASSWORD=your-secure-password
+     ADMIN_FIRSTNAME=System
+     ADMIN_LASTNAME=Administrator
+     ```
+   - The `DATABASE_URL` should be automatically connected to MySQL
+
+5. **Deploy and Access**
+   - Railway will automatically build and deploy
+   - Click "Generate Domain" to get a public URL
+   - Access at: `https://your-app.railway.app`
+   - Login with your admin credentials
+
+### Option 2: One-Click Deploy Template (Coming Soon)
+
+We're working on a one-click deploy template. For now, please use Option 1 above.
+
+<!-- Template deploy button will be added once Railway template is published -->
+<!-- [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/YOUR-TEMPLATE-CODE) -->
 
 ### Prerequisites
 
 - A [Railway.com](https://railway.com) account (free tier available)
 - GitHub account (for repository connection)
 
-### Deployment Steps
+### Post-Deployment Configuration
 
-1. **Click "Deploy on Railway"**
-   - Click the button above
-   - Sign in to Railway (or create a free account)
-   - Authorize GitHub access if prompted
-
-2. **Automatic Setup**
-   Railway automatically:
-   - Creates a new project with two services:
-     - **martinis** - The Spring Boot application
-     - **mysql** - MySQL 8.0 database
-   - Generates secure database credentials
-   - Connects the app to the database via `DATABASE_URL`
-   - Builds and deploys the application
-   - Initializes the database schema
-
-3. **Configure Admin User (Optional)**
-
-   By default, an admin user is created with username `admin` and a random password.
-   To set a custom admin password:
-
+**Configure Admin User:**
    - Go to your Railway project
    - Click on the **martinis** service
    - Go to **Variables** tab
-   - Add or modify:
+   - Set your admin password:
      ```bash
      ADMIN_PASSWORD=your-secure-password-here
      ```
    - The app will automatically redeploy
 
-4. **Access Your Application**
-   - Railway provides a public URL: `https://your-app.railway.app`
-   - Click "Generate Domain" if no domain is assigned yet
-   - Visit the URL and log in with your admin credentials
-   - Default username: `admin`
+**Verify Database Connection:**
+   - Ensure `DATABASE_URL` variable is set
+   - Format: `mysql://user:password@host:3306/martinis?useSSL=false&serverTimezone=UTC`
+   - Railway automatically manages this connection
 
 ### Detailed Documentation
 
 For comprehensive deployment instructions, troubleshooting, and configuration details, see:
 
-**[RAILWAY_MYSQL_SETUP.md](./RAILWAY_MYSQL_SETUP.md)** - Automatic MySQL setup guide for Railway
-**[RAILWAY.md](./RAILWAY.md)** - Complete Railway deployment guide
+- **[RAILWAY_MYSQL_SETUP.md](./RAILWAY_MYSQL_SETUP.md)** - MySQL setup guide for Railway
+- **[RAILWAY.md](./RAILWAY.md)** - Complete Railway deployment guide
 
 ## Local Development
 
