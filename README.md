@@ -29,10 +29,11 @@ A modern Spring Boot 3.2.0 web application for managing screenplay projects, sce
 
 [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/github)
 
-Click the button above to deploy to Railway. You'll be prompted to:
-1. Sign in to Railway (or create a free account)
-2. Connect your GitHub account
-3. Select a repository to deploy
+Click the button above to deploy to Railway. The deployment will automatically:
+1. Create a new Railway project
+2. Provision a MySQL 8.0 database with auto-generated credentials
+3. Deploy the Martinis application
+4. Connect the app to the database automatically
 
 ### Prerequisites
 
@@ -41,42 +42,40 @@ Click the button above to deploy to Railway. You'll be prompted to:
 
 ### Deployment Steps
 
-1. **Create New Railway Project**
-   - Click the "Deploy on Railway" button above, or
-   - Visit [Railway.com](https://railway.com) and sign in
-   - Click "New Project" → "Deploy from GitHub repo"
-   - Select or fork the `martinisapp/martinis` repository
+1. **Click "Deploy on Railway"**
+   - Click the button above
+   - Sign in to Railway (or create a free account)
+   - Authorize GitHub access if prompted
 
-2. **Add MySQL Database**
-   - Click "New" → "Database" → "Add MySQL"
-   - Railway automatically provides `DATABASE_URL` environment variable
-   - No manual configuration needed
+2. **Automatic Setup**
+   Railway automatically:
+   - Creates a new project with two services:
+     - **martinis** - The Spring Boot application
+     - **mysql** - MySQL 8.0 database
+   - Generates secure database credentials
+   - Connects the app to the database via `DATABASE_URL`
+   - Builds and deploys the application
+   - Initializes the database schema
 
-3. **Configure Environment Variables**
+3. **Configure Admin User (Optional)**
 
-   Required variables:
-   ```bash
-   DATABASE_URL     # Auto-set by Railway MySQL plugin
-   PORT             # Auto-set by Railway
-   ```
+   By default, an admin user is created with username `admin` and a random password.
+   To set a custom admin password:
 
-   Optional variables (for admin user creation):
-   ```bash
-   ADMIN_USERNAME=admin
-   ADMIN_PASSWORD=your-secure-password-here
-   ADMIN_FIRSTNAME=John
-   ADMIN_LASTNAME=Doe
-   ```
+   - Go to your Railway project
+   - Click on the **martinis** service
+   - Go to **Variables** tab
+   - Add or modify:
+     ```bash
+     ADMIN_PASSWORD=your-secure-password-here
+     ```
+   - The app will automatically redeploy
 
-4. **Deploy**
-   - Railway automatically detects the configuration
-   - Build process runs via Nixpacks
-   - Application starts automatically
-   - Database schema initializes on first run
-
-5. **Access Your Application**
+4. **Access Your Application**
    - Railway provides a public URL: `https://your-app.railway.app`
+   - Click "Generate Domain" if no domain is assigned yet
    - Visit the URL and log in with your admin credentials
+   - Default username: `admin`
 
 ### Detailed Documentation
 
