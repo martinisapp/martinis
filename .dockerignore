@@ -43,7 +43,7 @@ logs/
 Thumbs.db
 
 # Railway specific
-railway.json
+# Note: railway.json must NOT be ignored - Railway needs it to know to use Dockerfile
 railway.toml
 Procfile
 app.json
