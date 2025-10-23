@@ -76,6 +76,7 @@ A modern Spring Boot 3.2.0 web application for managing screenplay projects, sce
 
 For comprehensive deployment instructions, troubleshooting, and configuration details, see:
 
+**[RAILWAY_MYSQL_SETUP.md](./RAILWAY_MYSQL_SETUP.md)** - Automatic MySQL setup guide for Railway
 **[RAILWAY.md](./RAILWAY.md)** - Complete Railway deployment guide
 
 ## Local Development
