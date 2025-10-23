@@ -1,0 +1,73 @@
+# Railway Multi-Service Template Configuration
+# This file defines the services that will be automatically created
+# when someone clicks "Deploy to Railway"
+
+# Main Application Service
+[[services]]
+name = "martinis"
+source = { repo = "martinisapp/martinis" }
+
+[services.build]
+builder = "NIXPACKS"
+nixpacksConfigPath = "nixpacks.toml"
+watchPatterns = ["src/**", "pom.xml"]
+
+[services.deploy]
+startCommand = "java -Dserver.port=$PORT -Dspring.profiles.active=railway -Xmx768m -Xms256m -XX:+UseContainerSupport -XX:MaxRAMPercentage=80.0 -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -Djava.security.egd=file:/dev/./urandom -jar target/martinis.jar"
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+healthcheckPath = "/"
+healthcheckTimeout = 100
+sleepApplication = false
+numReplicas = 1
+
+# Environment variables for the app
+[[services.env]]
+name = "ADMIN_USERNAME"
+value = "admin"
+
+[[services.env]]
+name = "ADMIN_FIRSTNAME"
+value = "System"
+
+[[services.env]]
+name = "ADMIN_LASTNAME"
+value = "Administrator"
+
+# Database connection - references the MySQL service
+[[services.env]]
+name = "DATABASE_URL"
+value = "mysql://${mysql.MYSQL_USER}:${mysql.MYSQL_PASSWORD}@${mysql.RAILWAY_PRIVATE_DOMAIN}:3306/${mysql.MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
+
+# MySQL Database Service
+[[services]]
+name = "mysql"
+source = { image = "mysql:8.0" }
+
+# MySQL environment variables
+[[services.env]]
+name = "MYSQL_ROOT_PASSWORD"
+generateValue = true
+
+[[services.env]]
+name = "MYSQL_DATABASE"
+value = "martinis"
+
+[[services.env]]
+name = "MYSQL_USER"
+value = "martinis_user"
+
+[[services.env]]
+name = "MYSQL_PASSWORD"
+generateValue = true
+
+[services.deploy]
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10
+
+# Health check for MySQL
+[[services.healthcheck]]
+command = ["mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
+interval = 10
+timeout = 5
+retries = 5

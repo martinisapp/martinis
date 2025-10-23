@@ -2,7 +2,24 @@
 
 This guide explains how to automatically set up MySQL when deploying the Martinis application to Railway.com.
 
-## Quick Start (Automatic Setup)
+## Fastest Method: Deploy to Railway Button
+
+The easiest way to deploy Martinis with MySQL is using the "Deploy to Railway" button:
+
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/github)
+
+When you click this button, Railway **automatically**:
+1. Creates a new project
+2. Provisions a MySQL 8.0 database service
+3. Generates secure database credentials
+4. Deploys the application
+5. Connects the app to the database
+
+**No manual MySQL setup required!** The `railway.toml` file in the repository defines both services (app and MySQL), so everything is configured automatically.
+
+## Manual Setup (Alternative Method)
+
+If you prefer to set up MySQL manually or are working with an existing Railway project:
 
 ### 1. Add MySQL Database to Your Railway Project
 
