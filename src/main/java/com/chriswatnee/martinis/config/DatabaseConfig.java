@@ -32,6 +32,12 @@ public class DatabaseConfig {
     @Value("${DATABASE_URL:jdbc:mysql://localhost:3306/martinis?useSSL=false&serverTimezone=UTC}")
     private String databaseUrl;
 
+    @Value("${SPRING_DATASOURCE_USERNAME:#{null}}")
+    private String username;
+
+    @Value("${SPRING_DATASOURCE_PASSWORD:#{null}}")
+    private String password;
+
     @Bean
     public DataSource dataSource() {
         logger.info("Initializing HikariCP DataSource for Railway deployment");
@@ -40,6 +46,17 @@ public class DatabaseConfig {
 
         try {
             parseDatabaseUrl(config, databaseUrl);
+
+            // If username/password are provided via environment variables, use them
+            // This is useful for Docker Compose where DATABASE_URL doesn't contain credentials
+            if (username != null && !username.isEmpty()) {
+                config.setUsername(username);
+                logger.info("Using username from SPRING_DATASOURCE_USERNAME environment variable");
+            }
+            if (password != null && !password.isEmpty()) {
+                config.setPassword(password);
+                logger.info("Using password from SPRING_DATASOURCE_PASSWORD environment variable");
+            }
         } catch (Exception e) {
             logger.error("Failed to parse DATABASE_URL: {}", databaseUrl, e);
             throw new RuntimeException("Failed to configure database connection", e);

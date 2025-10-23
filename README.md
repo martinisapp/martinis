@@ -80,13 +80,89 @@ For comprehensive deployment instructions, troubleshooting, and configuration de
 
 ## Local Development
 
-### Prerequisites
+### Option 1: Docker Setup (Recommended)
+
+The easiest way to run the application locally is using Docker Compose, which automatically sets up MySQL and the application.
+
+#### Prerequisites
+
+- Docker 20.10 or higher
+- Docker Compose 2.0 or higher
+
+#### Quick Start
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/martinisapp/martinis.git
+   cd martinis
+   ```
+
+2. **Configure environment (optional)**
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env
+
+   # Edit .env to customize settings (optional)
+   # Default credentials: admin/admin123
+   ```
+
+3. **Start the application**
+   ```bash
+   # Start MySQL and the application
+   docker-compose up -d
+
+   # View logs
+   docker-compose logs -f app
+   ```
+
+4. **Access the application**
+   - Application: http://localhost:8080
+   - Login with: `admin` / `admin123` (or your configured credentials)
+
+5. **Optional: Start phpMyAdmin for database management**
+   ```bash
+   # Start with phpMyAdmin
+   docker-compose --profile tools up -d
+
+   # Access phpMyAdmin at http://localhost:8081
+   ```
+
+#### Docker Commands
+
+```bash
+# Start services
+docker-compose up -d
+
+# Stop services
+docker-compose down
+
+# Rebuild after code changes
+docker-compose up -d --build
+
+# View logs
+docker-compose logs -f app
+docker-compose logs -f mysql
+
+# Reset database (WARNING: deletes all data)
+docker-compose down -v
+docker-compose up -d
+
+# Access MySQL CLI
+docker-compose exec mysql mysql -u martinis_user -p martinis
+# Password: martinis_pass (or your configured password)
+```
+
+### Option 2: Manual Setup
+
+If you prefer to run components separately or don't have Docker available.
+
+#### Prerequisites
 
 - Java 17 or higher
 - Maven 3.9 or higher
 - MySQL 8.0 or higher (or access to Railway development database)
 
-### Setup
+#### Setup
 
 1. **Clone the repository**
    ```bash
