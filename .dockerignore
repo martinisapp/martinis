@@ -27,7 +27,7 @@ RAILWAY.md
 target/
 *.war
 *.class
-# Note: *.jar is NOT ignored because RAILPACK builds the JAR inside the Docker container
+# Note: *.jar is NOT ignored because the multi-stage Dockerfile builds the JAR inside the container
 
 # Logs
 *.log
@@ -43,7 +43,7 @@ logs/
 Thumbs.db
 
 # Railway specific
-# Note: railway.json must NOT be ignored - Railway needs it to know to use Dockerfile
+# Note: railway.json must NOT be ignored - Railway needs it for build configuration
 railway.toml
 Procfile
 app.json
