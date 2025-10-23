@@ -25,9 +25,9 @@ RAILWAY.md
 
 # Build artifacts
 target/
-*.jar
 *.war
 *.class
+# Note: *.jar is NOT ignored because RAILPACK builds the JAR inside the Docker container
 
 # Logs
 *.log
