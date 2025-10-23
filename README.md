@@ -27,7 +27,12 @@ A modern Spring Boot 3.2.0 web application for managing screenplay projects, sce
 
 ## Quick Deploy to Railway
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/martinisapp/martinis)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/github)
+
+Click the button above to deploy to Railway. You'll be prompted to:
+1. Sign in to Railway (or create a free account)
+2. Connect your GitHub account
+3. Select a repository to deploy
 
 ### Prerequisites
 
@@ -37,9 +42,10 @@ A modern Spring Boot 3.2.0 web application for managing screenplay projects, sce
 ### Deployment Steps
 
 1. **Create New Railway Project**
+   - Click the "Deploy on Railway" button above, or
    - Visit [Railway.com](https://railway.com) and sign in
    - Click "New Project" → "Deploy from GitHub repo"
-   - Select the `martinisapp/martinis` repository
+   - Select or fork the `martinisapp/martinis` repository
 
 2. **Add MySQL Database**
    - Click "New" → "Database" → "Add MySQL"
