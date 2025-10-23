@@ -444,3 +444,8 @@ $RECYCLE.BIN/
 
 /target/
 /nbproject/
+
+# Environment variables (Docker)
+.env
+.env.local
+.env.*.local

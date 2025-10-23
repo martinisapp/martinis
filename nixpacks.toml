@@ -2,7 +2,7 @@
 # Spring Boot 3.2.0 Application
 
 [phases.setup]
-nixPkgs = ["maven_3_9", "jdk17_headless"]
+nixPkgs = ["maven", "jdk17_headless"]
 aptPkgs = ["curl"]
 
 [phases.install]
