@@ -27,7 +27,7 @@ A modern Spring Boot 3.2.0 web application for managing screenplay projects, sce
 
 ## Quick Deploy to Railway
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template?template=https://github.com/martinisapp/martinis)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template/martinisapp/martinis)
 
 ### Prerequisites
 
