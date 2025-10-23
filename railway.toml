@@ -1,72 +1,12 @@
-# Railway Multi-Service Template Configuration
-# This file defines the services that will be automatically created
-# when someone clicks "Deploy to Railway"
+# Railway Configuration
+# Note: Multi-service templates are created through Railway's dashboard UI
+# This file is kept for reference but Railway templates are now managed via the Railway UI
 
-# Main Application Service
-[[services]]
-name = "martinis"
-source = { repo = "martinisapp/martinis" }
+# To create a deploy button:
+# 1. Deploy your project to Railway manually
+# 2. Go to project settings and convert it to a template
+# 3. Get your template code
+# 4. Use: https://railway.com/new/template/{YOUR_TEMPLATE_CODE}
 
-[services.build]
-builder = "DOCKERFILE"
-dockerfilePath = "Dockerfile"
-watchPatterns = ["src/**", "pom.xml"]
-
-[services.deploy]
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10
-healthcheckPath = "/"
-healthcheckTimeout = 100
-sleepApplication = false
-numReplicas = 1
-
-# Environment variables for the app
-[[services.env]]
-name = "ADMIN_USERNAME"
-value = "admin"
-
-[[services.env]]
-name = "ADMIN_FIRSTNAME"
-value = "System"
-
-[[services.env]]
-name = "ADMIN_LASTNAME"
-value = "Administrator"
-
-# Database connection - references the MySQL service
-[[services.env]]
-name = "DATABASE_URL"
-value = "mysql://${mysql.MYSQL_USER}:${mysql.MYSQL_PASSWORD}@${mysql.RAILWAY_PRIVATE_DOMAIN}:3306/${mysql.MYSQL_DATABASE}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC"
-
-# MySQL Database Service
-[[services]]
-name = "mysql"
-source = { image = "mysql:8.0" }
-
-# MySQL environment variables
-[[services.env]]
-name = "MYSQL_ROOT_PASSWORD"
-generateValue = true
-
-[[services.env]]
-name = "MYSQL_DATABASE"
-value = "martinis"
-
-[[services.env]]
-name = "MYSQL_USER"
-value = "martinis_user"
-
-[[services.env]]
-name = "MYSQL_PASSWORD"
-generateValue = true
-
-[services.deploy]
-restartPolicyType = "ON_FAILURE"
-restartPolicyMaxRetries = 10
-
-# Health check for MySQL
-[[services.healthcheck]]
-command = ["mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$MYSQL_ROOT_PASSWORD"]
-interval = 10
-timeout = 5
-retries = 5
+# For service-specific configuration, use railway.json instead
+# This file is deprecated for multi-service configuration
