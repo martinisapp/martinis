@@ -81,13 +81,13 @@ Railway automatically resolves these references:
 When you fork this repository, users can deploy with:
 
 ```
-https://railway.com/template?referralCode=YOUR_CODE
+https://railway.app/template?code=https://github.com/martinisapp/martinis
 ```
 
 Or directly from GitHub:
 
 ```
-https://railway.com/new/github?repo=martinisapp/martinis
+https://railway.app/template?code=https://github.com/martinisapp/martinis
 ```
 
 ## Customization
@@ -136,7 +136,7 @@ To test the template configuration:
 2. **Push your changes** to the main branch
 3. **Visit Railway template URL:**
    ```
-   https://railway.com/new/github?repo=YOUR_USERNAME/martinis
+   https://railway.app/template?code=https://github.com/YOUR_USERNAME/martinis
    ```
 4. **Click Deploy** and verify both services are created
 

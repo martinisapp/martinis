@@ -6,7 +6,7 @@ This guide explains how to automatically set up MySQL when deploying the Martini
 
 The easiest way to deploy Martinis with MySQL is using the "Deploy to Railway" button:
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/github)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/template?code=https://github.com/martinisapp/martinis)
 
 When you click this button, Railway **automatically**:
 1. Creates a new project
