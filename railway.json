@@ -5,7 +5,8 @@
     "dockerfilePath": "Dockerfile",
     "watchPatterns": [
       "src/**",
-      "pom.xml"
+      "pom.xml",
+      "Dockerfile"
     ]
   },
   "deploy": {
