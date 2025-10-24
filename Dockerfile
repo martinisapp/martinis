@@ -22,6 +22,13 @@ COPY src ./src
 # Build the application
 RUN mvn clean package -DskipTests -B
 
+# Verify the JAR was created successfully
+RUN ls -la /app/target/ && \
+    if [ ! -f /app/target/martinis.jar ]; then \
+        echo "ERROR: JAR file was not created by Maven build!" && exit 1; \
+    fi && \
+    echo "SUCCESS: JAR file created at /app/target/martinis.jar"
+
 # ========================================
 # Stage 2: Runtime Stage
 # ========================================
@@ -40,6 +47,13 @@ WORKDIR /app
 
 # Copy JAR from builder stage
 COPY --from=builder /app/target/martinis.jar ./martinis.jar
+
+# Verify the JAR was copied successfully
+RUN ls -la /app/ && \
+    if [ ! -f /app/martinis.jar ]; then \
+        echo "ERROR: JAR file was not copied to runtime stage!" && exit 1; \
+    fi && \
+    echo "SUCCESS: JAR file is available at /app/martinis.jar"
 
 # Change ownership to appuser
 RUN chown -R appuser:appuser /app
@@ -65,4 +79,5 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:${PORT:-8080}/actuator/health || exit 1
 
 # Run the application
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar martinis.jar"]
+# Note: Using absolute path to ensure JAR can be found
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/martinis.jar"]
