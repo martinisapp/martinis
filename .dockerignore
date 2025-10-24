@@ -5,8 +5,8 @@
 
 # Docker
 # Note: Dockerfile must NOT be ignored - Railway needs it for DOCKERFILE builder
+# Note: .dockerignore must NOT be ignored - Docker needs it during Railway builds
 docker-compose.yml
-.dockerignore
 
 # Documentation
 README.md
