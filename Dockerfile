@@ -79,5 +79,6 @@ HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:${PORT:-8080}/actuator/health || exit 1
 
 # Run the application
-# Note: Using absolute path to ensure JAR can be found
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/martinis.jar"]
+# Note: Using CMD with absolute path to ensure JAR can be found
+# CMD is preferred over ENTRYPOINT for Railway compatibility
+CMD ["sh", "-c", "java $JAVA_OPTS -jar /app/martinis.jar"]
