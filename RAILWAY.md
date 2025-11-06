@@ -1,154 +1,231 @@
-# Railway.com Deployment Guide - Complete Rewrite
+# Railway.com Deployment Guide
 
-## Overview
-
-This guide provides comprehensive instructions for deploying the Martinis screenplay management application on Railway.com. The application has been completely rewritten and optimized for Railway deployment with Spring Boot 3.2.0.
+Complete guide for deploying the Martinis screenplay management application on Railway.com.
 
 ## Table of Contents
 
-1. [Prerequisites](#prerequisites)
-2. [Quick Start](#quick-start)
-3. [Detailed Deployment Steps](#detailed-deployment-steps)
-4. [Environment Variables](#environment-variables)
-5. [Database Setup](#database-setup)
-6. [Configuration Files](#configuration-files)
-7. [Monitoring & Troubleshooting](#monitoring--troubleshooting)
-8. [Performance Optimization](#performance-optimization)
+- [Quick Start](#quick-start)
+- [Prerequisites](#prerequisites)
+- [Step-by-Step Deployment](#step-by-step-deployment)
+- [Environment Variables](#environment-variables)
+- [Database Setup](#database-setup)
+- [Configuration Files](#configuration-files)
+- [Monitoring & Troubleshooting](#monitoring--troubleshooting)
+- [Architecture](#architecture)
+- [Performance Optimization](#performance-optimization)
+- [Security Best Practices](#security-best-practices)
+
+---
+
+## Quick Start
+
+### Deploy from GitHub (Recommended)
+
+1. **Sign in to Railway**
+   - Go to [railway.app](https://railway.app)
+   - Sign in with your GitHub account
+
+2. **Create New Project**
+   - Click "New Project" → "Deploy from GitHub repo"
+   - Select the `martinisapp/martinis` repository
+   - Select branch to deploy
+
+3. **Add MySQL Database**
+   - In your project, click "New" → "Database" → "Add MySQL"
+   - Railway automatically sets `DATABASE_URL` environment variable
+
+4. **Configure Environment Variables**
+   - Go to your service → "Variables" tab
+   - Add required variables (see [Environment Variables](#environment-variables))
+
+5. **Deploy**
+   - Railway automatically builds and deploys
+   - Monitor progress in "Deployments" tab
+   - Access your app at the provided URL
 
 ---
 
 ## Prerequisites
 
-Before deploying to Railway, ensure you have:
-
-- A Railway.com account (free tier available)
+- Railway.com account (free tier available)
+- GitHub account
 - Git repository with the Martinis application
-- Basic understanding of Spring Boot applications
-- Railway CLI (optional, for advanced usage)
+- Optional: Railway CLI for advanced usage
 
-## Quick Start
+### Install Railway CLI (Optional)
 
-### Deploy from GitHub
+```bash
+# macOS/Linux
+curl -fsSL https://railway.app/install.sh | sh
 
-The easiest deployment method is directly from this GitHub repository. See the [README.md](./README.md#quick-deploy-to-railway) for step-by-step instructions.
+# Windows (PowerShell)
+iwr https://railway.app/install.ps1 | iex
 
-<!-- One-click template deploy coming soon -->
-<!-- [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/YOUR-TEMPLATE-CODE) -->
+# Verify installation
+railway --version
 
-### Manual Deployment
-
-1. Visit [Railway.com](https://railway.com) and sign in
-2. Click "New Project" → "Deploy from GitHub repo"
-3. Select the `martinisapp/martinis` repository
-4. Add MySQL database plugin
-5. Configure environment variables
-6. Deploy
+# Login
+railway login
+```
 
 ---
 
-## Detailed Deployment Steps
+## Step-by-Step Deployment
 
-### Step 1: Create a New Railway Project
+### Step 1: Create Railway Project
 
+**Using Railway Dashboard:**
+1. Visit [railway.app/new](https://railway.app/new)
+2. Click "Deploy from GitHub repo"
+3. Authorize Railway to access your GitHub repositories
+4. Select `martinisapp/martinis`
+
+**Using Railway CLI:**
 ```bash
-# Option 1: Using Railway CLI
-railway login
-railway init
-railway link
+# Clone repository
+git clone https://github.com/martinisapp/martinis.git
+cd martinis
 
-# Option 2: Using Web Interface
-# Visit https://railway.app/new
-# Click "Deploy from GitHub repo"
+# Initialize Railway project
+railway init
+
+# Link to existing project (if already created)
+railway link
 ```
 
 ### Step 2: Add MySQL Database
 
-1. In your Railway project dashboard, click "New"
-2. Select "Database" → "Add MySQL"
-3. Railway will automatically create a MySQL instance
-4. Copy the `DATABASE_URL` connection string
+**Using Railway Dashboard:**
+1. In your project, click "New"
+2. Select "Database"
+3. Choose "Add MySQL"
+4. Wait for database provisioning (~30 seconds)
 
-**Important:** Railway automatically sets the `DATABASE_URL` environment variable in the format:
+**Using Railway CLI:**
+```bash
+railway add --database mysql
 ```
-mysql://user:password@host:port/database
+
+Railway automatically creates these environment variables:
+- `DATABASE_URL`: MySQL connection string
+- `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, `MYSQLDATABASE`
+
+### Step 3: Configure Environment Variables
+
+**Using Railway Dashboard:**
+1. Select your service
+2. Go to "Variables" tab
+3. Click "New Variable"
+4. Add each variable below
+
+**Using Railway CLI:**
+```bash
+railway variables set ADMIN_USERNAME=admin
+railway variables set ADMIN_PASSWORD=your_secure_password_here
+railway variables set ADMIN_FIRSTNAME=John
+railway variables set ADMIN_LASTNAME=Doe
 ```
 
-### Step 3: Connect GitHub Repository
+### Step 4: Deploy Application
 
-1. Click "New" → "GitHub Repo"
-2. Select `martinisapp/martinis`
-3. Choose the branch to deploy (default: main)
-4. Railway will automatically detect the configuration files
-
-### Step 4: Configure Environment Variables
-
-Navigate to your service settings and add the following variables:
-
-#### Required Variables
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `DATABASE_URL` | MySQL connection URL (auto-set by Railway) | `mysql://user:pass@host:3306/railway` |
-| `PORT` | Application port (auto-set by Railway) | `8080` |
-
-#### Optional Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `ADMIN_USERNAME` | Initial admin username | `admin` |
-| `ADMIN_PASSWORD` | Initial admin password | None (must be set) |
-| `ADMIN_FIRSTNAME` | Admin first name | `System` |
-| `ADMIN_LASTNAME` | Admin last name | `Administrator` |
-
-**Security Note:** Always set a strong `ADMIN_PASSWORD` on first deployment.
-
-### Step 5: Deploy
+**Automatic Deployment (Recommended):**
+- Push to your GitHub repository
+- Railway automatically detects changes and deploys
 
 ```bash
-# Using Railway CLI
-railway up
-
-# Or push to GitHub (auto-deploys)
+git add .
+git commit -m "Configure for Railway"
 git push origin main
 ```
 
-Railway will:
-1. Detect the Nixpacks configuration
-2. Build the application using Maven
-3. Create the `martinis.jar` artifact
-4. Start the application with optimized JVM settings
-5. Initialize the database schema automatically
+**Manual Deployment with CLI:**
+```bash
+railway up
+```
+
+### Step 5: Monitor Deployment
+
+**Using Railway Dashboard:**
+1. Go to "Deployments" tab
+2. Click on the latest deployment
+3. View real-time build and deployment logs
+
+**Using Railway CLI:**
+```bash
+# View logs
+railway logs
+
+# Follow logs in real-time
+railway logs -f
+```
+
+### Step 6: Access Your Application
+
+Once deployed, Railway provides a public URL:
+
+**Using Railway Dashboard:**
+- Go to "Settings" → "Domains"
+- Click "Generate Domain" if not already created
+- Access your app at: `https://your-app-name.railway.app`
+
+**Using Railway CLI:**
+```bash
+railway open
+```
 
 ---
 
 ## Environment Variables
 
-### Database Configuration
+### Required Variables
 
-The application uses Railway's `DATABASE_URL` environment variable, which is automatically set when you add a MySQL database to your project.
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `ADMIN_USERNAME` | Initial admin username | `admin` |
+| `ADMIN_PASSWORD` | Initial admin password | `SecurePass123!` |
+| `ADMIN_FIRSTNAME` | Admin first name | `John` |
+| `ADMIN_LASTNAME` | Admin last name | `Doe` |
 
-**Format:** `mysql://user:password@host:port/database`
+### Automatic Variables (Set by Railway)
 
-The `DatabaseConfig.java` class automatically parses this URL and converts it to JDBC format with appropriate SSL settings.
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `DATABASE_URL` | MySQL connection URL | `mysql://user:pass@host:3306/db` |
+| `PORT` | Application port | `8080` |
+| `RAILWAY_ENVIRONMENT` | Deployment environment | `production` |
 
-### Admin User Bootstrap
+### Optional Variables
 
-Set these environment variables to create an initial admin user:
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `SQL_INIT_MODE` | Schema initialization mode | `always` |
+| `LOGGING_LEVEL_ROOT` | Root logging level | `INFO` |
+| `SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE` | Max DB connections | `10` |
+| `SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE` | Min idle connections | `2` |
 
+### Setting Environment Variables
+
+**Railway Dashboard Method:**
+1. Select your service
+2. Go to "Variables" tab
+3. Click "New Variable"
+4. Enter key and value
+5. Click "Add"
+
+**Railway CLI Method:**
 ```bash
-ADMIN_USERNAME=admin
-ADMIN_PASSWORD=your-secure-password-here
-ADMIN_FIRSTNAME=John
-ADMIN_LASTNAME=Doe
+# Set single variable
+railway variables set KEY=value
+
+# Set multiple variables
+railway variables set \
+  ADMIN_USERNAME=admin \
+  ADMIN_PASSWORD=secure123 \
+  ADMIN_FIRSTNAME=John
 ```
 
-The password will be automatically hashed with BCrypt before storage.
-
-### Port Configuration
-
-Railway automatically assigns a port via the `PORT` environment variable. The application listens on this port.
-
-**Default:** `8080` (used for local development)
+**Template File:**
+See `.env.railway` for a complete template of all available variables.
 
 ---
 
@@ -156,35 +233,66 @@ Railway automatically assigns a port via the `PORT` environment variable. The ap
 
 ### Automatic Schema Initialization
 
-The application automatically runs `schema.sql` on first startup to create all required tables:
+The application automatically creates all required database tables on first startup:
 
-- `user` - User accounts
+**Tables Created:**
+- `user` - User accounts with encrypted passwords
 - `authority` - User roles (ROLE_USER, ROLE_ADMIN)
 - `project` - Screenplay projects
 - `scene` - Scenes within projects
 - `actor` - Actor database
 - `person` - Characters in projects
-- `block` - Screenplay blocks/lines
+- `block` - Screenplay blocks/lines with bookmarking
+
+**How It Works:**
+1. Application starts and connects to MySQL
+2. Checks if `user` table exists
+3. If not, runs `schema.sql` from `src/main/resources/`
+4. Creates initial admin user from environment variables
+
+### Database Connection
+
+Railway automatically provides `DATABASE_URL` in format:
+```
+mysql://user:password@host:3306/database
+```
+
+The application's `DatabaseConfig.java` automatically:
+- Parses Railway's MySQL URL format
+- Converts to JDBC format with SSL
+- Configures HikariCP connection pool
+- Enables performance optimizations
 
 ### Manual Database Access
 
-```bash
-# Using Railway CLI
-railway connect mysql
+**Using Railway Dashboard:**
+1. Select MySQL database service
+2. Go to "Connect" tab
+3. Copy connection command
+4. Run in terminal
 
-# Or use the connection string from Railway dashboard
+**Using Railway CLI:**
+```bash
+railway connect mysql
+```
+
+**Using MySQL Client:**
+```bash
+# Get connection details
+railway variables
+
+# Connect using mysql client
 mysql -h host -u user -p database
 ```
 
 ### Database Migrations
 
-The application uses Spring Boot's SQL initialization feature:
-
-```properties
-spring.sql.init.mode=always
+**First Deployment:**
+```bash
+railway variables set SQL_INIT_MODE=always
 ```
 
-To skip schema initialization after first deploy:
+**Subsequent Deployments (skip schema creation):**
 ```bash
 railway variables set SQL_INIT_MODE=never
 ```
@@ -193,29 +301,50 @@ railway variables set SQL_INIT_MODE=never
 
 ## Configuration Files
 
-This deployment uses the following configuration files:
-
 ### 1. `railway.json` - Railway Service Configuration
+
+Defines how Railway builds and deploys your application:
 
 ```json
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "NIXPACKS",
-    "nixpacksConfigPath": "nixpacks.toml",
-    "watchPatterns": ["src/**", "pom.xml"]
+    "builder": "DOCKERFILE",
+    "dockerfilePath": "Dockerfile",
+    "watchPatterns": ["src/**", "pom.xml", "Dockerfile"]
   },
   "deploy": {
-    "startCommand": "java -Dserver.port=$PORT -Dspring.profiles.active=railway ...",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
-    "healthcheckPath": "/",
-    "healthcheckTimeout": 100
+    "healthcheckPath": "/actuator/health",
+    "healthcheckTimeout": 10000
   }
 }
 ```
 
-### 2. `nixpacks.toml` - Build Configuration
+**Key Settings:**
+- `builder: DOCKERFILE` - Uses Docker for builds
+- `watchPatterns` - Files that trigger rebuilds
+- `healthcheckPath` - Endpoint for health checks
+- `restartPolicyType` - Restart on failure
+
+### 2. `Dockerfile` - Container Build Configuration
+
+Multi-stage Docker build optimized for Railway:
+
+**Build Stage:**
+- Uses Maven 3.9 with Java 17
+- Caches dependencies for faster rebuilds
+- Compiles application to JAR
+
+**Runtime Stage:**
+- Uses minimal JRE Alpine image
+- Runs as non-root user for security
+- Optimized JVM settings for containers
+
+### 3. `nixpacks.toml` - Alternative Build System
+
+Alternative to Docker using Railway's Nixpacks:
 
 ```toml
 [phases.setup]
@@ -225,138 +354,169 @@ nixPkgs = ["maven_3_9", "jdk17_headless"]
 cmds = ["mvn clean package -DskipTests -B"]
 
 [start]
-cmd = "java -Dserver.port=$PORT ... -jar target/martinis.jar"
+cmd = "java -jar target/martinis.jar"
 ```
 
-### 3. `Procfile` - Process Definition
+**To use Nixpacks instead of Docker:**
+1. Update `railway.json`: `"builder": "NIXPACKS"`
+2. Railway will automatically use `nixpacks.toml`
 
-```
-web: java -Dserver.port=$PORT ... -jar target/martinis.jar
-```
+### 4. `.railwayignore` - Deployment Exclusions
 
-### 4. `app.json` - Application Manifest
+Excludes unnecessary files from deployment:
+- Documentation files
+- IDE configuration
+- Test files
+- Local environment files
+- Build artifacts (rebuilt on Railway)
 
-Defines metadata, environment variables, and deployment settings.
+### 5. `application.properties` - Spring Boot Configuration
+
+Main application configuration:
+- Server port from `$PORT` environment variable
+- Database URL from `$DATABASE_URL`
+- HikariCP connection pool settings
+- JSP view configuration
+- Security settings
 
 ---
 
 ## Monitoring & Troubleshooting
 
-### View Logs
+### View Application Logs
 
+**Railway Dashboard:**
+1. Select your service
+2. Go to "Deployments" tab
+3. Click on deployment
+4. View logs in real-time
+
+**Railway CLI:**
 ```bash
-# Using Railway CLI
+# View recent logs
 railway logs
 
-# Or use the Railway Dashboard
-# Navigate to your service → Deployments → View Logs
+# Follow logs in real-time
+railway logs -f
+
+# Filter logs
+railway logs | grep ERROR
+```
+
+### Health Check Endpoint
+
+Railway uses `/actuator/health` to monitor application health:
+
+```bash
+# Check health locally
+curl http://localhost:8080/actuator/health
+
+# Check health on Railway
+curl https://your-app.railway.app/actuator/health
+```
+
+**Expected Response:**
+```json
+{"status":"UP"}
 ```
 
 ### Common Issues
 
-#### 1. Database Connection Errors
+#### 1. Database Connection Failed
 
-**Symptom:** Application fails to start with database connection errors
+**Symptoms:**
+- Application fails to start
+- Logs show database connection errors
 
-**Solution:**
-- Verify `DATABASE_URL` is set correctly
-- Check MySQL plugin is running
-- Ensure database credentials are valid
-
+**Solutions:**
 ```bash
+# Verify DATABASE_URL is set
+railway variables
+
+# Check MySQL service is running
+railway status
+
 # Test database connection
-railway run printenv DATABASE_URL
+railway connect mysql
 ```
 
-#### 2. Port Binding Errors
+#### 2. Port Binding Issues
 
-**Symptom:** `Address already in use` error
+**Symptoms:**
+- "Address already in use" error
+- Application won't start
 
-**Solution:**
-- Railway automatically assigns the port via `$PORT`
+**Solutions:**
 - Ensure `application.properties` uses `${PORT:8080}`
-- Don't hardcode port numbers
+- Don't hardcode port in code
+- Railway automatically assigns port via `$PORT`
 
 #### 3. Build Failures
 
-**Symptom:** Maven build fails during deployment
+**Symptoms:**
+- Build fails during Maven compilation
+- "BUILD FAILURE" in logs
 
-**Solution:**
-- Check `pom.xml` for errors
-- Verify Java 17 compatibility
-- Review build logs for specific errors
-
+**Solutions:**
 ```bash
 # Test build locally
-mvn clean package -DskipTests
+mvn clean package
+
+# Check Java version
+java -version
+
+# Verify pom.xml is valid
+mvn validate
 ```
 
 #### 4. Out of Memory Errors
 
-**Symptom:** Application crashes with OOM errors
+**Symptoms:**
+- Application crashes with OOM
+- `OutOfMemoryError` in logs
 
-**Solution:**
-- Increase Railway service memory limit (Project Settings)
-- Adjust JVM settings in `railway.json` or `nixpacks.toml`
-- Optimize connection pool size in `DatabaseConfig.java`
-
-### Health Check Endpoint
-
-The application exposes a health check at `/` (root path).
-
-**Test locally:**
-```bash
-curl http://localhost:8080/
-```
-
-**Test on Railway:**
-```bash
-curl https://your-app-name.railway.app/
-```
-
----
-
-## Performance Optimization
-
-### JVM Tuning
-
-The application uses optimized JVM settings for Railway:
+**Solutions:**
+1. Increase Railway plan memory limit
+2. Optimize JVM settings in Dockerfile
+3. Reduce connection pool size
+4. Review application memory usage
 
 ```bash
--Xmx768m -Xms256m
--XX:+UseContainerSupport
--XX:MaxRAMPercentage=80.0
--XX:+UseG1GC
--XX:MaxGCPauseMillis=100
--Djava.security.egd=file:/dev/./urandom
+# Update connection pool
+railway variables set SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE=5
 ```
 
-### Connection Pool Optimization
+#### 5. Schema Initialization Issues
 
-HikariCP is configured with Railway-optimized settings:
+**Symptoms:**
+- Tables not created
+- "Table doesn't exist" errors
 
-```java
-config.setMaximumPoolSize(10);
-config.setMinimumIdle(2);
-config.setConnectionTimeout(30000); // 30 seconds
-config.setIdleTimeout(600000); // 10 minutes
-config.setMaxLifetime(1800000); // 30 minutes
+**Solutions:**
+```bash
+# Ensure SQL_INIT_MODE is set
+railway variables set SQL_INIT_MODE=always
+
+# Check schema.sql exists
+ls src/main/resources/schema.sql
+
+# View logs for initialization errors
+railway logs | grep "SQL"
 ```
 
-### Response Compression
+### Performance Monitoring
 
-Enabled in `application.properties`:
+**Railway Dashboard Metrics:**
+- CPU usage
+- Memory usage
+- Network traffic
+- Request count
+- Response times
 
-```properties
-server.compression.enabled=true
-server.compression.mime-types=text/html,text/xml,text/plain,text/css,application/javascript,application/json
-```
-
-### HTTP/2 Support
-
-```properties
-server.http2.enabled=true
-```
+**Access Metrics:**
+1. Select your service
+2. Go to "Metrics" tab
+3. View real-time and historical data
 
 ---
 
@@ -364,117 +524,250 @@ server.http2.enabled=true
 
 ### Technology Stack
 
-- **Framework:** Spring Boot 3.2.0
-- **Java Version:** 17 (LTS)
-- **Build Tool:** Maven 3.9
-- **Database:** MySQL 8.0+
-- **Connection Pool:** HikariCP
-- **View Technology:** JSP with JSTL
-- **Security:** Spring Security with BCrypt
+| Component | Technology |
+|-----------|------------|
+| Framework | Spring Boot 3.3.3 |
+| Language | Java 17 (LTS) |
+| Build Tool | Maven 3.9+ |
+| Database | MySQL 8.0+ |
+| Connection Pool | HikariCP |
+| View Technology | JSP + JSTL |
+| Security | Spring Security + BCrypt |
+| Container | Docker (Alpine Linux) |
 
 ### Application Layers
 
 ```
-┌─────────────────────────────────────┐
-│         Controllers (Web)            │
-├─────────────────────────────────────┤
-│       Services (Business Logic)      │
-├─────────────────────────────────────┤
-│      DAOs (Data Access Layer)        │
-├─────────────────────────────────────┤
-│      HikariCP (Connection Pool)      │
-├─────────────────────────────────────┤
-│         MySQL Database               │
-└─────────────────────────────────────┘
+┌─────────────────────────────────┐
+│      Controllers (Web)          │ ← HTTP Requests
+├─────────────────────────────────┤
+│      Services (Business)         │ ← Business Logic
+├─────────────────────────────────┤
+│      DAOs (Data Access)          │ ← Database Operations
+├─────────────────────────────────┤
+│   HikariCP (Connection Pool)     │ ← Connection Management
+├─────────────────────────────────┤
+│      MySQL Database              │ ← Data Storage
+└─────────────────────────────────┘
 ```
 
 ### Request Flow
 
-1. User request → Spring Security authentication
-2. Controller receives request
-3. Service layer processes business logic
-4. DAO layer queries database via HikariCP
-5. Results returned through layers
-6. JSP renders response
+1. User request → Railway load balancer
+2. Spring Security authentication
+3. Controller processes request
+4. Service executes business logic
+5. DAO queries database via HikariCP
+6. Results returned through layers
+7. JSP renders HTML response
+8. Response sent to user
+
+### Key Components
+
+**Controllers:**
+- `HomeController` - Dashboard and home page
+- `LoginController` - Authentication
+- `ProjectController` - Project management
+- `SceneController` - Scene management
+- `ActorController` - Actor database
+- `PersonController` - Character management
+- `BlockController` - Screenplay blocks
+
+**Services:**
+- `UserService` - User management
+- `ProjectService` - Project operations
+- `SceneService` - Scene operations
+- `ActorService` - Actor operations
+
+**Configuration:**
+- `DatabaseConfig` - Database connection
+- `SecurityConfig` - Spring Security
+- `WebConfig` - MVC configuration
+- `DatabaseInitializer` - Schema initialization
+
+---
+
+## Performance Optimization
+
+### JVM Tuning
+
+The Dockerfile includes optimized JVM settings for Railway:
+
+```bash
+-XX:+UseContainerSupport       # Respect container limits
+-XX:MaxRAMPercentage=75.0      # Use up to 75% of memory
+-XX:+UseG1GC                   # Low-latency GC
+-XX:MaxGCPauseMillis=100       # Max GC pause time
+-XX:+UseStringDeduplication    # Reduce memory usage
+```
+
+### Connection Pool Optimization
+
+HikariCP configured for Railway:
+
+```java
+Maximum Pool Size: 10 connections
+Minimum Idle: 2 connections
+Connection Timeout: 30 seconds
+Idle Timeout: 10 minutes
+Max Lifetime: 30 minutes
+```
+
+**For high traffic, increase pool size:**
+```bash
+railway variables set SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE=20
+railway variables set SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE=5
+```
+
+### HTTP Compression
+
+Enabled in `application.properties`:
+- Compresses HTML, CSS, JavaScript, JSON
+- Minimum response size: 1KB
+- Reduces bandwidth by ~70%
+
+### HTTP/2 Support
+
+Enabled for faster page loads:
+- Multiplexing multiple requests
+- Server push capability
+- Header compression
+
+### Build Optimization
+
+**Layer Caching:**
+- POM file copied first
+- Dependencies cached between builds
+- Only source changes trigger full rebuild
+
+**Image Size:**
+- Multi-stage build reduces final image
+- Alpine Linux base (~50MB vs ~200MB)
+- Only JRE included (no JDK)
 
 ---
 
 ## Security Best Practices
 
-### 1. Secure Database Connections
+### 1. SSL/TLS Encryption
 
-The application uses SSL for Railway MySQL connections:
+**Railway provides:**
+- Automatic HTTPS for all domains
+- TLS 1.3 support
+- Free SSL certificates
+
+**Application enforces:**
+- SSL for database connections
+- Secure cookie settings
+- HTTPS redirect (configurable)
+
+### 2. Password Security
+
+**BCrypt hashing:**
+- Strength: 10 rounds
+- Salt automatically generated
+- Passwords never stored in plain text
 
 ```java
-String jdbcUrl = String.format(
-    "jdbc:mysql://%s:%d/%s?useSSL=true&requireSSL=true&serverTimezone=UTC",
-    host, port, database
-);
-```
-
-### 2. Password Hashing
-
-All passwords are hashed using BCrypt with strength 10:
-
-```properties
-spring.security.password.bcrypt.rounds=10
+// Configured in SecurityConfig.java
+@Bean
+public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder(10);
+}
 ```
 
 ### 3. Environment Variables
 
-Never commit sensitive data to Git. Use Railway environment variables:
+**Never commit sensitive data:**
+- Use Railway environment variables
+- Keep `.env` files out of Git
+- Use strong admin passwords
 
 ```bash
-railway variables set ADMIN_PASSWORD="your-secure-password"
+# Good password examples
+railway variables set ADMIN_PASSWORD="MySecure!Pass123"
+
+# Bad password examples (DON'T USE)
+ADMIN_PASSWORD=password
+ADMIN_PASSWORD=admin123
 ```
 
 ### 4. Role-Based Access Control
 
-The application enforces role-based access:
-
+**Access levels:**
 - `/admin/**` → Requires `ROLE_ADMIN`
-- Protected resources → Require `ROLE_USER` or `ROLE_ADMIN`
-- Public routes → `/`, `/login`, `/register`, static resources
+- Protected routes → Require `ROLE_USER`
+- Public routes → `/`, `/login`, `/register`
+
+### 5. Database Security
+
+**Connection security:**
+- SSL/TLS encryption required
+- Credentials from environment only
+- Connection pool prevents exhaustion
+- Prepared statements prevent SQL injection
+
+### 6. Security Headers
+
+Spring Security automatically adds:
+- `X-Content-Type-Options: nosniff`
+- `X-Frame-Options: DENY`
+- `X-XSS-Protection: 1; mode=block`
+- `Strict-Transport-Security` (HSTS)
 
 ---
 
-## Scaling & Production Considerations
+## Scaling & Production
 
 ### Horizontal Scaling
 
-Railway supports horizontal scaling for increased traffic:
+Railway supports multiple replicas:
 
+**Using Railway Dashboard:**
+1. Select your service
+2. Go to "Settings"
+3. Update "Replicas" count
+
+**Using Railway CLI:**
 ```bash
-railway scale --replicas 3
+# Scale to 3 replicas
+railway service scale --replicas 3
 ```
 
-**Note:** Ensure session management is stateless or uses shared storage.
+**Note:** Ensure your application is stateless or uses shared session storage.
 
-### Database Connection Pool
+### Vertical Scaling
 
-Current settings support ~10 concurrent database connections per instance. Adjust for your needs:
+Upgrade Railway plan for more resources:
+- Hobby: 512MB RAM, 1 vCPU
+- Pro: Up to 8GB RAM, 8 vCPU
+- Custom enterprise plans available
 
-```java
-config.setMaximumPoolSize(20); // Increase for high traffic
-config.setMinimumIdle(5); // Maintain more idle connections
-```
+### Database Backups
 
-### Monitoring
+Railway MySQL includes automatic backups:
 
-Use Railway's built-in monitoring:
+**Configure backups:**
+1. Select MySQL service
+2. Go to "Settings" → "Backups"
+3. Set backup frequency
+4. Set retention period
 
-- CPU usage
-- Memory usage
-- Network traffic
-- Request logs
+**Restore backup:**
+1. Select backup from list
+2. Click "Restore"
+3. Confirm restoration
 
-### Backups
+### Monitoring & Alerts
 
-Railway MySQL plugin includes automatic backups. Configure retention:
-
-1. Navigate to MySQL service
-2. Click "Settings" → "Backups"
-3. Configure backup schedule and retention
+**Set up alerts in Railway:**
+1. Go to project settings
+2. Configure notification webhooks
+3. Set alert thresholds:
+   - High CPU usage
+   - High memory usage
+   - Failed deployments
+   - Health check failures
 
 ---
 
@@ -482,18 +775,18 @@ Railway MySQL plugin includes automatic backups. Configure retention:
 
 ### Prerequisites
 
-- Java 17
-- Maven 3.9+
-- MySQL 8.0+ (or use Railway development database)
+- Java 17 or higher
+- Maven 3.9 or higher
+- MySQL 8.0+ (or use Railway dev database)
 
-### Setup
+### Setup with Local MySQL
 
 ```bash
 # Clone repository
 git clone https://github.com/martinisapp/martinis.git
 cd martinis
 
-# Configure local database
+# Configure environment
 export DATABASE_URL="jdbc:mysql://localhost:3306/martinis?useSSL=false&serverTimezone=UTC"
 export ADMIN_USERNAME="admin"
 export ADMIN_PASSWORD="password"
@@ -501,16 +794,36 @@ export ADMIN_PASSWORD="password"
 # Build and run
 mvn clean package
 java -jar target/martinis.jar
+
+# Access application
+open http://localhost:8080
 ```
 
-### Using Railway Development Database
+### Setup with Railway Database
 
 ```bash
 # Link to Railway project
 railway link
 
 # Run with Railway environment
+railway run mvn spring-boot:run
+
+# Or run JAR with Railway environment
+mvn clean package
 railway run java -jar target/martinis.jar
+```
+
+### Development with Docker Compose
+
+```bash
+# Start MySQL and application
+docker-compose up
+
+# Stop services
+docker-compose down
+
+# View logs
+docker-compose logs -f
 ```
 
 ---
@@ -519,34 +832,43 @@ railway run java -jar target/martinis.jar
 
 ### Documentation
 
-- [Railway Documentation](https://docs.railway.app/)
-- [Spring Boot Documentation](https://docs.spring.io/spring-boot/docs/3.2.0/reference/html/)
-- [HikariCP Documentation](https://github.com/brettwooldridge/HikariCP)
+- **Railway Docs:** [docs.railway.app](https://docs.railway.app)
+- **Spring Boot Docs:** [spring.io/projects/spring-boot](https://spring.io/projects/spring-boot)
+- **HikariCP Docs:** [github.com/brettwooldridge/HikariCP](https://github.com/brettwooldridge/HikariCP)
 
-### GitHub Repository
+### Community Support
 
-- Repository: [martinisapp/martinis](https://github.com/martinisapp/martinis)
-- Issues: [Report Issues](https://github.com/martinisapp/martinis/issues)
+- **Railway Discord:** [discord.gg/railway](https://discord.gg/railway)
+- **Railway Help Center:** [help.railway.app](https://help.railway.app)
+- **GitHub Issues:** [github.com/martinisapp/martinis/issues](https://github.com/martinisapp/martinis/issues)
 
-### Railway Support
+### Getting Help
 
-- [Railway Discord](https://discord.gg/railway)
-- [Railway Help Center](https://help.railway.app/)
+1. Check this guide first
+2. Review Railway documentation
+3. Check application logs
+4. Search GitHub issues
+5. Ask in Railway Discord
+6. Create GitHub issue
 
 ---
 
 ## Changelog
 
-### Version 2.0 - Complete Railway Rewrite (October 2025)
+### 2025-01-06 - Complete Railway Rewrite
 
-- Complete rewrite of all Railway configuration files
-- Upgraded to Spring Boot 3.2.0
-- Optimized JVM settings for Railway containers
-- Enhanced database connection handling with SSL support
-- Improved logging and monitoring capabilities
-- Added PostgreSQL support alongside MySQL
-- Comprehensive documentation rewrite
-- Performance optimizations for production workloads
+- ✅ Rewritten Dockerfile with Alpine Linux for smaller image
+- ✅ Created nixpacks.toml for alternative build method
+- ✅ Updated railway.json with optimized settings
+- ✅ Cleaned up .railwayignore for faster deployments
+- ✅ Simplified .env.railway template
+- ✅ Comprehensive RAILWAY.md documentation
+- ✅ Fixed Spring Boot version in configuration
+- ✅ Optimized JVM settings for Railway containers
+- ✅ Enhanced security with non-root user
+- ✅ Improved health check configuration
+- ✅ Updated connection pool settings
+- ✅ Better layer caching for faster builds
 
 ---
 
@@ -556,4 +878,4 @@ This application is provided as-is for deployment on Railway.com. See the main r
 
 ---
 
-**Deploy with confidence!** This complete rewrite provides production-ready configuration for Railway deployment.
+**🚀 Ready to deploy!** This complete rewrite provides production-ready configuration for Railway.com deployment.
