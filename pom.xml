@@ -8,7 +8,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
+        <version>3.3.3</version>
         <relativePath/>
     </parent>
 
@@ -92,7 +92,7 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>5.2.5</version>
+            <version>5.3.0</version>
         </dependency>
 
         <!-- Commons FileUpload for multipart file handling -->
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.15.1</version>
+            <version>2.16.1</version>
         </dependency>
 
         <!-- Tuples -->
