@@ -36,7 +36,8 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorize -> authorize
                 .requestMatchers("/favicon.ico", "/dbcheck", "/css/**", "/js/**",
-                                "/fonts/**", "/", "/login", "/register").permitAll()
+                                "/fonts/**", "/", "/login", "/register",
+                                "/actuator/health").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().hasRole("USER")
             )
