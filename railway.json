@@ -12,8 +12,8 @@
   "deploy": {
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
-    "healthcheckPath": "/",
-    "healthcheckTimeout": 100,
+    "healthcheckPath": "/actuator/health",
+    "healthcheckTimeout": 5000,
     "sleepApplication": false,
     "numReplicas": 1
   }
