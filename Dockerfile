@@ -1,84 +1,82 @@
 # ========================================
-# Multi-Stage Build for Martinis Application
+# Optimized Multi-Stage Dockerfile for Railway.com
+# ========================================
+# This Dockerfile is specifically optimized for Railway deployment:
+# - Fast builds with layer caching
+# - Minimal runtime image size
+# - Security best practices
+# - Production-ready JVM settings
 # ========================================
 
 # ========================================
 # Stage 1: Build Stage
 # ========================================
-FROM maven:3.9-eclipse-temurin-17 AS builder
+FROM maven:3.9-eclipse-temurin-17-alpine AS builder
 
 # Set working directory
-WORKDIR /app
+WORKDIR /build
 
-# Copy POM file first for dependency caching
+# Copy POM file first for better layer caching
+# Dependencies only rebuild if pom.xml changes
 COPY pom.xml .
 
-# Download dependencies (cached layer if pom.xml doesn't change)
+# Download dependencies (cached layer)
 RUN mvn dependency:go-offline -B
 
 # Copy source code
 COPY src ./src
 
 # Build the application
+# -DskipTests: Skip tests for faster builds (run tests in CI/CD)
+# -B: Batch mode for cleaner logs
 RUN mvn clean package -DskipTests -B
 
-# Verify the JAR was created successfully
-RUN ls -la /app/target/ && \
-    if [ ! -f /app/target/martinis.jar ]; then \
-        echo "ERROR: JAR file was not created by Maven build!" && exit 1; \
-    fi && \
-    echo "SUCCESS: JAR file created at /app/target/martinis.jar"
+# Verify JAR was created
+RUN test -f /build/target/martinis.jar || (echo "ERROR: JAR not created" && exit 1)
 
 # ========================================
 # Stage 2: Runtime Stage
 # ========================================
-FROM eclipse-temurin:17-jre-jammy
+FROM eclipse-temurin:17-jre-alpine
 
-# Install curl for healthchecks
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends curl && \
-    rm -rf /var/lib/apt/lists/*
+# Install curl for health checks (Railway uses this)
+RUN apk add --no-cache curl
 
-# Create app user for security
-RUN groupadd -r appuser && useradd -r -g appuser appuser
+# Create non-root user for security
+RUN addgroup -g 1000 appuser && \
+    adduser -D -u 1000 -G appuser appuser
 
 # Set working directory
 WORKDIR /app
 
 # Copy JAR from builder stage
-COPY --from=builder /app/target/martinis.jar ./martinis.jar
-
-# Verify the JAR was copied successfully
-RUN ls -la /app/ && \
-    if [ ! -f /app/martinis.jar ]; then \
-        echo "ERROR: JAR file was not copied to runtime stage!" && exit 1; \
-    fi && \
-    echo "SUCCESS: JAR file is available at /app/martinis.jar"
-
-# Change ownership to appuser
-RUN chown -R appuser:appuser /app
+COPY --from=builder --chown=appuser:appuser /build/target/martinis.jar ./app.jar
 
 # Switch to non-root user
 USER appuser
 
-# Expose port
+# Expose port (Railway will override with $PORT)
 EXPOSE 8080
 
-# JVM settings optimized for containers
-ENV JAVA_OPTS="-Xmx768m -Xms256m \
-    -XX:+UseContainerSupport \
-    -XX:MaxRAMPercentage=80.0 \
+# JVM settings optimized for Railway containers
+# - UseContainerSupport: Respect container memory limits
+# - MaxRAMPercentage: Use up to 75% of container memory
+# - G1GC: Low-latency garbage collector
+# - ExitOnOutOfMemoryError: Restart on OOM (Railway handles restart)
+ENV JAVA_OPTS="-XX:+UseContainerSupport \
+    -XX:MaxRAMPercentage=75.0 \
+    -XX:InitialRAMPercentage=50.0 \
     -XX:+UseG1GC \
     -XX:MaxGCPauseMillis=100 \
     -XX:+ParallelRefProcEnabled \
     -XX:+UseStringDeduplication \
+    -XX:+ExitOnOutOfMemoryError \
     -Djava.security.egd=file:/dev/./urandom"
 
-# Health check
+# Health check for Railway
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:${PORT:-8080}/actuator/health || exit 1
 
-# Run the application
-# Note: Using CMD with absolute path to ensure JAR can be found
-# CMD is preferred over ENTRYPOINT for Railway compatibility
-CMD ["sh", "-c", "java $JAVA_OPTS -jar /app/martinis.jar"]
+# Start the application
+# Use shell form to allow environment variable expansion
+CMD java $JAVA_OPTS -jar app.jar

@@ -13,7 +13,8 @@
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
     "healthcheckPath": "/actuator/health",
-    "healthcheckTimeout": 5000,
+    "healthcheckTimeout": 10000,
+    "startCommand": null,
     "sleepApplication": false,
     "numReplicas": 1
   }

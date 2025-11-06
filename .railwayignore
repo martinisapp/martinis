@@ -1,19 +1,23 @@
+# ========================================
 # Railway Ignore File
-# Files and directories to exclude from Railway deployments
+# ========================================
+# Files and directories excluded from Railway deployments
+# This reduces upload time and keeps deployments clean
+# ========================================
 
-# Documentation
+# Documentation (except Railway guide)
 *.md
 !RAILWAY.md
 docs/
 documentation/
 
-# Development files
+# Git and GitHub
 .git/
 .github/
 .gitignore
 .gitattributes
 
-# IDE files
+# IDE and Editor files
 .idea/
 .vscode/
 *.iml
@@ -22,11 +26,14 @@ documentation/
 .project
 .classpath
 .settings/
+*.swp
+*~
 
-# Build output (will be rebuilt in Docker on Railway)
+# Build artifacts (rebuilt in Railway)
 target/
+*.class
 
-# Test files
+# Test files (not needed in production)
 src/test/
 **/test/
 
@@ -39,23 +46,24 @@ tmp/
 temp/
 *.tmp
 *.bak
-*.swp
-*~
 
 # OS files
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# SQL files (schema is auto-loaded from resources)
+# SQL files (schema loaded from resources)
 sql/
 *.sql
 !src/main/resources/schema.sql
 !src/main/resources/data.sql
 
-# Local environment files
+# Local environment files (use Railway variables instead)
 .env
 .env.local
+.env.development
+.env.test
+.env.production
 .env.*.local
 
 # Maven wrapper (Railway provides Maven)
@@ -65,6 +73,19 @@ mvnw.cmd
 
 # Other deployment platforms
 .heroku/
-# Note: Dockerfile is NOT ignored - Railway needs it for DOCKERFILE builder
-# Note: .dockerignore is NOT ignored - Docker needs it during build
 docker-compose.yml
+docker-compose.*.yml
+
+# Node modules (if any)
+node_modules/
+
+# Coverage reports
+coverage/
+*.coverage
+
+# Security and credentials (should never be in repo)
+*.key
+*.pem
+*.p12
+credentials.json
+secrets.json

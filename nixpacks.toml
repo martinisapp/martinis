@@ -1,0 +1,39 @@
+# ========================================
+# Nixpacks Configuration for Railway.com
+# ========================================
+# Alternative to Dockerfile - Railway's native build system
+# Nixpacks provides automatic detection and optimization
+# To use this instead of Docker, update railway.json:
+#   "builder": "NIXPACKS"
+# ========================================
+
+# ========================================
+# Setup Phase
+# ========================================
+[phases.setup]
+# Install required packages
+nixPkgs = ["maven_3_9", "jdk17_headless"]
+
+# ========================================
+# Build Phase
+# ========================================
+[phases.build]
+# Build commands to compile the application
+cmds = [
+    "mvn clean package -DskipTests -B"
+]
+
+# ========================================
+# Start Phase
+# ========================================
+[start]
+# Command to run the application
+# Railway automatically provides $PORT environment variable
+cmd = "java -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -Djava.security.egd=file:/dev/./urandom -jar target/martinis.jar"
+
+# ========================================
+# Environment Variables
+# ========================================
+[variables]
+# These are default values that can be overridden in Railway dashboard
+MAVEN_OPTS = "-Xmx512m"
