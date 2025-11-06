@@ -10,6 +10,7 @@
     ]
   },
   "deploy": {
+    "startCommand": "java $JAVA_OPTS -jar /app/martinis.jar",
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
     "healthcheckPath": "/actuator/health",
