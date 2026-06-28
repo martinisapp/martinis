@@ -449,3 +449,6 @@ $RECYCLE.BIN/
 .env
 .env.local
 .env.*.local
+
+# Devin local config (personal API keys / credentials)
+.devin/config.local.json
