@@ -11,6 +11,7 @@ import com.chriswatnee.martinis.service.ProjectService;
 import com.chriswatnee.martinis.viewmodel.person.createperson.CreatePersonViewModel;
 import com.chriswatnee.martinis.viewmodel.person.editperson.EditPersonViewModel;
 import com.chriswatnee.martinis.viewmodel.person.personprofile.PersonProfileViewModel;
+import com.chriswatnee.martinis.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -203,22 +204,38 @@ class PersonWebServiceImplTest {
     }
 
     @Test
-    void saveCreatePersonCommandModelWithNullActorAndProject() {
+    void saveCreatePersonCommandModelWithNullActorSkipsActorLookup() {
         CreatePersonCommandModel cmd = new CreatePersonCommandModel();
         cmd.setName("Extra");
         cmd.setActorId(null);
-        cmd.setProjectId(null);
+        cmd.setProjectId(20);
+
+        Project project = new Project();
+        project.setId(20);
 
         Person saved = new Person();
         saved.setId(1);
 
-        when(actorService.read(null)).thenReturn(null);
-        when(projectService.read(null)).thenReturn(null);
+        when(projectService.read(20)).thenReturn(project);
         when(personService.create(any(Person.class))).thenReturn(saved);
 
         Person result = webService.saveCreatePersonCommandModel(cmd);
 
         assertNotNull(result);
+        verify(actorService, never()).read(any());
+    }
+
+    @Test
+    void saveCreatePersonCommandModelWithNullProjectThrows() {
+        CreatePersonCommandModel cmd = new CreatePersonCommandModel();
+        cmd.setName("Extra");
+        cmd.setActorId(null);
+        cmd.setProjectId(null);
+
+        when(projectService.read(null)).thenReturn(null);
+
+        assertThrows(ResourceNotFoundException.class,
+                () -> webService.saveCreatePersonCommandModel(cmd));
     }
 
     @Test
@@ -247,6 +264,32 @@ class PersonWebServiceImplTest {
 
         assertEquals("Updated", result.getName());
         assertEquals("Updated Full", result.getFullName());
+        verify(personService).update(existing);
+    }
+
+    @Test
+    void saveEditPersonCommandModelWithNullActorSkipsActorLookup() {
+        EditPersonCommandModel cmd = new EditPersonCommandModel();
+        cmd.setId(1);
+        cmd.setName("Updated");
+        cmd.setFullName("Updated Full");
+        cmd.setActorId(null);
+        cmd.setProjectId(20);
+
+        Person existing = new Person();
+        existing.setId(1);
+
+        Project project = new Project();
+        project.setId(20);
+
+        when(personService.read(1)).thenReturn(existing);
+        when(projectService.read(20)).thenReturn(project);
+
+        Person result = webService.saveEditPersonCommandModel(cmd);
+
+        assertEquals("Updated", result.getName());
+        assertNull(result.getActor());
+        verify(actorService, never()).read(any());
         verify(personService).update(existing);
     }
 
