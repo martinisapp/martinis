@@ -22,11 +22,18 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Database configuration optimized for Railway.com deployment
+ * Database configuration optimized for Railway.com deployment.
+ *
  * Supports multiple database URL formats:
- * - Railway format: mysql://user:password@host:port/database
+ * - Railway format: MYSQL_URL or DATABASE_URL (e.g. ******host:port/db)
  * - JDBC format: jdbc:mysql://host:port/database
- * - PostgreSQL format: postgres://user:password@host:port/database (converts to JDBC)
+ * - PostgreSQL Railway format: ******host:port/db
+ *
+ * Environment variable resolution order:
+ * 1. DATABASE_URL  - standard JDBC or Railway URL
+ * 2. MYSQL_URL     - Railway MySQL service primary variable (same format)
+ * 3. MYSQLHOST + MYSQLPORT + MYSQLDATABASE + MYSQLUSER + MYSQLPASSWORD - individual Railway vars
+ * 4. Localhost fallback for local development
  */
 @Configuration
 @EnableTransactionManagement
@@ -34,8 +41,26 @@ public class DatabaseConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(DatabaseConfig.class);
 
-    @Value("${DATABASE_URL:jdbc:mysql://localhost:3306/martinis?useSSL=false&serverTimezone=UTC}")
+    @Value("${DATABASE_URL:#{null}}")
     private String databaseUrl;
+
+    @Value("${MYSQL_URL:#{null}}")
+    private String mysqlUrl;
+
+    @Value("${MYSQLHOST:#{null}}")
+    private String mysqlHost;
+
+    @Value("${MYSQLPORT:3306}")
+    private int mysqlPort;
+
+    @Value("${MYSQLDATABASE:railway}")
+    private String mysqlDatabase;
+
+    @Value("${MYSQLUSER:#{null}}")
+    private String mysqlUser;
+
+    @Value("${MYSQLPASSWORD:#{null}}")
+    private String mysqlPassword;
 
     @Value("${SPRING_DATASOURCE_USERNAME:#{null}}")
     private String username;
@@ -50,7 +75,8 @@ public class DatabaseConfig {
         HikariConfig config = new HikariConfig();
 
         try {
-            parseDatabaseUrl(config, databaseUrl);
+            String resolvedUrl = resolveUrl();
+            parseDatabaseUrl(config, resolvedUrl);
 
             // If username/password are provided via environment variables, use them
             // This is useful for Docker Compose where DATABASE_URL doesn't contain credentials
@@ -63,7 +89,7 @@ public class DatabaseConfig {
                 logger.info("Using password from SPRING_DATASOURCE_PASSWORD environment variable");
             }
         } catch (Exception e) {
-            logger.error("Failed to parse DATABASE_URL: {}", maskPassword(databaseUrl), e);
+            logger.error("Failed to configure database connection", e);
             throw new RuntimeException("Failed to configure database connection", e);
         }
 
@@ -99,24 +125,44 @@ public class DatabaseConfig {
     }
 
     /**
+     * Resolve the database URL from environment variables in priority order:
+     * 1. DATABASE_URL
+     * 2. MYSQL_URL (Railway MySQL service primary variable)
+     * 3. Build from individual MYSQLHOST/MYSQLPORT/MYSQLDATABASE/MYSQLUSER/MYSQLPASSWORD
+     * 4. Localhost fallback
+     */
+    private String resolveUrl() {
+        if (databaseUrl != null && !databaseUrl.isBlank()) {
+            logger.info("Using DATABASE_URL environment variable");
+            return databaseUrl;
+        }
+        if (mysqlUrl != null && !mysqlUrl.isBlank()) {
+            logger.info("Using MYSQL_URL environment variable");
+            return mysqlUrl;
+        }
+        if (mysqlHost != null && !mysqlHost.isBlank()) {
+            logger.info("Building database URL from MYSQLHOST/MYSQLPORT/MYSQLDATABASE variables");
+            String user = mysqlUser != null ? mysqlUser : "root";
+            String pass = mysqlPassword != null ? mysqlPassword : "";
+            return "mysql://" + user + ":" + pass + "@" + mysqlHost + ":" + mysqlPort + "/" + mysqlDatabase;
+        }
+        logger.warn("No database URL environment variable found; falling back to localhost default");
+        return "jdbc:mysql://localhost:3306/martinis?useSSL=false&serverTimezone=UTC";
+    }
+
+    /**
      * Parse database URL in various formats and configure HikariCP
      */
     private void parseDatabaseUrl(HikariConfig config, String url) throws URISyntaxException {
-        logger.debug("Parsing DATABASE_URL: {}", maskPassword(url));
+        logger.debug("Parsing database URL: {}", maskPassword(url));
 
-        // Railway MySQL format: mysql://user:password@host:port/database
         if (url.startsWith("mysql://") && !url.startsWith("jdbc:")) {
             parseRailwayMySqlUrl(config, url);
-        }
-        // Railway PostgreSQL format: postgres://user:password@host:port/database
-        else if (url.startsWith("postgres://") && !url.startsWith("jdbc:")) {
+        } else if (url.startsWith("postgres://") && !url.startsWith("jdbc:")) {
             parseRailwayPostgresUrl(config, url);
-        }
-        // Standard JDBC format
-        else if (url.startsWith("jdbc:")) {
+        } else if (url.startsWith("jdbc:")) {
             parseJdbcUrl(config, url);
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Unsupported database URL format: " + maskPassword(url));
         }
     }
