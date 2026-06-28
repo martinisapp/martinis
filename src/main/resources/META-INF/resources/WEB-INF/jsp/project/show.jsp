@@ -25,7 +25,7 @@
             </nav>
             <hgroup>
                 <h1>${viewModel.title}</h1>
-                <div><a href="${pageContext.request.contextPath}/project/edit?id=${viewModel.id}" role="button" class="secondary outline">edit</a> <form action="${pageContext.request.contextPath}/project/delete" method="post" style="display:inline;"><input type="hidden" name="id" value="${viewModel.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline">delete</button></form></div>
+                <div><a href="${pageContext.request.contextPath}/project/edit?id=${viewModel.id}" role="button" class="secondary outline">edit</a> <form action="${pageContext.request.contextPath}/project/delete" method="post" style="display:inline;"><input type="hidden" name="id" value="${viewModel.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline" style="width:auto;">delete</button></form></div>
             </hgroup>
             <div class="grid">
                 <div>
