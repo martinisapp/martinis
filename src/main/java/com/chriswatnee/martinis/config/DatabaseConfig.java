@@ -15,8 +15,11 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Database configuration optimized for Railway.com deployment
@@ -212,7 +215,7 @@ public class DatabaseConfig {
 
         if (rawQuery != null && !rawQuery.isBlank()) {
             for (String pair : rawQuery.split("&")) {
-                if (pair == null || pair.isBlank()) {
+                if (pair.isBlank()) {
                     continue;
                 }
 
@@ -223,9 +226,10 @@ public class DatabaseConfig {
             }
         }
 
+        Set<String> normalizedKeys = new HashSet<>();
+        params.keySet().forEach(key -> normalizedKeys.add(key.toLowerCase(Locale.ROOT)));
         defaultParams.forEach((key, value) -> {
-            boolean present = params.keySet().stream().anyMatch(existingKey -> existingKey.equalsIgnoreCase(key));
-            if (!present) {
+            if (normalizedKeys.add(key.toLowerCase(Locale.ROOT))) {
                 params.put(key, value);
             }
         });
