@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 /**
@@ -28,7 +28,7 @@ public class DatabaseInitializer implements ApplicationListener<ContextRefreshed
     private JdbcTemplate jdbcTemplate;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -54,7 +54,7 @@ public class DatabaseInitializer implements ApplicationListener<ContextRefreshed
                 Long.class, username);
 
             if (count != null && count > 0) {
-                logger.info("Admin user '{}' already exists. Skipping creation.", username);
+                logger.info("Admin user already exists. Skipping creation.");
                 return;
             }
 
@@ -84,11 +84,10 @@ public class DatabaseInitializer implements ApplicationListener<ContextRefreshed
                 username, "ROLE_USER"
             );
 
-            logger.info("Admin user '{}' created successfully with ROLE_ADMIN and ROLE_USER authorities.", username);
-            logger.warn("SECURITY WARNING: Remove ADMIN_PASSWORD from environment variables after first deployment!");
+            logger.info("Admin user created successfully with ROLE_ADMIN and ROLE_USER authorities.");
 
         } catch (Exception e) {
-            logger.error("Failed to create admin user '{}'", username, e);
+            logger.error("Failed to create admin user", e);
         }
     }
 }

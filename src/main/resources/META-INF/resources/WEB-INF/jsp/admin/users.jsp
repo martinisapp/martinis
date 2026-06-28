@@ -19,13 +19,13 @@
 
             <c:if test="${not empty successMessage}">
                 <article style="background-color: var(--pico-ins-color);">
-                    ${successMessage}
+                    <c:out value="${successMessage}" />
                 </article>
             </c:if>
 
             <c:if test="${not empty errorMessage}">
                 <article style="background-color: var(--pico-del-color);">
-                    ${errorMessage}
+                    <c:out value="${errorMessage}" />
                 </article>
             </c:if>
 
@@ -50,18 +50,18 @@
                                 <tbody>
                                     <c:forEach var="user" items="${pendingUsers}">
                                         <tr>
-                                            <td>${user.username}</td>
-                                            <td>${user.first_name}</td>
-                                            <td>${user.last_name}</td>
+                                            <td><c:out value="${user.username}" /></td>
+                                            <td><c:out value="${user.first_name}" /></td>
+                                            <td><c:out value="${user.last_name}" /></td>
                                             <td>
                                                 <form method="POST" action="${pageContext.request.contextPath}/admin/users/approve" style="display: inline;">
                                                     <sec:csrfInput />
-                                                    <input type="hidden" name="username" value="${user.username}" />
+                                                    <input type="hidden" name="username" value="<c:out value='${user.username}' />" />
                                                     <button type="submit" class="contrast">Approve</button>
                                                 </form>
                                                 <form method="POST" action="${pageContext.request.contextPath}/admin/users/reject" style="display: inline;">
                                                     <sec:csrfInput />
-                                                    <input type="hidden" name="username" value="${user.username}" />
+                                                    <input type="hidden" name="username" value="<c:out value='${user.username}' />" />
                                                     <button type="submit" class="secondary" onclick="return confirm('Are you sure you want to reject and delete this user?');">Reject</button>
                                                 </form>
                                             </td>

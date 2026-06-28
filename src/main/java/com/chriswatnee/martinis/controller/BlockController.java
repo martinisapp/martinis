@@ -118,7 +118,7 @@ public class BlockController {
             blockWebService.reorderBlocks(blockIds);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -161,7 +161,7 @@ public class BlockController {
             blockWebService.saveEditBlockCommandModel(commandModel);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -270,7 +270,7 @@ public class BlockController {
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error creating inline block for scene {}", commandModel.getSceneId(), e);
-            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -289,7 +289,7 @@ public class BlockController {
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (Exception e) {
             logger.error("Error creating block below block {}", commandModel.getId(), e);
-            return new ResponseEntity<>("Error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }
