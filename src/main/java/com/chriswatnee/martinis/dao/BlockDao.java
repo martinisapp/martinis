@@ -24,6 +24,7 @@ public interface BlockDao {
     public void moveUp(Block block);
     public void moveDown(Block block);
     public void updateOrder(Integer blockId, Integer newOrder);
+    public void toggleBookmark(Integer id, boolean newBookmarked);
     public List<Block> list();
     public List<Block> getBlocksByScene(Scene scene);
 

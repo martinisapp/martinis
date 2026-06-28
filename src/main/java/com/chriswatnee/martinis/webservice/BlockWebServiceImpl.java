@@ -334,6 +334,19 @@ public class BlockWebServiceImpl implements BlockWebService {
         if (block == null) {
             throw new ResourceNotFoundException("Block", id);
         }
+        if (block.getPerson() != null && block.getPerson().getId() != null) {
+            Person person = personService.read(block.getPerson().getId());
+            block.setPerson(person);
+        }
+        return block;
+    }
+
+    @Override
+    public Block toggleBookmark(Integer id) {
+        Block block = blockService.toggleBookmark(id);
+        if (block == null) {
+            throw new ResourceNotFoundException("Block", id);
+        }
         return block;
     }
 

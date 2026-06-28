@@ -37,5 +37,6 @@ public interface BlockWebService {
 
     public List<Person> getPersonsForScene(Integer sceneId);
     public Block getBlock(Integer id);
+    public Block toggleBookmark(Integer id);
 
 }
