@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest(properties = {
-    "DATABASE_URL=jdbc:mysql://localhost:3306/martinis?useSSL=false&serverTimezone=UTC",
     "spring.sql.init.mode=never",
     "management.health.db.enabled=false"
 })
