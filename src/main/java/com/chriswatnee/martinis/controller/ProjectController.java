@@ -54,7 +54,7 @@ public class ProjectController {
         return "project/show";
     }
     
-    @RequestMapping(value = "/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String delete(@RequestParam Integer id) {
         
         projectWebService.deleteProject(id);

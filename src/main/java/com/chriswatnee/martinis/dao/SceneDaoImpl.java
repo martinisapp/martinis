@@ -11,9 +11,11 @@ import jakarta.inject.Inject;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 public class SceneDaoImpl extends AbstractBaseDao<Scene> implements SceneDao {
 
     private static final String CREATE_QUERY = "INSERT INTO scene (`order`, `name`, project_id) VALUES (?,?,?)";

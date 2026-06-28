@@ -34,10 +34,10 @@
                     <strong>Block deleted.</strong>
                     <c:choose>
                         <c:when test="${undoCount > 1}">
-                            <a href="${pageContext.request.contextPath}/block/undo" role="button" class="contrast">Undo (${undoCount} available)</a>
+                            <form action="${pageContext.request.contextPath}/block/undo" method="post" style="display:inline;"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="contrast">Undo (${undoCount} available)</button></form>
                         </c:when>
                         <c:otherwise>
-                            <a href="${pageContext.request.contextPath}/block/undo" role="button" class="contrast">Undo</a>
+                            <form action="${pageContext.request.contextPath}/block/undo" method="post" style="display:inline;"><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="contrast">Undo</button></form>
                         </c:otherwise>
                     </c:choose>
                 </article>
@@ -51,7 +51,7 @@
             </nav>
             <hgroup>
                 <h1 style="text-transform: uppercase;">${viewModel.name}</h1>
-                <p><a href="${pageContext.request.contextPath}/scene/edit?id=${viewModel.id}" role="button" class="secondary outline">edit</a> <a href="${pageContext.request.contextPath}/scene/delete?id=${viewModel.id}" role="button" class="secondary outline">delete</a></p>
+                <p><a href="${pageContext.request.contextPath}/scene/edit?id=${viewModel.id}" role="button" class="secondary outline">edit</a> <form action="${pageContext.request.contextPath}/scene/delete" method="post" style="display:inline;"><input type="hidden" name="id" value="${viewModel.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline">delete</button></form></p>
             </hgroup>
             <div id="blocks-container">
                 <div id="blocks-list">
@@ -83,12 +83,12 @@
                         </div>
                         <div class="block-column block-column-actions">
                             <div class="nowrap">
-                                <a href="${pageContext.request.contextPath}/block/delete?id=${block.id}" role="button" class="secondary outline">delete</a>
+                                <form action="${pageContext.request.contextPath}/block/delete" method="post" style="display:inline;"><input type="hidden" name="id" value="${block.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline">delete</button></form>
                                 <c:if test="${not loop.last}">
-                                    <a href="${pageContext.request.contextPath}/block/moveDown?id=${block.id}" role="button" class="secondary outline move-down">↓</a>
+                                    <form action="${pageContext.request.contextPath}/block/moveDown" method="post" style="display:inline;"><input type="hidden" name="id" value="${block.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline move-down">↓</button></form>
                                 </c:if>
                                 <c:if test="${not loop.first}">
-                                    <a href="${pageContext.request.contextPath}/block/moveUp?id=${block.id}" role="button" class="secondary outline move-up">↑</a>
+                                    <form action="${pageContext.request.contextPath}/block/moveUp" method="post" style="display:inline;"><input type="hidden" name="id" value="${block.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline move-up">↑</button></form>
                                 </c:if>
                                 <a hx-get="${pageContext.request.contextPath}/block/createBelowForm?id=${block.id}"
                                    hx-target="closest .block-row"

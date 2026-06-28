@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -20,7 +21,7 @@
                 <li class="active">${viewModel.first} ${viewModel.last}</li>
             </ul></nav>
             <hgroup>
-                <h1>${viewModel.first} ${viewModel.last} <small><a href="${pageContext.request.contextPath}/actor/edit?id=${viewModel.id}" role="button" class="secondary outline" role="button">edit</a> <a href="${pageContext.request.contextPath}/actor/delete?id=${viewModel.id}" role="button" class="secondary outline" role="button">delete</a></small></h1>
+                <h1>${viewModel.first} ${viewModel.last} <small><a href="${pageContext.request.contextPath}/actor/edit?id=${viewModel.id}" role="button" class="secondary outline">edit</a> <form action="${pageContext.request.contextPath}/actor/delete" method="post" style="display:inline;"><input type="hidden" name="id" value="${viewModel.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline">delete</button></form></small></h1>
             </div>
             <p>Phone: ${viewModel.phone}</p>
             <p>Email: ${viewModel.email}</p>

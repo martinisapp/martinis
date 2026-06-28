@@ -27,11 +27,13 @@ import com.chriswatnee.martinis.webservice.support.ViewModelMapper;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.inject.Inject;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author chris
  */
+@Service
 public class SceneWebServiceImpl implements SceneWebService {
 
     SceneService sceneService;
@@ -188,10 +190,7 @@ public class SceneWebServiceImpl implements SceneWebService {
         
         // Put stuff
         scene.setName(createSceneCommandModel.getName());
-
-        if (project != null) {
-            scene.setProject(project);
-        }
+        scene.setProject(project);
 
         // Save stuff
         scene = sceneService.create(scene);
