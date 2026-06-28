@@ -20,9 +20,6 @@ Railway will automatically:
 
 For detailed step-by-step instructions, see the [README.md](./README.md#quick-deploy-to-railway).
 
-<!-- One-click deploy template coming soon -->
-<!-- [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/YOUR-TEMPLATE-CODE) -->
-
 ## Manual Setup (Alternative Method)
 
 If you prefer to set up MySQL manually or are working with an existing Railway project:

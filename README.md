@@ -27,49 +27,23 @@ A modern Spring Boot 3.2.0 web application for managing screenplay projects, sce
 
 ## Quick Deploy to Railway
 
-### Option 1: Deploy from GitHub (Recommended)
+Fastest path (no CLI required):
 
-The easiest way to deploy is directly from this GitHub repository:
+1. In [Railway](https://railway.com), click **New Project** → **Deploy from GitHub repo**.
+2. Select **`martinisapp/martinis`**.
+3. In the same project, click **+ New** → **Database** → **Add MySQL**.
+4. Open your app service **Variables** and set:
+   ```
+   ADMIN_USERNAME=admin
+   ADMIN_PASSWORD=your-secure-password
+   ADMIN_FIRSTNAME=System
+   ADMIN_LASTNAME=Administrator
+   ```
+   `DATABASE_URL` is created automatically when MySQL is added.
+5. Generate a domain in Railway and log in with your admin credentials.
 
-1. **Sign in to Railway**
-   - Go to [Railway.com](https://railway.com)
-   - Sign in with GitHub (free tier available)
-
-2. **Create New Project**
-   - Click "+ New Project"
-   - Select "Deploy from GitHub repo"
-   - Select `martinisapp/martinis` repository
-   - Railway will automatically detect the configuration
-
-3. **Add MySQL Database**
-   - In your project, click "+ New"
-   - Select "Database" → "Add MySQL"
-   - Railway will automatically create `DATABASE_URL` variable
-
-4. **Configure Environment Variables**
-   - Click on the **martinis** service
-   - Go to **Variables** tab
-   - Add (if not auto-generated):
-     ```
-     ADMIN_USERNAME=admin
-     ADMIN_PASSWORD=your-secure-password
-     ADMIN_FIRSTNAME=System
-     ADMIN_LASTNAME=Administrator
-     ```
-   - The `DATABASE_URL` should be automatically connected to MySQL
-
-5. **Deploy and Access**
-   - Railway will automatically build and deploy
-   - Click "Generate Domain" to get a public URL
-   - Access at: `https://your-app.railway.app`
-   - Login with your admin credentials
-
-### Option 2: One-Click Deploy Template (Coming Soon)
-
-We're working on a one-click deploy template. For now, please use Option 1 above.
-
-<!-- Template deploy button will be added once Railway template is published -->
-<!-- [![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/YOUR-TEMPLATE-CODE) -->
+> Railway one-click template button is not published for this repository yet.  
+> Use the GitHub deploy path above (currently the shortest supported flow).
 
 ### Prerequisites
 
@@ -95,10 +69,10 @@ We're working on a one-click deploy template. For now, please use Option 1 above
 
 ### Detailed Documentation
 
-For comprehensive deployment instructions, troubleshooting, and configuration details, see:
+For comprehensive deployment instructions and troubleshooting, see:
 
-- **[RAILWAY_MYSQL_SETUP.md](./RAILWAY_MYSQL_SETUP.md)** - MySQL setup guide for Railway
-- **[RAILWAY.md](./RAILWAY.md)** - Complete Railway deployment guide
+- **[RAILWAY.md](./RAILWAY.md)** - Primary Railway deployment guide
+- **[RAILWAY_MYSQL_SETUP.md](./RAILWAY_MYSQL_SETUP.md)** - MySQL-specific notes
 
 ## Local Development
 

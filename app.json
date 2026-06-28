@@ -30,7 +30,7 @@
     },
     "ADMIN_PASSWORD": {
       "description": "Initial admin password (will be hashed with BCrypt)",
-      "required": false
+      "required": true
     },
     "ADMIN_FIRSTNAME": {
       "description": "Admin user's first name",
