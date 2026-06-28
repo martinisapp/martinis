@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Locale;
@@ -142,9 +144,22 @@ public class DatabaseConfig {
         }
         if (mysqlHost != null && !mysqlHost.isBlank()) {
             logger.info("Building database URL from MYSQLHOST/MYSQLPORT/MYSQLDATABASE variables");
-            String user = mysqlUser != null ? mysqlUser : "root";
-            String pass = mysqlPassword != null ? mysqlPassword : "";
-            return "mysql://" + user + ":" + pass + "@" + mysqlHost + ":" + mysqlPort + "/" + mysqlDatabase;
+            if (mysqlUser == null || mysqlUser.isBlank()) {
+                throw new IllegalStateException(
+                    "MYSQLHOST is set but MYSQLUSER is missing; cannot build database URL");
+            }
+            if (mysqlPassword == null) {
+                throw new IllegalStateException(
+                    "MYSQLHOST is set but MYSQLPASSWORD is missing; cannot build database URL");
+            }
+            try {
+                String encodedUser = URLEncoder.encode(mysqlUser, StandardCharsets.UTF_8);
+                String encodedPass = URLEncoder.encode(mysqlPassword, StandardCharsets.UTF_8);
+                return "mysql://" + encodedUser + ":" + encodedPass + "@"
+                        + mysqlHost + ":" + mysqlPort + "/" + mysqlDatabase;
+            } catch (Exception e) {
+                throw new RuntimeException("Failed to encode MySQL credentials", e);
+            }
         }
         logger.warn("No database URL environment variable found; falling back to localhost default");
         return "jdbc:mysql://localhost:3306/martinis?useSSL=false&serverTimezone=UTC";
