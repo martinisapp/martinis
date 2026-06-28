@@ -151,7 +151,10 @@ public class PersonWebServiceImpl implements PersonWebService {
         Person person = new Person();
         
         // Look up stuff
-        Actor actor = actorService.read(createPersonCommandModel.getActorId());
+        Actor actor = null;
+        if (createPersonCommandModel.getActorId() != null) {
+            actor = actorService.read(createPersonCommandModel.getActorId());
+        }
         Project project = projectService.read(createPersonCommandModel.getProjectId());
         if (project == null) {
             throw new ResourceNotFoundException("Project", createPersonCommandModel.getProjectId());
@@ -183,7 +186,10 @@ public class PersonWebServiceImpl implements PersonWebService {
         }
         
         // Look up stuff
-        Actor actor = actorService.read(editPersonCommandModel.getActorId());
+        Actor actor = null;
+        if (editPersonCommandModel.getActorId() != null) {
+            actor = actorService.read(editPersonCommandModel.getActorId());
+        }
         Project project = projectService.read(editPersonCommandModel.getProjectId());
         if (project == null) {
             throw new ResourceNotFoundException("Project", editPersonCommandModel.getProjectId());
