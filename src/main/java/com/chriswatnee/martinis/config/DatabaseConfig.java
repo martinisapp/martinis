@@ -15,6 +15,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import javax.sql.DataSource;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * Database configuration optimized for Railway.com deployment
@@ -126,10 +128,17 @@ public class DatabaseConfig {
         String host = uri.getHost();
         int port = uri.getPort() > 0 ? uri.getPort() : 3306;
         String database = uri.getPath().substring(1);
-
-        String jdbcUrl = String.format(
-            "jdbc:mysql://%s:%d/%s?useSSL=true&requireSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=false",
-            host, port, database
+        String jdbcUrl = buildJdbcUrl(
+            "jdbc:mysql",
+            host,
+            port,
+            database,
+            uri.getRawQuery(),
+            Map.of(
+                "serverTimezone", "UTC",
+                "allowPublicKeyRetrieval", "true",
+                "createDatabaseIfNotExist", "false"
+            )
         );
 
         config.setJdbcUrl(jdbcUrl);
@@ -191,6 +200,53 @@ public class DatabaseConfig {
             config.setDriverClassName("org.postgresql.Driver");
             logger.info("PostgreSQL driver selected");
         }
+    }
+
+    private String buildJdbcUrl(String scheme,
+                                String host,
+                                int port,
+                                String database,
+                                String rawQuery,
+                                Map<String, String> defaultParams) {
+        Map<String, String> params = new LinkedHashMap<>();
+
+        if (rawQuery != null && !rawQuery.isBlank()) {
+            for (String pair : rawQuery.split("&")) {
+                if (pair == null || pair.isBlank()) {
+                    continue;
+                }
+
+                int separatorIndex = pair.indexOf('=');
+                String key = separatorIndex >= 0 ? pair.substring(0, separatorIndex) : pair;
+                String value = separatorIndex >= 0 ? pair.substring(separatorIndex + 1) : "";
+                params.putIfAbsent(key, value);
+            }
+        }
+
+        defaultParams.forEach((key, value) -> {
+            boolean present = params.keySet().stream().anyMatch(existingKey -> existingKey.equalsIgnoreCase(key));
+            if (!present) {
+                params.put(key, value);
+            }
+        });
+
+        StringBuilder jdbcUrl = new StringBuilder(String.format("%s://%s:%d/%s", scheme, host, port, database));
+        if (!params.isEmpty()) {
+            jdbcUrl.append('?');
+            boolean first = true;
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                if (!first) {
+                    jdbcUrl.append('&');
+                }
+                jdbcUrl.append(entry.getKey());
+                if (!entry.getValue().isEmpty()) {
+                    jdbcUrl.append('=').append(entry.getValue());
+                }
+                first = false;
+            }
+        }
+
+        return jdbcUrl.toString();
     }
 
     /**
