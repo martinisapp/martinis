@@ -242,10 +242,7 @@ public class DatabaseConfig {
                 if (!first) {
                     jdbcUrl.append('&');
                 }
-                jdbcUrl.append(entry.getKey());
-                if (!entry.getValue().isEmpty()) {
-                    jdbcUrl.append('=').append(entry.getValue());
-                }
+                jdbcUrl.append(entry.getKey()).append('=').append(entry.getValue());
                 first = false;
             }
         }

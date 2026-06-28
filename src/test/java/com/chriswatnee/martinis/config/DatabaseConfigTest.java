@@ -12,11 +12,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DatabaseConfigTest {
 
+    private static final String BASE_RAILWAY_URL =
+        "mysql://railway" + ":" + "secret" + "@" + "db.railway.internal:3306/martinis";
+
     @Test
     void railwayMySqlUrlPreservesIncomingSslSettings() throws Exception {
         HikariConfig dataSourceConfig = createDataSourceConfig(
-            "mysql://railway" + ":" + "secret" + "@"
-                + "db.railway.internal:3306/martinis?useSSL=false&serverTimezone=America%2FNew_York"
+            BASE_RAILWAY_URL + "?useSSL=false&serverTimezone=America%2FNew_York"
         );
 
         assertEquals("railway", dataSourceConfig.getUsername());
@@ -31,10 +33,7 @@ class DatabaseConfigTest {
 
     @Test
     void railwayMySqlUrlAddsSafeDefaultsWhenQueryIsMissing() throws Exception {
-        HikariConfig dataSourceConfig = createDataSourceConfig(
-            "mysql://railway" + ":" + "secret" + "@"
-                + "db.railway.internal:3306/martinis"
-        );
+        HikariConfig dataSourceConfig = createDataSourceConfig(BASE_RAILWAY_URL);
 
         assertTrue(dataSourceConfig.getJdbcUrl().startsWith("jdbc:mysql://db.railway.internal:3306/martinis?"));
         assertTrue(dataSourceConfig.getJdbcUrl().contains("serverTimezone=UTC"));
