@@ -126,6 +126,16 @@ public class BlockController {
         }
     }
 
+    // htmx endpoint - get new-block form to insert after existing block
+    @RequestMapping(value = "/createBelowForm", method = RequestMethod.GET)
+    public String getCreateBelowForm(@RequestParam Integer id, Model model) {
+        Block block = blockWebService.getBlock(id);
+        model.addAttribute("insertAfterBlockId", block.getId());
+        model.addAttribute("sceneId", block.getScene().getId());
+        model.addAttribute("persons", blockWebService.getPersonsForScene(block.getScene().getId()));
+        return "fragments/block-new-form";
+    }
+
     // htmx endpoint - get edit form
     @RequestMapping(value = "/editForm", method = RequestMethod.GET)
     public String getEditForm(@RequestParam Integer id, Model model) {
@@ -262,44 +272,39 @@ public class BlockController {
         return "redirect:/scene/show?id=" + block.getScene().getId();
     }
 
-    // AJAX endpoint for inline block creation
+    // htmx endpoint for inline block creation
     @RequestMapping(value = "/createInline", method = RequestMethod.POST)
-    @ResponseBody
-    public ResponseEntity<String> createInline(@RequestBody CreateBlockCommandModel commandModel) {
-        try {
-            if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
-                return new ResponseEntity<>("Content cannot be empty", HttpStatus.BAD_REQUEST);
-            }
-            if (commandModel.getSceneId() == null) {
-                return new ResponseEntity<>("Scene ID is required", HttpStatus.BAD_REQUEST);
-            }
-            Block block = blockWebService.saveCreateBlockCommandModel(commandModel);
-            return new ResponseEntity<>("Success", HttpStatus.OK);
-        } catch (ResourceNotFoundException e) {
-            return new ResponseEntity<>("The requested resource was not found", HttpStatus.NOT_FOUND);
-        } catch (Exception e) {
-            logger.error("Error creating inline block for scene {}", commandModel.getSceneId(), e);
-            return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
+    public String createInline(@ModelAttribute CreateBlockCommandModel commandModel, Model model) {
+        if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
+            return "fragments/empty";
         }
+        Block block = blockWebService.saveCreateBlockCommandModel(commandModel);
+        model.addAttribute("block", block);
+        return "fragments/block-row-complete";
     }
 
-    // AJAX endpoint for inline block creation below existing block
+    // htmx endpoint for inline block creation below existing block
     @RequestMapping(value = "/createBelowInline", method = RequestMethod.POST)
+    public String createBelowInline(@ModelAttribute CreateBlockBelowCommandModel commandModel, Model model) {
+        if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
+            return "fragments/empty";
+        }
+        Block block = blockWebService.saveCreateBlockBelowCommandModel(commandModel);
+        model.addAttribute("block", block);
+        return "fragments/block-row-complete";
+    }
+
+    // htmx endpoint - toggle bookmark status
+    @RequestMapping(value = "/toggleBookmark", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity<String> createBelowInline(@RequestBody CreateBlockBelowCommandModel commandModel) {
+    public ResponseEntity<String> toggleBookmark(@RequestParam Integer id) {
         try {
-            if (commandModel.getContent() == null || commandModel.getContent().trim().isEmpty()) {
-                return new ResponseEntity<>("Content cannot be empty", HttpStatus.BAD_REQUEST);
-            }
-            if (commandModel.getId() == null) {
-                return new ResponseEntity<>("Block ID is required for createBelow", HttpStatus.BAD_REQUEST);
-            }
-            Block block = blockWebService.saveCreateBlockBelowCommandModel(commandModel);
+            blockWebService.toggleBookmark(id);
             return new ResponseEntity<>("Success", HttpStatus.OK);
         } catch (ResourceNotFoundException e) {
             return new ResponseEntity<>("The requested resource was not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
-            logger.error("Error creating block below block {}", commandModel.getId(), e);
+            logger.error("Error toggling bookmark for block {}", id, e);
             return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

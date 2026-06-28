@@ -26,6 +26,7 @@ public class BlockDaoImpl extends AbstractBaseDao<Block> implements BlockDao {
     private static final String LIST_QUERY = "SELECT * FROM block";
     private static final String GET_BLOCK_BY_ORDER_QUERY = "SELECT * FROM block WHERE `order` = ? AND scene_id = ?";
     private static final String UPDATE_ORDER_QUERY = "UPDATE block SET `order` = ? WHERE id = ?";
+    private static final String TOGGLE_BOOKMARK_QUERY = "UPDATE block SET is_bookmarked = ? WHERE id = ?";
     private static final String ADD_ORDERS_QUERY = "UPDATE block SET `order` = `order` + 1 WHERE `order` > ? AND scene_id = ?";
     private static final String SUBTRACT_ORDERS_QUERY = "UPDATE block SET `order` = `order` - 1 WHERE `order` > ? AND scene_id = ?";
     private static final String GET_BLOCKS_BY_SCENE_QUERY = "SELECT * FROM block WHERE scene_id = ? ORDER BY `order`";
@@ -119,6 +120,11 @@ public class BlockDaoImpl extends AbstractBaseDao<Block> implements BlockDao {
     }
 
     @Override
+    public void toggleBookmark(Integer id, boolean newBookmarked) {
+        jdbcTemplate.update(TOGGLE_BOOKMARK_QUERY, newBookmarked ? 1 : 0, id);
+    }
+
+    @Override
     public List<Block> list() {
         return findAll(LIST_QUERY, mapper);
     }
@@ -145,6 +151,7 @@ public class BlockDaoImpl extends AbstractBaseDao<Block> implements BlockDao {
             block.setId(resultSet.getInt("id"));
             block.setOrder(resultSet.getInt("order"));
             block.setContent(resultSet.getString("content"));
+            block.setBookmarked(resultSet.getBoolean("is_bookmarked"));
 
             Integer personId = resultSet.getInt("person_id");
             if (personId != null) {

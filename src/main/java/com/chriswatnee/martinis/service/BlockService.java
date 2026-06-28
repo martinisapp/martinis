@@ -24,6 +24,7 @@ public interface BlockService {
     public void moveUp(Block block);
     public void moveDown(Block block);
     public void reorderBlocks(List<Integer> blockIds);
+    public Block toggleBookmark(Integer id);
     public List<Block> list();
     public List<Block> getBlocksByScene(Scene scene);
 
