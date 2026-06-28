@@ -24,11 +24,13 @@ import com.chriswatnee.martinis.exception.ResourceNotFoundException;
 import com.chriswatnee.martinis.webservice.support.ViewModelMapper;
 import java.util.List;
 import jakarta.inject.Inject;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author chris
  */
+@Service
 public class ProjectWebServiceImpl implements ProjectWebService {
 
     ProjectService projectService;

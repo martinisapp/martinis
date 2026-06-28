@@ -10,9 +10,11 @@ import java.util.List;
 import jakarta.inject.Inject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 public class PersonDaoImpl extends AbstractBaseDao<Person> implements PersonDao {
 
     private static final String CREATE_QUERY = "INSERT INTO person (`name`, full_name, actor_id, project_id) VALUES (?,?,?,?)";

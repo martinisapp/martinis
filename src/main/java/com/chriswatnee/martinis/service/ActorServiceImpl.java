@@ -9,11 +9,13 @@ import com.chriswatnee.martinis.dao.ActorDao;
 import com.chriswatnee.martinis.dto.Actor;
 import java.util.List;
 import jakarta.inject.Inject;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author chris
  */
+@Service
 public class ActorServiceImpl implements ActorService {
 
     ActorDao actorDao;

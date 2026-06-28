@@ -43,7 +43,7 @@ public class PersonController {
         return "character/show";
     }
     
-    @RequestMapping(value = "/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String delete(@RequestParam Integer id) {
         
         Person person = personWebService.deletePerson(id);

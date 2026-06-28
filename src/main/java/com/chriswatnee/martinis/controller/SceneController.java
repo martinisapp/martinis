@@ -45,7 +45,7 @@ public class SceneController {
         return "scene/show";
     }
     
-    @RequestMapping(value = "/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String delete(@RequestParam Integer id) {
         
         Scene scene = sceneWebService.deleteScene(id);
@@ -53,7 +53,7 @@ public class SceneController {
         return "redirect:/project/show?id=" + scene.getProject().getId();
     }
     
-    @RequestMapping(value = "/moveUp")
+    @RequestMapping(value = "/moveUp", method = RequestMethod.POST)
     public String moveUp(@RequestParam Integer id) {
         
         Scene scene = sceneWebService.moveSceneUp(id);
@@ -61,7 +61,7 @@ public class SceneController {
         return "redirect:/project/show?id=" + scene.getProject().getId();
     }
     
-    @RequestMapping(value = "/moveDown")
+    @RequestMapping(value = "/moveDown", method = RequestMethod.POST)
     public String moveDown(@RequestParam Integer id) {
         
         Scene scene = sceneWebService.moveSceneDown(id);

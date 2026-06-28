@@ -1,10 +1,12 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <sec:csrfMetaTags />
         <title>Martinis - Project Profile</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
         <link href="${pageContext.request.contextPath}/css/martinis.css" rel="stylesheet">
@@ -23,7 +25,7 @@
             </nav>
             <hgroup>
                 <h1>${viewModel.title}</h1>
-                <p><a href="${pageContext.request.contextPath}/project/edit?id=${viewModel.id}" role="button" class="secondary outline">edit</a> <a href="${pageContext.request.contextPath}/project/delete?id=${viewModel.id}" role="button" class="secondary outline">delete</a></p>
+                <p><a href="${pageContext.request.contextPath}/project/edit?id=${viewModel.id}" role="button" class="secondary outline">edit</a> <form action="${pageContext.request.contextPath}/project/delete" method="post" style="display:inline;"><input type="hidden" name="id" value="${viewModel.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline">delete</button></form></p>
             </hgroup>
             <div class="grid">
                 <div>
@@ -37,10 +39,10 @@
                                     <td>
                                         <div class="nowrap">
                                             <c:if test="${not loop.last}">
-                                                <a href="${pageContext.request.contextPath}/scene/moveDown?id=${scene.id}" role="button" class="secondary outline move-down">↓</a>
+                                                <form action="${pageContext.request.contextPath}/scene/moveDown" method="post" style="display:inline;"><input type="hidden" name="id" value="${scene.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline move-down">↓</button></form>
                                             </c:if>
                                             <c:if test="${not loop.first}">
-                                                <a href="${pageContext.request.contextPath}/scene/moveUp?id=${scene.id}" role="button" class="secondary outline move-up">↑</a>
+                                                <form action="${pageContext.request.contextPath}/scene/moveUp" method="post" style="display:inline;"><input type="hidden" name="id" value="${scene.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline move-up">↑</button></form>
                                             </c:if>
                                         </div>
                                     </td>
@@ -74,10 +76,13 @@
 
         <script>
             function toggleCleanView() {
+                var csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+                var csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
                 fetch('${pageContext.request.contextPath}/project/toggleCleanView', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
+                        [csrfHeader]: csrfToken
                     }
                 })
                 .then(response => response.text())

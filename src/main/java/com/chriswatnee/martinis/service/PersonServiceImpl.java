@@ -10,11 +10,13 @@ import com.chriswatnee.martinis.dto.Person;
 import com.chriswatnee.martinis.dto.Project;
 import java.util.List;
 import jakarta.inject.Inject;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author chris
  */
+@Service
 public class PersonServiceImpl implements PersonService {
 
     PersonDao personDao;

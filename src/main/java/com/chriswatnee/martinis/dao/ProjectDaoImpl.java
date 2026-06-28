@@ -9,9 +9,11 @@ import java.util.List;
 import jakarta.inject.Inject;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+@Repository
 public class ProjectDaoImpl extends AbstractBaseDao<Project> implements ProjectDao {
 
     private static final String CREATE_QUERY = "INSERT INTO project (title) VALUES (?)";

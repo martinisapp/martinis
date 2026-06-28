@@ -47,7 +47,7 @@ public class BlockController {
     @Inject
     BlockWebService blockWebService;
     
-    @RequestMapping(value = "/delete")
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String delete(@RequestParam Integer id, HttpSession session, RedirectAttributes redirectAttributes) {
 
         Block block = blockWebService.deleteBlock(id);
@@ -70,7 +70,7 @@ public class BlockController {
         return "redirect:/scene/show?id=" + block.getScene().getId();
     }
 
-    @RequestMapping(value = "/undo")
+    @RequestMapping(value = "/undo", method = RequestMethod.POST)
     public String undo(HttpSession session, RedirectAttributes redirectAttributes) {
 
         // Get the undo stack from session
@@ -96,7 +96,7 @@ public class BlockController {
         return "redirect:/project/list";
     }
     
-    @RequestMapping(value = "/moveUp")
+    @RequestMapping(value = "/moveUp", method = RequestMethod.POST)
     public String moveUp(@RequestParam Integer id) {
         
         Block block = blockWebService.moveBlockUp(id);
@@ -104,7 +104,7 @@ public class BlockController {
         return "redirect:/scene/show?id=" + block.getScene().getId();
     }
     
-    @RequestMapping(value = "/moveDown")
+    @RequestMapping(value = "/moveDown", method = RequestMethod.POST)
     public String moveDown(@RequestParam Integer id) {
 
         Block block = blockWebService.moveBlockDown(id);
