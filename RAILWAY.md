@@ -309,59 +309,36 @@ Defines how Railway builds and deploys your application:
 {
   "$schema": "https://railway.app/railway.schema.json",
   "build": {
-    "builder": "DOCKERFILE",
-    "dockerfilePath": "Dockerfile",
-    "watchPatterns": ["src/**", "pom.xml", "Dockerfile"]
+    "builder": "RAILPACK",
+    "buildCommand": "mvn clean package -DskipTests -B",
+    "watchPatterns": ["src/**", "pom.xml"]
   },
   "deploy": {
     "restartPolicyType": "ON_FAILURE",
     "restartPolicyMaxRetries": 10,
     "healthcheckPath": "/actuator/health",
-    "healthcheckTimeout": 10000
+    "healthcheckTimeout": 10000,
+    "startCommand": "java -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0 -XX:InitialRAMPercentage=50.0 -XX:+UseG1GC -XX:MaxGCPauseMillis=100 -XX:+ParallelRefProcEnabled -XX:+UseStringDeduplication -XX:+ExitOnOutOfMemoryError -Djava.security.egd=file:/dev/./urandom -jar target/martinis.jar"
   }
 }
 ```
 
 **Key Settings:**
-- `builder: DOCKERFILE` - Uses Docker for builds
+- `builder: RAILPACK` - Uses Railway's Railpack build system (auto-detects Java/Maven)
+- `buildCommand` - Maven build command to produce the JAR
+- `startCommand` - JVM command with container-aware memory settings
 - `watchPatterns` - Files that trigger rebuilds
 - `healthcheckPath` - Endpoint for health checks
 - `restartPolicyType` - Restart on failure
 
-### 2. `Dockerfile` - Container Build Configuration
+### 2. `Dockerfile` - Container Build Configuration (alternative)
 
-Multi-stage Docker build optimized for Railway:
+A multi-stage Dockerfile is included as an alternative build method. To switch to Docker:
 
-**Build Stage:**
-- Uses Maven 3.9 with Java 17
-- Caches dependencies for faster rebuilds
-- Compiles application to JAR
+1. Update `railway.json`: `"builder": "DOCKERFILE"`
+2. Optionally set `"dockerfilePath": "Dockerfile"` and update `watchPatterns`
 
-**Runtime Stage:**
-- Uses minimal JRE Alpine image
-- Runs as non-root user for security
-- Optimized JVM settings for containers
-
-### 3. `nixpacks.toml` - Alternative Build System
-
-Alternative to Docker using Railway's Nixpacks:
-
-```toml
-[phases.setup]
-nixPkgs = ["maven_3_9", "jdk17_headless"]
-
-[phases.build]
-cmds = ["mvn clean package -DskipTests -B"]
-
-[start]
-cmd = "java -jar target/martinis.jar"
-```
-
-**To use Nixpacks instead of Docker:**
-1. Update `railway.json`: `"builder": "NIXPACKS"`
-2. Railway will automatically use `nixpacks.toml`
-
-### 4. `.railwayignore` - Deployment Exclusions
+### 3. `.railwayignore` - Deployment Exclusions
 
 Excludes unnecessary files from deployment:
 - Documentation files
@@ -370,7 +347,7 @@ Excludes unnecessary files from deployment:
 - Local environment files
 - Build artifacts (rebuilt on Railway)
 
-### 5. `application.properties` - Spring Boot Configuration
+### 4. `application.properties` - Spring Boot Configuration
 
 Main application configuration:
 - Server port from `$PORT` environment variable
@@ -533,7 +510,7 @@ railway logs | grep "SQL"
 | Connection Pool | HikariCP |
 | View Technology | JSP + JSTL |
 | Security | Spring Security + BCrypt |
-| Container | Docker (Alpine Linux) |
+| Build System | Railpack (auto-detects Java/Maven) |
 
 ### Application Layers
 
@@ -591,7 +568,7 @@ railway logs | grep "SQL"
 
 ### JVM Tuning
 
-The Dockerfile includes optimized JVM settings for Railway:
+The `startCommand` in `railway.json` includes optimized JVM settings for Railway:
 
 ```bash
 -XX:+UseContainerSupport       # Respect container limits
@@ -635,15 +612,9 @@ Enabled for faster page loads:
 
 ### Build Optimization
 
-**Layer Caching:**
-- POM file copied first
-- Dependencies cached between builds
+**Build Caching:**
+- Railpack caches Maven dependencies between builds
 - Only source changes trigger full rebuild
-
-**Image Size:**
-- Multi-stage build reduces final image
-- Alpine Linux base (~50MB vs ~200MB)
-- Only JRE included (no JDK)
 
 ---
 
@@ -855,10 +826,17 @@ docker-compose logs -f
 
 ## Changelog
 
+### 2025-01-06 - Migrated to Railpack
+
+- ✅ Switched `railway.json` builder from DOCKERFILE to RAILPACK
+- ✅ Configured Railpack build command (`mvn clean package -DskipTests -B`)
+- ✅ Configured Railpack start command with optimized JVM settings
+- ✅ Removed `nixpacks.toml` (superseded by Railpack)
+- ✅ Updated RAILWAY.md to document Railpack configuration
+
 ### 2025-01-06 - Complete Railway Rewrite
 
 - ✅ Rewritten Dockerfile with Alpine Linux for smaller image
-- ✅ Created nixpacks.toml for alternative build method
 - ✅ Updated railway.json with optimized settings
 - ✅ Cleaned up .railwayignore for faster deployments
 - ✅ Simplified .env.railway template
@@ -868,7 +846,6 @@ docker-compose logs -f
 - ✅ Enhanced security with non-root user
 - ✅ Improved health check configuration
 - ✅ Updated connection pool settings
-- ✅ Better layer caching for faster builds
 
 ---
 
