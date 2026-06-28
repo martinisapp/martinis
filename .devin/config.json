@@ -1,15 +1,11 @@
 {
   "mcpServers": {
     "mysql": {
-      "command": "npx",
+      "command": "sh",
       "args": [
-        "-y",
-        "@modelcontextprotocol/server-mysql",
-        "${DATABASE_URL}"
-      ],
-      "env": {
-        "DATABASE_URL": "${DATABASE_URL}"
-      }
+        "-c",
+        "npx -y @modelcontextprotocol/server-mysql \"$DATABASE_URL\""
+      ]
     }
   }
 }

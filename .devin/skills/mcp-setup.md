@@ -36,10 +36,7 @@ This project uses the Model Context Protocol (MCP) to provide AI assistants with
      "mcpServers": {
        "mysql": {
          "command": "npx",
-         "args": ["-y", "@modelcontextprotocol/server-mysql", "mysql://user:pass@localhost:3306/martinis"],
-         "env": {
-           "DATABASE_URL": "mysql://user:pass@localhost:3306/martinis"
-         }
+         "args": ["-y", "@modelcontextprotocol/server-mysql", "mysql://user:pass@localhost:3306/martinis"]
        }
      }
    }
