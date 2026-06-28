@@ -1,9 +1,10 @@
 package com.chriswatnee.martinis.config;
 
-import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.HikariConfig;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -12,50 +13,50 @@ class DatabaseConfigTest {
 
     @Test
     void railwayMySqlUrlPreservesIncomingSslSettings() throws Exception {
-        HikariDataSource dataSource = createDataSource(
+        HikariConfig dataSourceConfig = createDataSourceConfig(
             "mysql://railway" + ":" + "secret" + "@"
                 + "db.railway.internal:3306/martinis?useSSL=false&serverTimezone=America%2FNew_York"
         );
 
-        try {
-            assertEquals("railway", dataSource.getUsername());
-            assertEquals("secret", dataSource.getPassword());
-            assertEquals(
-                "jdbc:mysql://db.railway.internal:3306/martinis?useSSL=false&serverTimezone=America%2FNew_York&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=false",
-                dataSource.getJdbcUrl()
-            );
-            assertFalse(dataSource.getJdbcUrl().contains("requireSSL=true"));
-        } finally {
-            dataSource.close();
-        }
+        assertEquals("railway", dataSourceConfig.getUsername());
+        assertEquals("secret", dataSourceConfig.getPassword());
+        assertEquals(
+            "jdbc:mysql://db.railway.internal:3306/martinis?useSSL=false&serverTimezone=America%2FNew_York&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=false",
+            dataSourceConfig.getJdbcUrl()
+        );
+        assertFalse(dataSourceConfig.getJdbcUrl().contains("requireSSL=true"));
     }
 
     @Test
     void railwayMySqlUrlAddsSafeDefaultsWhenQueryIsMissing() throws Exception {
-        HikariDataSource dataSource = createDataSource(
+        HikariConfig dataSourceConfig = createDataSourceConfig(
             "mysql://railway" + ":" + "secret" + "@"
                 + "db.railway.internal:3306/martinis"
         );
 
-        try {
-            assertEquals(
-                "jdbc:mysql://db.railway.internal:3306/martinis?serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=false",
-                dataSource.getJdbcUrl()
-            );
-        } finally {
-            dataSource.close();
-        }
+        assertEquals(
+            "jdbc:mysql://db.railway.internal:3306/martinis?serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=false",
+            dataSourceConfig.getJdbcUrl()
+        );
     }
 
-    private HikariDataSource createDataSource(String databaseUrl) throws Exception {
+    private HikariConfig createDataSourceConfig(String databaseUrl) throws Exception {
         DatabaseConfig config = new DatabaseConfig();
+        HikariConfig hikariConfig = new HikariConfig();
         setField(config, "databaseUrl", databaseUrl);
-        return (HikariDataSource) config.dataSource();
+        invokeParseDatabaseUrl(config, hikariConfig, databaseUrl);
+        return hikariConfig;
     }
 
     private void setField(Object target, String name, Object value) throws Exception {
         Field field = target.getClass().getDeclaredField(name);
         field.setAccessible(true);
         field.set(target, value);
+    }
+
+    private void invokeParseDatabaseUrl(DatabaseConfig config, HikariConfig hikariConfig, String databaseUrl) throws Exception {
+        Method method = DatabaseConfig.class.getDeclaredMethod("parseDatabaseUrl", HikariConfig.class, String.class);
+        method.setAccessible(true);
+        method.invoke(config, hikariConfig, databaseUrl);
     }
 }
