@@ -36,7 +36,7 @@
         <form action="${pageContext.request.contextPath}/block/delete" method="post" style="display:inline;">
             <input type="hidden" name="id" value="${block.id}"/>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            <button type="submit" role="button" class="secondary outline">delete</button>
+            <button type="submit" role="button" class="secondary outline" onclick="return confirm('Delete this block?')">delete</button>
         </form>
         <a hx-get="${pageContext.request.contextPath}/block/createBelowForm?id=${block.id}"
            hx-target="closest .block-row"

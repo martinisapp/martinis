@@ -121,7 +121,7 @@ public class BlockDaoImpl extends AbstractBaseDao<Block> implements BlockDao {
 
     @Override
     public void toggleBookmark(Integer id, boolean newBookmarked) {
-        jdbcTemplate.update(TOGGLE_BOOKMARK_QUERY, newBookmarked ? 1 : 0, id);
+        jdbcTemplate.update(TOGGLE_BOOKMARK_QUERY, newBookmarked, id);
     }
 
     @Override
