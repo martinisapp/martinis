@@ -16,7 +16,7 @@
         </jsp:include>
         <main class="container">
             <h1>Not Found</h1>
-            <p>${errorMessage != null ? errorMessage : 'The requested resource could not be found.'}</p>
+            <p><c:out value="${errorMessage}" default="The requested resource could not be found." /></p>
             <p><a href="${pageContext.request.contextPath}/project/list" role="button">Back to Projects</a></p>
         </main>
     </body>

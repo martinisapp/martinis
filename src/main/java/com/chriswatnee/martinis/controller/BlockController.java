@@ -9,6 +9,7 @@ import com.chriswatnee.martinis.commandmodel.block.createblock.CreateBlockComman
 import com.chriswatnee.martinis.commandmodel.block.createblockbelow.CreateBlockBelowCommandModel;
 import com.chriswatnee.martinis.commandmodel.block.editblock.EditBlockCommandModel;
 import com.chriswatnee.martinis.dto.Block;
+import com.chriswatnee.martinis.exception.ResourceNotFoundException;
 import com.chriswatnee.martinis.viewmodel.block.createblock.CreateBlockViewModel;
 import com.chriswatnee.martinis.viewmodel.block.createblockbelow.CreateBlockBelowViewModel;
 import com.chriswatnee.martinis.viewmodel.block.editblock.EditBlockViewModel;
@@ -117,7 +118,10 @@ public class BlockController {
         try {
             blockWebService.reorderBlocks(blockIds);
             return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>("The requested resource was not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
+            logger.error("Error reordering blocks", e);
             return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -160,7 +164,10 @@ public class BlockController {
             }
             blockWebService.saveEditBlockCommandModel(commandModel);
             return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>("The requested resource was not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
+            logger.error("Error updating block {}", commandModel.getId(), e);
             return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -268,6 +275,8 @@ public class BlockController {
             }
             Block block = blockWebService.saveCreateBlockCommandModel(commandModel);
             return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>("The requested resource was not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             logger.error("Error creating inline block for scene {}", commandModel.getSceneId(), e);
             return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
@@ -287,6 +296,8 @@ public class BlockController {
             }
             Block block = blockWebService.saveCreateBlockBelowCommandModel(commandModel);
             return new ResponseEntity<>("Success", HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<>("The requested resource was not found", HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             logger.error("Error creating block below block {}", commandModel.getId(), e);
             return new ResponseEntity<>("An error occurred", HttpStatus.INTERNAL_SERVER_ERROR);
