@@ -58,7 +58,7 @@ public class DatabaseConfig {
                 logger.info("Using password from SPRING_DATASOURCE_PASSWORD environment variable");
             }
         } catch (Exception e) {
-            logger.error("Failed to parse DATABASE_URL: {}", databaseUrl, e);
+            logger.error("Failed to parse DATABASE_URL: {}", maskPassword(databaseUrl), e);
             throw new RuntimeException("Failed to configure database connection", e);
         }
 

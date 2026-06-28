@@ -18,7 +18,7 @@
             <h1>Create Account</h1>
             <c:if test="${not empty error}">
                 <article style="background-color: var(--pico-del-color);">
-                    ${error}
+                    <c:out value="${error}" />
                 </article>
             </c:if>
             <article>

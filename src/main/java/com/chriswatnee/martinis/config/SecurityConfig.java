@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 
 import javax.sql.DataSource;
 
@@ -51,6 +52,13 @@ public class SecurityConfig {
             )
             .logout(logout -> logout
                 .permitAll()
+            )
+            .headers(headers -> headers
+                .contentTypeOptions(contentTypeOptions -> {})
+                .xssProtection(xss -> xss
+                    .headerValue(XXssProtectionHeaderWriter.HeaderValue.ENABLED_MODE_BLOCK)
+                )
+                .frameOptions(frameOptions -> frameOptions.deny())
             );
 
         return http.build();
