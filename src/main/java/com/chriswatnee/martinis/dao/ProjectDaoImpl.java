@@ -1,121 +1,76 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.chriswatnee.martinis.dao;
 
+import com.chriswatnee.martinis.dao.support.AbstractBaseDao;
 import com.chriswatnee.martinis.dto.Project;
 import com.chriswatnee.martinis.dto.Scene;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import jakarta.inject.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-/**
- *
- * @author chris
- */
-public class ProjectDaoImpl implements ProjectDao {
+public class ProjectDaoImpl extends AbstractBaseDao<Project> implements ProjectDao {
 
-    private static final Logger logger = LoggerFactory.getLogger(ProjectDaoImpl.class);
-    
-    JdbcTemplate jdbcTemplate;
-    
-    static String CREATE_QUERY = "INSERT INTO project (title) VALUES (?)";
-    static String READ_QUERY = "SELECT * FROM project WHERE id = ?";
-    static String UPDATE_QUERY = "UPDATE project SET title = ? WHERE id = ?";
-    static String DELETE_QUERY = "DELETE FROM project WHERE id = ?";
-    static String LIST_QUERY = "SELECT * FROM project ORDER BY title";
-    static String GET_PROJECT_BY_SCENE_QUERY = "SELECT * FROM project p " +
+    private static final String CREATE_QUERY = "INSERT INTO project (title) VALUES (?)";
+    private static final String READ_QUERY = "SELECT * FROM project WHERE id = ?";
+    private static final String UPDATE_QUERY = "UPDATE project SET title = ? WHERE id = ?";
+    private static final String DELETE_QUERY = "DELETE FROM project WHERE id = ?";
+    private static final String LIST_QUERY = "SELECT * FROM project ORDER BY title";
+    private static final String GET_PROJECT_BY_SCENE_QUERY = "SELECT * FROM project p " +
                                                "INNER JOIN scene s on p.id = s.project_id " +
                                                "WHERE s.id = ?";
-    
-    
+
+    private final RowMapper<Project> mapper = new ProjectMapper();
+
     @Inject
     public ProjectDaoImpl(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+        super(jdbcTemplate);
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
     public Project create(Project project) {
-        
-        jdbcTemplate.update(CREATE_QUERY,
-                            project.getTitle()
-        );
-        
-        int createId = jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()", Integer.class);
-        
-        project.setId(createId);
-        
+        jdbcTemplate.update(CREATE_QUERY, project.getTitle());
+        project.setId(getLastInsertId());
         return project;
     }
 
     @Override
     public Project read(Integer id) {
-        
-        try {
-            Project project = jdbcTemplate.queryForObject(READ_QUERY, new ProjectMapper(), id);
-            return project;
-        } catch (EmptyResultDataAccessException ex) {
-            logger.debug("Project not found with id: {}", id);
-        }
-        
-        return null;
+        return findById(READ_QUERY, mapper, id);
     }
 
     @Override
     public void update(Project project) {
-        
-        jdbcTemplate.update(UPDATE_QUERY,
-                            project.getTitle(),
-                            project.getId()
-        );
+        jdbcTemplate.update(UPDATE_QUERY, project.getTitle(), project.getId());
     }
 
     @Override
     public void delete(Project project) {
-        jdbcTemplate.update(DELETE_QUERY, project.getId());
+        deleteById(DELETE_QUERY, project.getId());
     }
 
     @Override
     public List<Project> list() {
-        return jdbcTemplate.query(LIST_QUERY, new ProjectMapper());
+        return findAll(LIST_QUERY, mapper);
     }
 
     @Override
     public Project getProjectByScene(Scene scene) {
-        
-        try {
-            Project project = jdbcTemplate.queryForObject(GET_PROJECT_BY_SCENE_QUERY, new ProjectMapper(), scene.getId());
-            return project;
-        } catch (EmptyResultDataAccessException ex) {
-            logger.debug("Project not found for scene with id: {}", scene.getId());
-        }
-        
-        return null;
+        return findById(GET_PROJECT_BY_SCENE_QUERY, mapper, scene.getId());
     }
-    
-    private class ProjectMapper implements RowMapper<Project> {
-        
+
+    private static class ProjectMapper implements RowMapper<Project> {
+
         @Override
-        public Project mapRow(ResultSet resultSet, int it) throws SQLException {
-            
+        public Project mapRow(ResultSet resultSet, int rowNum) throws SQLException {
             Project project = new Project();
-            
             project.setId(resultSet.getInt("id"));
             project.setTitle(resultSet.getString("title"));
-            
             return project;
         }
     }
-    
 }

@@ -23,6 +23,7 @@ import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.BlockViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.PersonViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.SceneProfileViewModel;
 import com.chriswatnee.martinis.exception.ResourceNotFoundException;
+import com.chriswatnee.martinis.webservice.support.ViewModelMapper;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.inject.Inject;
@@ -296,13 +297,7 @@ public class SceneWebServiceImpl implements SceneWebService {
     }
 
     private List<BlockViewModel> translateBlock(List<Block> blocks) {
-        List<BlockViewModel> blockViewModels = new ArrayList<>();
-
-        for (Block block : blocks) {
-            blockViewModels.add(translateBlock(block));
-        }
-
-        return blockViewModels;
+        return ViewModelMapper.mapList(blocks, this::translateBlock);
     }
 
     private BlockViewModel translateBlock(Block block) {
@@ -327,13 +322,7 @@ public class SceneWebServiceImpl implements SceneWebService {
     }
 
     private List<PersonViewModel> translatePerson(List<Person> persons) {
-        List<PersonViewModel> personViewModels = new ArrayList<>();
-
-        for (Person person : persons) {
-            personViewModels.add(translatePerson(person));
-        }
-
-        return personViewModels;
+        return ViewModelMapper.mapList(persons, this::translatePerson);
     }
 
     private PersonViewModel translatePerson(Person person) {

@@ -21,7 +21,7 @@ import com.chriswatnee.martinis.viewmodel.project.projectprofile.PersonViewModel
 import com.chriswatnee.martinis.viewmodel.project.projectprofile.ProjectProfileViewModel;
 import com.chriswatnee.martinis.viewmodel.project.projectprofile.SceneViewModel;
 import com.chriswatnee.martinis.exception.ResourceNotFoundException;
-import java.util.ArrayList;
+import com.chriswatnee.martinis.webservice.support.ViewModelMapper;
 import java.util.List;
 import jakarta.inject.Inject;
 
@@ -166,13 +166,7 @@ public class ProjectWebServiceImpl implements ProjectWebService {
     }
 
     private List<SceneViewModel> translateScene(List<Scene> scenes) {
-        List<SceneViewModel> sceneViewModels = new ArrayList<>();
-
-        for (Scene scene : scenes) {
-            sceneViewModels.add(translateScene(scene));
-        }
-
-        return sceneViewModels;
+        return ViewModelMapper.mapList(scenes, this::translateScene);
     }
 
     private SceneViewModel translateScene(Scene scene) {
@@ -186,13 +180,7 @@ public class ProjectWebServiceImpl implements ProjectWebService {
     }
 
     private List<PersonViewModel> translatePerson(List<Person> persons) {
-        List<PersonViewModel> personViewModels = new ArrayList<>();
-
-        for (Person person : persons) {
-            personViewModels.add(translatePerson(person));
-        }
-
-        return personViewModels;
+        return ViewModelMapper.mapList(persons, this::translatePerson);
     }
 
     private PersonViewModel translatePerson(Person person) {
@@ -205,15 +193,8 @@ public class ProjectWebServiceImpl implements ProjectWebService {
         return personViewModel;
     }
 
-
     private List<ProjectViewModel> translate(List<Project> projects) {
-        List<ProjectViewModel> projectViewModels = new ArrayList<>();
-
-        for (Project project : projects) {
-            projectViewModels.add(translate(project));
-        }
-
-        return projectViewModels;
+        return ViewModelMapper.mapList(projects, this::translate);
     }
 
     private ProjectViewModel translate(Project project) {
