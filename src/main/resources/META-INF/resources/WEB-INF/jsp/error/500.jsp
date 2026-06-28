@@ -16,7 +16,7 @@
         </jsp:include>
         <main class="container">
             <h1>Something Went Wrong</h1>
-            <p>${errorMessage != null ? errorMessage : 'An unexpected error occurred. Please try again later.'}</p>
+            <p><c:out value="${errorMessage}" default="An unexpected error occurred. Please try again later." /></p>
             <p><a href="${pageContext.request.contextPath}/project/list" role="button">Back to Projects</a></p>
         </main>
     </body>
