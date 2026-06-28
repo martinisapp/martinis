@@ -14,7 +14,9 @@ import com.chriswatnee.martinis.viewmodel.project.projectlist.ProjectListViewMod
 import com.chriswatnee.martinis.viewmodel.project.projectprofile.ProjectProfileViewModel;
 import com.chriswatnee.martinis.webservice.ProjectWebService;
 import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -45,13 +47,24 @@ public class ProjectController {
     }
     
     @RequestMapping(value = "/show")
-    public String show(@RequestParam Integer id, Model model) {
+    public String show(@RequestParam Integer id, Model model, HttpSession session) {
 
         ProjectProfileViewModel viewModel = projectWebService.getProjectProfileViewModel(id);
+
+        Boolean cleanView = (Boolean) session.getAttribute("cleanView");
+        viewModel.setCleanView(cleanView != null && cleanView);
 
         model.addAttribute("viewModel", viewModel);
 
         return "project/show";
+    }
+
+    @RequestMapping(value = "/toggleCleanView", method = RequestMethod.POST)
+    public ResponseEntity<String> toggleCleanView(HttpSession session) {
+        Boolean cleanView = (Boolean) session.getAttribute("cleanView");
+        boolean newValue = !(cleanView != null && cleanView);
+        session.setAttribute("cleanView", newValue);
+        return ResponseEntity.ok(newValue ? "clean" : "normal");
     }
     
     @RequestMapping(value = "/delete", method = RequestMethod.POST)

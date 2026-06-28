@@ -11,6 +11,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.XXssProtectionHeaderWriter;
 
+import jakarta.servlet.DispatcherType;
 import javax.sql.DataSource;
 
 @Configuration
@@ -36,6 +37,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authorize -> authorize
+                .dispatcherTypeMatchers(DispatcherType.FORWARD, DispatcherType.ERROR).permitAll()
                 .requestMatchers("/favicon.ico", "/css/**", "/js/**",
                                 "/fonts/**", "/", "/login", "/register",
                                 "/actuator/health").permitAll()
