@@ -1,0 +1,15 @@
+{
+  "mcpServers": {
+    "mysql": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-mysql",
+        "mysql://martinis_user:your_password@localhost:3306/martinis"
+      ],
+      "env": {
+        "DATABASE_URL": "mysql://martinis_user:your_password@localhost:3306/martinis"
+      }
+    }
+  }
+}
