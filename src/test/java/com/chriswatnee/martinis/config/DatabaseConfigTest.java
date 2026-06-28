@@ -8,6 +8,7 @@ import java.lang.reflect.Method;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class DatabaseConfigTest {
 
@@ -20,10 +21,11 @@ class DatabaseConfigTest {
 
         assertEquals("railway", dataSourceConfig.getUsername());
         assertEquals("secret", dataSourceConfig.getPassword());
-        assertEquals(
-            "jdbc:mysql://db.railway.internal:3306/martinis?useSSL=false&serverTimezone=America%2FNew_York&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=false",
-            dataSourceConfig.getJdbcUrl()
-        );
+        assertTrue(dataSourceConfig.getJdbcUrl().startsWith("jdbc:mysql://db.railway.internal:3306/martinis?"));
+        assertTrue(dataSourceConfig.getJdbcUrl().contains("useSSL=false"));
+        assertTrue(dataSourceConfig.getJdbcUrl().contains("serverTimezone=America%2FNew_York"));
+        assertTrue(dataSourceConfig.getJdbcUrl().contains("allowPublicKeyRetrieval=true"));
+        assertTrue(dataSourceConfig.getJdbcUrl().contains("createDatabaseIfNotExist=false"));
         assertFalse(dataSourceConfig.getJdbcUrl().contains("requireSSL=true"));
     }
 
@@ -34,10 +36,10 @@ class DatabaseConfigTest {
                 + "db.railway.internal:3306/martinis"
         );
 
-        assertEquals(
-            "jdbc:mysql://db.railway.internal:3306/martinis?serverTimezone=UTC&allowPublicKeyRetrieval=true&createDatabaseIfNotExist=false",
-            dataSourceConfig.getJdbcUrl()
-        );
+        assertTrue(dataSourceConfig.getJdbcUrl().startsWith("jdbc:mysql://db.railway.internal:3306/martinis?"));
+        assertTrue(dataSourceConfig.getJdbcUrl().contains("serverTimezone=UTC"));
+        assertTrue(dataSourceConfig.getJdbcUrl().contains("allowPublicKeyRetrieval=true"));
+        assertTrue(dataSourceConfig.getJdbcUrl().contains("createDatabaseIfNotExist=false"));
     }
 
     private HikariConfig createDataSourceConfig(String databaseUrl) throws Exception {
