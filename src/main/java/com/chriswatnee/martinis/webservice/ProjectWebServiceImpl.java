@@ -20,6 +20,7 @@ import com.chriswatnee.martinis.viewmodel.project.projectlist.ProjectViewModel;
 import com.chriswatnee.martinis.viewmodel.project.projectprofile.PersonViewModel;
 import com.chriswatnee.martinis.viewmodel.project.projectprofile.ProjectProfileViewModel;
 import com.chriswatnee.martinis.viewmodel.project.projectprofile.SceneViewModel;
+import com.chriswatnee.martinis.exception.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.inject.Inject;
@@ -64,6 +65,9 @@ public class ProjectWebServiceImpl implements ProjectWebService {
 
         // Look up stuff
         Project project = projectService.read(id);
+        if (project == null) {
+            throw new ResourceNotFoundException("Project", id);
+        }
         List<Scene> scenes = sceneService.getScenesByProject(project);
         List<Person> persons = personService.getPersonsByProject(project);
 
@@ -96,6 +100,9 @@ public class ProjectWebServiceImpl implements ProjectWebService {
 
         // Look up stuff
         Project existingProject = projectService.read(id);
+        if (existingProject == null) {
+            throw new ResourceNotFoundException("Project", id);
+        }
 
         // Populate
         editProjectViewModel.setId(id);
@@ -130,6 +137,9 @@ public class ProjectWebServiceImpl implements ProjectWebService {
 
         // Instantiate
         Project project = projectService.read(editProjectCommandModel.getId());
+        if (project == null) {
+            throw new ResourceNotFoundException("Project", editProjectCommandModel.getId());
+        }
 
         // Put stuff
         project.setTitle(editProjectCommandModel.getTitle());
@@ -145,6 +155,9 @@ public class ProjectWebServiceImpl implements ProjectWebService {
 
         // Instantiate
         Project project = projectService.read(id);
+        if (project == null) {
+            throw new ResourceNotFoundException("Project", id);
+        }
 
         // Delete
         projectService.delete(project);

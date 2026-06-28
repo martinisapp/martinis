@@ -11,6 +11,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -22,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
  * @author chris
  */
 public class SceneDaoImpl implements SceneDao {
+
+    private static final Logger logger = LoggerFactory.getLogger(SceneDaoImpl.class);
 
     JdbcTemplate jdbcTemplate;
     
@@ -108,7 +112,9 @@ public class SceneDaoImpl implements SceneDao {
         try {
             Scene scene = jdbcTemplate.queryForObject(READ_QUERY, new SceneMapper(), id);
             return scene;
-        } catch(EmptyResultDataAccessException ex) {}
+        } catch (EmptyResultDataAccessException ex) {
+            logger.debug("Scene not found with id: {}", id);
+        }
         
         return null;
     }
@@ -191,7 +197,9 @@ public class SceneDaoImpl implements SceneDao {
         try {
             Scene previousScene = getSceneByProjectAndOrder(scene.getProject(), scene.getOrder() - 1);
             return previousScene;
-        } catch(EmptyResultDataAccessException ex) {}
+        } catch (EmptyResultDataAccessException ex) {
+            logger.debug("No previous scene found for scene with id: {}", scene.getId());
+        }
         
         return null;
     }
@@ -202,7 +210,9 @@ public class SceneDaoImpl implements SceneDao {
         try {
             Scene nextScene = getSceneByProjectAndOrder(scene.getProject(), scene.getOrder() + 1);
             return nextScene;
-        } catch(EmptyResultDataAccessException ex) {}
+        } catch (EmptyResultDataAccessException ex) {
+            logger.debug("No next scene found for scene with id: {}", scene.getId());
+        }
         
         return null;
     }
@@ -223,7 +233,9 @@ public class SceneDaoImpl implements SceneDao {
                                                       order,
                                                       project.getId());
             return scene;
-        } catch (EmptyResultDataAccessException ex) {}
+        } catch (EmptyResultDataAccessException ex) {
+            logger.debug("Scene not found with order: {} in project: {}", order, project.getId());
+        }
         
         return null;
     }

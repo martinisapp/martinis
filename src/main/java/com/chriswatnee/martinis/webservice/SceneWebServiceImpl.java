@@ -22,6 +22,7 @@ import com.chriswatnee.martinis.viewmodel.scene.editscene.EditSceneViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.BlockViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.PersonViewModel;
 import com.chriswatnee.martinis.viewmodel.scene.sceneprofile.SceneProfileViewModel;
+import com.chriswatnee.martinis.exception.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.inject.Inject;
@@ -53,6 +54,9 @@ public class SceneWebServiceImpl implements SceneWebService {
 
         // Look up stuff
         Scene scene = sceneService.read(id);
+        if (scene == null) {
+            throw new ResourceNotFoundException("Scene", id);
+        }
         List<Block> blocks = blockService.getBlocksByScene(scene);
 
         Project project = null;
@@ -120,7 +124,13 @@ public class SceneWebServiceImpl implements SceneWebService {
 
         // Look up stuff
         Scene existingScene = sceneService.read(id);
+        if (existingScene == null) {
+            throw new ResourceNotFoundException("Scene", id);
+        }
         Project project = projectService.getProjectByScene(existingScene);
+        if (project == null) {
+            throw new ResourceNotFoundException("Project for Scene", id);
+        }
 
         // Populate commmand model
         CreateSceneBelowCommandModel commandModel = new CreateSceneBelowCommandModel();
@@ -143,6 +153,9 @@ public class SceneWebServiceImpl implements SceneWebService {
 
         // Look up stuff
         Scene existingScene = sceneService.read(id);
+        if (existingScene == null) {
+            throw new ResourceNotFoundException("Scene", id);
+        }
 
         Project selectedProject = projectService.read(existingScene.getProject().getId());
         
@@ -168,6 +181,9 @@ public class SceneWebServiceImpl implements SceneWebService {
         
         // Look up stuff
         Project project = projectService.read(createSceneCommandModel.getProjectId());
+        if (project == null) {
+            throw new ResourceNotFoundException("Project", createSceneCommandModel.getProjectId());
+        }
         
         // Put stuff
         scene.setName(createSceneCommandModel.getName());
@@ -190,8 +206,14 @@ public class SceneWebServiceImpl implements SceneWebService {
         
         // Look up stuff
         Scene existingScene = sceneService.read(createSceneBelowCommandModel.getId());
+        if (existingScene == null) {
+            throw new ResourceNotFoundException("Scene", createSceneBelowCommandModel.getId());
+        }
         
         Project project = projectService.read(existingScene.getProject().getId());
+        if (project == null) {
+            throw new ResourceNotFoundException("Project for Scene", existingScene.getId());
+        }
         
         // Put stuff
         scene.setOrder(existingScene.getOrder());
@@ -210,9 +232,15 @@ public class SceneWebServiceImpl implements SceneWebService {
 
         // Instantiate
         Scene scene = sceneService.read(editSceneCommandModel.getId());
+        if (scene == null) {
+            throw new ResourceNotFoundException("Scene", editSceneCommandModel.getId());
+        }
 
         // Look up stuff
         Project project = projectService.read(editSceneCommandModel.getProjectId());
+        if (project == null) {
+            throw new ResourceNotFoundException("Project", editSceneCommandModel.getProjectId());
+        }
 
         // Put stuff
         scene.setName(editSceneCommandModel.getName());
@@ -229,6 +257,9 @@ public class SceneWebServiceImpl implements SceneWebService {
 
         // Instantiate
         Scene scene = sceneService.read(id);
+        if (scene == null) {
+            throw new ResourceNotFoundException("Scene", id);
+        }
 
         // Delete
         sceneService.delete(scene);
@@ -241,8 +272,10 @@ public class SceneWebServiceImpl implements SceneWebService {
 
         // Instantiate
         Scene scene = sceneService.read(id);
+        if (scene == null) {
+            throw new ResourceNotFoundException("Scene", id);
+        }
 
-        // Delete
         sceneService.moveUp(scene);
 
         return scene;
@@ -253,8 +286,10 @@ public class SceneWebServiceImpl implements SceneWebService {
 
         // Instantiate
         Scene scene = sceneService.read(id);
+        if (scene == null) {
+            throw new ResourceNotFoundException("Scene", id);
+        }
 
-        // Delete
         sceneService.moveDown(scene);
 
         return scene;

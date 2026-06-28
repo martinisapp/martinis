@@ -14,6 +14,7 @@ import com.chriswatnee.martinis.viewmodel.actor.actorprofile.ActorProfileViewMod
 import com.chriswatnee.martinis.viewmodel.actor.actorlist.ActorViewModel;
 import com.chriswatnee.martinis.viewmodel.actor.createactor.CreateActorViewModel;
 import com.chriswatnee.martinis.viewmodel.actor.editactor.EditActorViewModel;
+import com.chriswatnee.martinis.exception.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.inject.Inject;
@@ -54,6 +55,9 @@ public class ActorWebServiceImpl implements ActorWebService {
 
         // Look up stuff
         Actor actor = actorService.read(id);
+        if (actor == null) {
+            throw new ResourceNotFoundException("Actor", id);
+        }
 
         // Put stuff
         actorProfileViewModel.setId(actor.getId());
@@ -85,6 +89,9 @@ public class ActorWebServiceImpl implements ActorWebService {
 
         // Look up stuff
         Actor existingActor = actorService.read(id);
+        if (existingActor == null) {
+            throw new ResourceNotFoundException("Actor", id);
+        }
 
         // Populate
         editActorViewModel.setId(id);
@@ -125,6 +132,9 @@ public class ActorWebServiceImpl implements ActorWebService {
 
         // Instantiate
         Actor actor = actorService.read(editActorCommandModel.getId());
+        if (actor == null) {
+            throw new ResourceNotFoundException("Actor", editActorCommandModel.getId());
+        }
 
         // Put stuff
         actor.setFirstName(editActorCommandModel.getFirst());
@@ -143,6 +153,9 @@ public class ActorWebServiceImpl implements ActorWebService {
 
         // Instantiate
         Actor actor = actorService.read(id);
+        if (actor == null) {
+            throw new ResourceNotFoundException("Actor", id);
+        }
 
         // Delete
         actorService.delete(actor);

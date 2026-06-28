@@ -21,6 +21,7 @@ import com.chriswatnee.martinis.viewmodel.block.createblock.CreatePersonViewMode
 import com.chriswatnee.martinis.viewmodel.block.createblockbelow.CreateBlockBelowViewModel;
 import com.chriswatnee.martinis.viewmodel.block.editblock.EditBlockViewModel;
 import com.chriswatnee.martinis.viewmodel.block.editblock.EditPersonViewModel;
+import com.chriswatnee.martinis.exception.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.inject.Inject;
@@ -54,7 +55,13 @@ public class BlockWebServiceImpl implements BlockWebService {
         
         // Look up stuff
         Scene scene = sceneService.read(sceneId);
+        if (scene == null) {
+            throw new ResourceNotFoundException("Scene", sceneId);
+        }
         Project project = projectService.getProjectByScene(scene);
+        if (project == null) {
+            throw new ResourceNotFoundException("Project for Scene", sceneId);
+        }
 
         // Populate commmand model
         CreateBlockCommandModel commandModel = new CreateBlockCommandModel();
@@ -79,8 +86,17 @@ public class BlockWebServiceImpl implements BlockWebService {
         
         // Look up stuff
         Block existingBlock = blockService.read(id);
+        if (existingBlock == null) {
+            throw new ResourceNotFoundException("Block", id);
+        }
         Scene scene = sceneService.read(existingBlock.getScene().getId());
+        if (scene == null) {
+            throw new ResourceNotFoundException("Scene for Block", id);
+        }
         Project project = projectService.getProjectByScene(scene);
+        if (project == null) {
+            throw new ResourceNotFoundException("Project for Scene", scene.getId());
+        }
 
         // Populate commmand model
         CreateBlockBelowCommandModel commandModel = new CreateBlockBelowCommandModel();
@@ -106,6 +122,9 @@ public class BlockWebServiceImpl implements BlockWebService {
 
         // Look up stuff
         Block existingBlock = blockService.read(id);
+        if (existingBlock == null) {
+            throw new ResourceNotFoundException("Block", id);
+        }
         
         List<Person> allPersons = personService.list();
         Person selectedPerson = null;
@@ -148,6 +167,9 @@ public class BlockWebServiceImpl implements BlockWebService {
         }
         
         Scene scene = sceneService.read(createBlockCommandModel.getSceneId());
+        if (scene == null) {
+            throw new ResourceNotFoundException("Scene", createBlockCommandModel.getSceneId());
+        }
         
         // Put stuff
         block.setContent(createBlockCommandModel.getContent());
@@ -172,6 +194,9 @@ public class BlockWebServiceImpl implements BlockWebService {
         
         // Look up stuff
         Block existingBlock = blockService.read(createBlockBelowCommandModel.getId());
+        if (existingBlock == null) {
+            throw new ResourceNotFoundException("Block", createBlockBelowCommandModel.getId());
+        }
         
         Person person = null;
         if (createBlockBelowCommandModel.getPersonId() != null) {
@@ -179,6 +204,9 @@ public class BlockWebServiceImpl implements BlockWebService {
         }
         
         Scene scene = sceneService.read(existingBlock.getScene().getId());
+        if (scene == null) {
+            throw new ResourceNotFoundException("Scene for Block", existingBlock.getId());
+        }
         
         // Put stuff
         block.setOrder(existingBlock.getOrder());
@@ -201,10 +229,16 @@ public class BlockWebServiceImpl implements BlockWebService {
 
         // Instantiate
         Block block = blockService.read(editBlockCommandModel.getId());
+        if (block == null) {
+            throw new ResourceNotFoundException("Block", editBlockCommandModel.getId());
+        }
         
         // Look up stuff
         Person person = personService.read(editBlockCommandModel.getPersonId());
         Scene scene = sceneService.read(editBlockCommandModel.getSceneId());
+        if (scene == null) {
+            throw new ResourceNotFoundException("Scene", editBlockCommandModel.getSceneId());
+        }
 
         // Put stuff
         block.setContent(editBlockCommandModel.getContent());
@@ -222,6 +256,9 @@ public class BlockWebServiceImpl implements BlockWebService {
 
         // Instantiate
         Block block = blockService.read(id);
+        if (block == null) {
+            throw new ResourceNotFoundException("Block", id);
+        }
 
         // Delete
         blockService.delete(block);
@@ -250,8 +287,10 @@ public class BlockWebServiceImpl implements BlockWebService {
 
         // Instantiate
         Block block = blockService.read(id);
+        if (block == null) {
+            throw new ResourceNotFoundException("Block", id);
+        }
 
-        // Delete
         blockService.moveUp(block);
 
         return block;
@@ -262,8 +301,10 @@ public class BlockWebServiceImpl implements BlockWebService {
 
         // Instantiate
         Block block = blockService.read(id);
+        if (block == null) {
+            throw new ResourceNotFoundException("Block", id);
+        }
 
-        // Delete
         blockService.moveDown(block);
 
         return block;
@@ -277,13 +318,23 @@ public class BlockWebServiceImpl implements BlockWebService {
     @Override
     public List<Person> getPersonsForScene(Integer sceneId) {
         Scene scene = sceneService.read(sceneId);
+        if (scene == null) {
+            throw new ResourceNotFoundException("Scene", sceneId);
+        }
         Project project = projectService.getProjectByScene(scene);
+        if (project == null) {
+            throw new ResourceNotFoundException("Project for Scene", sceneId);
+        }
         return personService.getPersonsByProject(project);
     }
 
     @Override
     public Block getBlock(Integer id) {
-        return blockService.read(id);
+        Block block = blockService.read(id);
+        if (block == null) {
+            throw new ResourceNotFoundException("Block", id);
+        }
+        return block;
     }
 
     // Translate create person/scene

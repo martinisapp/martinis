@@ -18,6 +18,7 @@ import com.chriswatnee.martinis.viewmodel.person.createperson.CreatePersonViewMo
 import com.chriswatnee.martinis.viewmodel.person.editperson.EditActorViewModel;
 import com.chriswatnee.martinis.viewmodel.person.editperson.EditPersonViewModel;
 import com.chriswatnee.martinis.viewmodel.person.personprofile.PersonProfileViewModel;
+import com.chriswatnee.martinis.exception.ResourceNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.inject.Inject;
@@ -49,6 +50,9 @@ public class PersonWebServiceImpl implements PersonWebService {
 
         // Look up stuff
         Person person = personService.read(id);
+        if (person == null) {
+            throw new ResourceNotFoundException("Person", id);
+        }
 
         Actor actor = null;
         if (person.getActor() != null) {
@@ -106,6 +110,9 @@ public class PersonWebServiceImpl implements PersonWebService {
 
         // Look up stuff
         Person existingPerson = personService.read(id);
+        if (existingPerson == null) {
+            throw new ResourceNotFoundException("Person", id);
+        }
 
         List<Actor> allActors = actorService.list();
 
@@ -145,7 +152,10 @@ public class PersonWebServiceImpl implements PersonWebService {
         
         // Look up stuff
         Actor actor = actorService.read(createPersonCommandModel.getActorId());
-        Project project = projectService.read(createPersonCommandModel.getProjectId()); 
+        Project project = projectService.read(createPersonCommandModel.getProjectId());
+        if (project == null) {
+            throw new ResourceNotFoundException("Project", createPersonCommandModel.getProjectId());
+        }
         
         // Put stuff
         person.setName(createPersonCommandModel.getName());
@@ -155,9 +165,7 @@ public class PersonWebServiceImpl implements PersonWebService {
             person.setActor(actor);
         }
 
-        if (project != null) {
-            person.setProject(project);
-        }
+        person.setProject(project);
 
         // Save stuff
         person = personService.create(person);
@@ -170,10 +178,16 @@ public class PersonWebServiceImpl implements PersonWebService {
 
         // Instantiate
         Person person = personService.read(editPersonCommandModel.getId());
+        if (person == null) {
+            throw new ResourceNotFoundException("Person", editPersonCommandModel.getId());
+        }
         
         // Look up stuff
         Actor actor = actorService.read(editPersonCommandModel.getActorId());
-        Project project = projectService.read(editPersonCommandModel.getProjectId()); 
+        Project project = projectService.read(editPersonCommandModel.getProjectId());
+        if (project == null) {
+            throw new ResourceNotFoundException("Project", editPersonCommandModel.getProjectId());
+        }
 
         // Put stuff
         person.setName(editPersonCommandModel.getName());
@@ -192,6 +206,9 @@ public class PersonWebServiceImpl implements PersonWebService {
 
         // Instantiate
         Person person = personService.read(id);
+        if (person == null) {
+            throw new ResourceNotFoundException("Person", id);
+        }
 
         // Delete
         personService.delete(person);

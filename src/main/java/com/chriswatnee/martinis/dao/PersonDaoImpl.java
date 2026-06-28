@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,6 +25,8 @@ import org.springframework.transaction.annotation.Transactional;
  * @author chris
  */
 public class PersonDaoImpl implements PersonDao {
+
+    private static final Logger logger = LoggerFactory.getLogger(PersonDaoImpl.class);
     
     JdbcTemplate jdbcTemplate;
     
@@ -74,7 +78,9 @@ public class PersonDaoImpl implements PersonDao {
         try {
             Person person = jdbcTemplate.queryForObject(READ_QUERY, new PersonMapper(), id);
             return person;
-        } catch (EmptyResultDataAccessException ex) {}
+        } catch (EmptyResultDataAccessException ex) {
+            logger.debug("Person not found with id: {}", id);
+        }
         
         return null;
     }
