@@ -27,18 +27,18 @@
                     <label for="username">
                         Username:
                         <input type="text" name="username" id="username"
-                               placeholder="Username" value="${username}" required maxlength="20" />
+                               placeholder="Username" value="<c:out value='${username}' />" required maxlength="20" />
                         <small>Maximum 20 characters</small>
                     </label>
                     <label for="firstName">
                         First Name:
                         <input type="text" name="firstName" id="firstName"
-                               placeholder="First Name" value="${firstName}" required maxlength="30" />
+                               placeholder="First Name" value="<c:out value='${firstName}' />" required maxlength="30" />
                     </label>
                     <label for="lastName">
                         Last Name:
                         <input type="text" name="lastName" id="lastName"
-                               placeholder="Last Name" value="${lastName}" required maxlength="30" />
+                               placeholder="Last Name" value="<c:out value='${lastName}' />" required maxlength="30" />
                     </label>
                     <label for="password">
                         Password:
