@@ -51,7 +51,7 @@
             </nav>
             <hgroup>
                 <h1 style="text-transform: uppercase;">${viewModel.name}</h1>
-                <p><a href="${pageContext.request.contextPath}/scene/edit?id=${viewModel.id}" role="button" class="secondary outline">edit</a> <form action="${pageContext.request.contextPath}/scene/delete" method="post" style="display:inline;"><input type="hidden" name="id" value="${viewModel.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline">delete</button></form></p>
+                <div><a href="${pageContext.request.contextPath}/scene/edit?id=${viewModel.id}" role="button" class="secondary outline">edit</a> <form action="${pageContext.request.contextPath}/scene/delete" method="post" style="display:inline;"><input type="hidden" name="id" value="${viewModel.id}"/><input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/><button type="submit" role="button" class="secondary outline" style="width:auto;">delete</button></form></div>
             </hgroup>
             <div id="blocks-container">
                 <div id="blocks-list">

@@ -61,6 +61,12 @@
             <artifactId>tomcat-embed-jasper</artifactId>
         </dependency>
 
+        <!-- Spring Security Taglibs for JSP sec: tags -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+        </dependency>
+
         <!-- JSTL -->
         <dependency>
             <groupId>jakarta.servlet.jsp.jstl</groupId>
