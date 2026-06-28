@@ -1,5 +1,7 @@
 package com.martinis.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -19,6 +21,8 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DatabaseInitializer implements ApplicationListener<ContextRefreshedEvent> {
+
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseInitializer.class);
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
@@ -50,7 +54,7 @@ public class DatabaseInitializer implements ApplicationListener<ContextRefreshed
                 Long.class, username);
 
             if (count != null && count > 0) {
-                System.out.println("Admin user '" + username + "' already exists. Skipping creation.");
+                logger.info("Admin user '{}' already exists. Skipping creation.", username);
                 return;
             }
 
@@ -80,12 +84,11 @@ public class DatabaseInitializer implements ApplicationListener<ContextRefreshed
                 username, "ROLE_USER"
             );
 
-            System.out.println("✓ Admin user '" + username + "' created successfully with ROLE_ADMIN and ROLE_USER authorities.");
-            System.out.println("  SECURITY WARNING: Remove ADMIN_PASSWORD from environment variables after first deployment!");
+            logger.info("Admin user '{}' created successfully with ROLE_ADMIN and ROLE_USER authorities.", username);
+            logger.warn("SECURITY WARNING: Remove ADMIN_PASSWORD from environment variables after first deployment!");
 
         } catch (Exception e) {
-            System.err.println("Failed to create admin user: " + e.getMessage());
-            e.printStackTrace();
+            logger.error("Failed to create admin user '{}'", username, e);
         }
     }
 }

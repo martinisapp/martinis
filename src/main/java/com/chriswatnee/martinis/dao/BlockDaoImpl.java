@@ -12,6 +12,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -25,6 +27,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 public class BlockDaoImpl implements BlockDao {
+
+    private static final Logger logger = LoggerFactory.getLogger(BlockDaoImpl.class);
     
     JdbcTemplate jdbcTemplate;
     
@@ -125,7 +129,9 @@ public class BlockDaoImpl implements BlockDao {
         try {
             Block block = jdbcTemplate.queryForObject(READ_QUERY, new BlockMapper(), id);
             return block;
-        } catch (EmptyResultDataAccessException ex) {}
+        } catch (EmptyResultDataAccessException ex) {
+            logger.debug("Block not found with id: {}", id);
+        }
         
         return null;
         
@@ -295,7 +301,9 @@ public class BlockDaoImpl implements BlockDao {
                                                       order,
                                                       sceneId);
             return block;
-        } catch (EmptyResultDataAccessException ex) {}
+        } catch (EmptyResultDataAccessException ex) {
+            logger.debug("Block not found with order: {} in scene: {}", order, sceneId);
+        }
         
         return null;
     }
