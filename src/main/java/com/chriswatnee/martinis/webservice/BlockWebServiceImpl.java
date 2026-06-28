@@ -22,7 +22,7 @@ import com.chriswatnee.martinis.viewmodel.block.createblockbelow.CreateBlockBelo
 import com.chriswatnee.martinis.viewmodel.block.editblock.EditBlockViewModel;
 import com.chriswatnee.martinis.viewmodel.block.editblock.EditPersonViewModel;
 import com.chriswatnee.martinis.exception.ResourceNotFoundException;
-import java.util.ArrayList;
+import com.chriswatnee.martinis.webservice.support.ViewModelMapper;
 import java.util.List;
 import jakarta.inject.Inject;
 import org.springframework.stereotype.Service;
@@ -337,34 +337,22 @@ public class BlockWebServiceImpl implements BlockWebService {
         return block;
     }
 
-    // Translate create person/scene
     private List<CreatePersonViewModel> translateCreatePersonViewModel(List<Person> persons) {
-
-        List<CreatePersonViewModel> createPersonViewModels = new ArrayList<>();
-
-        for (Person person : persons) {
-            CreatePersonViewModel createPersonViewModel = new CreatePersonViewModel();
-            createPersonViewModel.setId(person.getId());
-            createPersonViewModel.setName(person.getName());
-            createPersonViewModels.add(createPersonViewModel);
-        }
-
-        return createPersonViewModels;
+        return ViewModelMapper.mapList(persons, person -> {
+            CreatePersonViewModel vm = new CreatePersonViewModel();
+            vm.setId(person.getId());
+            vm.setName(person.getName());
+            return vm;
+        });
     }
 
-    // Translate edit person/scene
     private List<EditPersonViewModel> translateEditPersonViewModel(List<Person> persons) {
-
-        List<EditPersonViewModel> editPersonViewModels = new ArrayList<>();
-
-        for (Person person : persons) {
-            EditPersonViewModel editPersonViewModel = new EditPersonViewModel();
-            editPersonViewModel.setId(person.getId());
-            editPersonViewModel.setName(person.getName());
-            editPersonViewModels.add(editPersonViewModel);
-        }
-
-        return editPersonViewModels;
+        return ViewModelMapper.mapList(persons, person -> {
+            EditPersonViewModel vm = new EditPersonViewModel();
+            vm.setId(person.getId());
+            vm.setName(person.getName());
+            return vm;
+        });
     }
     
 }

@@ -15,7 +15,7 @@ import com.chriswatnee.martinis.viewmodel.actor.actorlist.ActorViewModel;
 import com.chriswatnee.martinis.viewmodel.actor.createactor.CreateActorViewModel;
 import com.chriswatnee.martinis.viewmodel.actor.editactor.EditActorViewModel;
 import com.chriswatnee.martinis.exception.ResourceNotFoundException;
-import java.util.ArrayList;
+import com.chriswatnee.martinis.webservice.support.ViewModelMapper;
 import java.util.List;
 import jakarta.inject.Inject;
 
@@ -164,13 +164,7 @@ public class ActorWebServiceImpl implements ActorWebService {
     }
     
     private List<ActorViewModel> translate(List<Actor> actors) {
-        List<ActorViewModel> actorViewModels = new ArrayList<>();
-
-        for (Actor actor : actors) {
-            actorViewModels.add(translate(actor));
-        }
-
-        return actorViewModels;
+        return ViewModelMapper.mapList(actors, this::translate);
     }
 
     private ActorViewModel translate(Actor actor) {

@@ -19,7 +19,7 @@ import com.chriswatnee.martinis.viewmodel.person.editperson.EditActorViewModel;
 import com.chriswatnee.martinis.viewmodel.person.editperson.EditPersonViewModel;
 import com.chriswatnee.martinis.viewmodel.person.personprofile.PersonProfileViewModel;
 import com.chriswatnee.martinis.exception.ResourceNotFoundException;
-import java.util.ArrayList;
+import com.chriswatnee.martinis.webservice.support.ViewModelMapper;
 import java.util.List;
 import jakarta.inject.Inject;
 import org.springframework.stereotype.Service;
@@ -216,34 +216,22 @@ public class PersonWebServiceImpl implements PersonWebService {
         return person;
     }
     
-    // Translate create actor
     private List<CreateActorViewModel> translateCreateActorViewModel(List<Actor> actors) {
-
-        List<CreateActorViewModel> createActorViewModels = new ArrayList<>();
-
-        for (Actor actor : actors) {
-            CreateActorViewModel createActorViewModel = new CreateActorViewModel();
-            createActorViewModel.setId(actor.getId());
-            createActorViewModel.setName(actor.getFirstName() + " " + actor.getLastName());
-            createActorViewModels.add(createActorViewModel);
-        }
-
-        return createActorViewModels;
+        return ViewModelMapper.mapList(actors, actor -> {
+            CreateActorViewModel vm = new CreateActorViewModel();
+            vm.setId(actor.getId());
+            vm.setName(actor.getFirstName() + " " + actor.getLastName());
+            return vm;
+        });
     }
     
-    // Translate edit actor
     private List<EditActorViewModel> translateEditActorViewModel(List<Actor> actors) {
-
-        List<EditActorViewModel> editActorViewModels = new ArrayList<>();
-
-        for (Actor actor : actors) {
-            EditActorViewModel editActorViewModel = new EditActorViewModel();
-            editActorViewModel.setId(actor.getId());
-            editActorViewModel.setName(actor.getFirstName() + " " + actor.getLastName());
-            editActorViewModels.add(editActorViewModel);
-        }
-
-        return editActorViewModels;
+        return ViewModelMapper.mapList(actors, actor -> {
+            EditActorViewModel vm = new EditActorViewModel();
+            vm.setId(actor.getId());
+            vm.setName(actor.getFirstName() + " " + actor.getLastName());
+            return vm;
+        });
     }
     
 }
